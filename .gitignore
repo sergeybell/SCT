@@ -1,0 +1,18 @@
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+# macOS system files
+.DS_Store
+**/.DS_Store
+
+# Скомпилированные бинарные файлы
+*.bin
+
+# Файлы листинга и отчетов (часто генерируются компиляторами)
+*.lis
+
+# Специфические расширения (например, для определенных IDE или программаторов)
+*.893
+*.892
+*.99

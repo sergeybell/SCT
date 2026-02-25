@@ -1,0 +1,125 @@
+{INCLUDE 'BYPASS_REAL_SEQ';}
+INCLUDE 'seq_Nuclotron_Mod';
+
+PROCEDURE OPTIMIZE_old SEXTGx1 SEXTGy1 SEXTGx2 SEXTGy2 EBE;
+  VARIABLE OBJ 1; VARIABLE EB1 1; {optimized value of the EB elements electric field}
+                  VARIABLE EB2 1; {magnetic field}
+  VARIABLE SXX 1; VARIABLE SYY 1; VARIABLE SZZ 1; {Spin transfer maps coefficients S11, S22, S33}
+  VARIABLE SXZ 1;
+  VARIABLE SGx1 1; VARIABLE SGy1 1;
+  VARIABLE SGx2 1; VARIABLE SGy2 1;
+
+  SGx1 := SEXTGx1; SGy1 := SEXTGy1;
+  SGx2 := SEXTGx2; SGy2 := SEXTGy2;
+  EB1 := EBE;
+  FIT EB1;
+    LATTICE SGx1 SGy1 SGx2 SGy2 EB1 0;
+    SXX := CONS(SPNR(1,1)); SXZ := CONS(SPNR(1,3));
+    SYY := CONS(SPNR(2,2)); SZZ := CONS(SPNR(3,3));
+    WRITE 6 'SXX = '&ST(SXX);
+    WRITE 6 'SXZ = '&ST(SXZ);
+    WRITE 6 'SZZ = '&ST(SZZ);
+    OBJ := SQRT(SQR(SXX-1) + SQR(SXZ));
+    WRITE 6 'EBE = '&ST(EB1);
+    WRITE 6 'OBJ ='&ST(OBJ);
+  ENDFIT 1E-12 1000 1 OBJ;
+  EBE := EB1;
+
+ENDPROCEDURE; {OPTIMIZE old (via Spin-Transfer map}
+
+PROCEDURE OPTIMIZE SEXTGx1 SEXTGy1 SEXTGx2 SEXTGy2 EBE;
+  VARIABLE MU 800; VARIABLE NBAR 800 3; VARIABLE MU0 1;
+  VARIABLE OBJ1 1; VARIABLE OBJ2 1; VARIABLE OBJ 1;
+                   VARIABLE SGx1 1; VARIABLE SGy1 1;
+                   VARIABLE SGx2 1; VARIABLE SGy2 1;
+                   VARIABLE EB1 1;
+  WRITE 6 'BEGIN';
+  SGx1 := SEXTGx1; SGy1 := SEXTGy1;
+  SGx2 := SEXTGx2; SGy2 := SEXTGy2;
+  EB1 := EBE;
+  WRITE 6 'SGx1, SGy1 = '&ST(SGx1)&' '&ST(SGy1);
+  WRITE 6 'SGx2, SGy2 = '&ST(SGx2)&' '&ST(SGy2);
+  WRITE 6 'EB1 = '&ST(EB1);
+    FIT EB1;
+      LATTICE SGx1 SGy1 SGx2 SGy2 EB1 1;
+      WRITE 6 'LATTICE ALREADY READ';
+      TSS MU NBAR 0;
+      WRITE 6 'TSS DONE';
+      {WRITE 6 MU;}
+      MU0 := CONS(MU);
+      OBJ := ABS(MU0);
+      WRITE 6 'EBE, MU0 = '&ST(EB1)&', '&ST(MU0);
+      WRITE 6 'OBJ ='&ST(OBJ);
+    ENDFIT 1E-15 1000 1 OBJ;
+    EBE := EB1;
+  ENDPROCEDURE; {OPTIMIZE (via TSS)}
+
+PROCEDURE OPTIMIZE_TILT SEXTGx1 SEXTGy1 SEXTGx2 SEXTGy2 EBE TILTARR;
+    VARIABLE MU 800; VARIABLE NBAR 800 3; VARIABLE MU0 1;
+    VARIABLE OBJ1 1; VARIABLE OBJ2 1; VARIABLE OBJ 1;
+                     VARIABLE SGx1 1; VARIABLE SGy1 1;
+                     VARIABLE SGx2 1; VARIABLE SGy2 1;
+                     VARIABLE EB1 1; VARIABLE TILT 48;
+    WRITE 6 'BEGIN';
+    TILT := TILTARR;
+    SGx1 := SEXTGx1; SGy1 := SEXTGy1;
+    SGx2 := SEXTGx2; SGy2 := SEXTGy2;
+    EB1 := EBE;
+    WRITE 6 'SGx1, SGy1 = '&ST(SGx1)&' '&ST(SGy1);
+    WRITE 6 'SGx2, SGy2 = '&ST(SGx2)&' '&ST(SGy2);
+    WRITE 6 'EB1 = '&ST(EB1);
+      FIT EB1;
+        LATTICE SGx1 SGy1 SGx2 SGy2 EB1 1 TILT 0;
+        WRITE 6 'LATTICE ALREADY READ';
+        TSS MU NBAR 0;
+        WRITE 6 'TSS DONE';
+        {WRITE 6 MU;}
+        MU0 := CONS(MU);
+        OBJ := CONS(NBAR(2));
+        WRITE 6 'EBE, MU0 = '&ST(EB1)&', '&ST(MU0);
+        WRITE 6 'OBJ ='&ST(OBJ);
+      ENDFIT 1E-15 1000 1 OBJ;
+      EBE := EB1;
+ENDPROCEDURE; {OPTIMIZE (via TSS)}
+
+PROCEDURE MAIN;
+  VARIABLE GAMMA 1;
+  VARIABLE SGx1 1; VARIABLE SGy1 1;
+  VARIABLE SGx2 1; VARIABLE SGy2 1;
+  VARIABLE EB1 1;
+  VARIABLE TILT 48;
+
+  GAMMA := 1.143914;
+  TILT := ZEROS(48);
+
+  {natural chromaticity}
+  SGx1 := 0.0;
+  SGy1 := 0.0;
+  SGx2 := 0.0;
+  SGy2 := 0.0;
+
+  {WIEN FILTER}
+  EB1 := 0.0;
+  EB1 := 129.5058235952117; {8-period}
+  EB1 := 132.6727764948780; {16-period}
+
+  EB1 := 132;
+
+  OV 3 3 0;
+  {DAEPS 1E-12;}
+  { SET lattice parameters }
+  SET_FOR_DEUTERONS GAMMA;
+
+  PM 6;
+  {OPTIMIZE SGx1 SGy1 SGx2 SGy2 EB1;}
+  OPTIMIZE_TILT SGx1 SGy1 SGx2 SGy2 EB1 TILT;
+  WRITE 6 'SGx1, SGy1 = '&ST(SGx1)&' '&ST(SGy1);
+  WRITE 6 'SGx2, SGy2 = '&ST(SGx2)&' '&ST(SGy2);
+  WRITE 6 'EB1 = '&ST(EB1);
+
+  ENDPROCEDURE; {MAIN}
+
+PROCEDURE RUN;
+  MAIN;
+ENDPROCEDURE;
+RUN; END;

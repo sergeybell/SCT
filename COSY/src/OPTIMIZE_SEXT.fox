@@ -1,0 +1,308 @@
+INCLUDE 'seq_Nuclotron_Mod';
+
+PROCEDURE MCMCALC ALPHA0 ALPHA1;
+      VARIABLE TMPALPHA 100;
+      VARIABLE I 1;
+      VARIABLE MCM0 1;
+      VARIABLE MCM1 1;
+      VARIABLE MCM2 1;
+      VARIABLE MCM3 1;
+      VARIABLE MCM4 1;
+
+      {L0:=183.4720631502572;}
+
+      MCM MAP SPOS TMPALPHA;
+      MCM0 := -TMPALPHA|(0&0&0&0&0&0);
+      MCM1 := -TMPALPHA|(0&0&0&0&0&1);
+      MCM2 := -2*TMPALPHA|(0&0&0&0&0&2);
+      MCM3 := -2*3*TMPALPHA|(0&0&0&0&0&3);
+      MCM4 := -2*3*4*TMPALPHA|(0&0&0&0&0&4);
+
+      ALPHA0:= MCM1;
+      ALPHA1:= MCM2;
+
+      WRITE 6 '++++++++ MOMENTUM COMPACTION FACTOR ++++++++';
+      WRITE 6 'MC0 = '&ST(MCM0);
+      WRITE 6 'MC1 = '&ST(MCM1);
+      WRITE 6 'MC2 = '&ST(MCM2);
+      WRITE 6 'MC3 = '&ST(MCM3);
+      WRITE 6 'MC4 = '&ST(MCM4);
+      WRITE 6 '++++++++++++++++++++++++++++++++++++++++++++';
+
+ENDPROCEDURE;
+
+{PROCEDURE OPTIMIZE_CHROM SEXTGx1 SEXTGy1 EBE;}
+PROCEDURE OPTIMIZE_CHROM SEXTGx1 SEXTGy1 SEXTGx2 SEXTGy2 EBE;
+  VARIABLE MU 800; VARIABLE NBAR 800 3;
+  VARIABLE OBJ1 1; VARIABLE OBJ2 1; VARIABLE OBJ 1;
+                   VARIABLE SGx1 1; VARIABLE SGy1 1;
+                   VARIABLE SGx2 1; VARIABLE SGy2 1;
+                   VARIABLE EB1 1; VARIABLE EB2 1;
+                   VARIABLE E1 1;
+                   VARIABLE GAMMA 1;
+                   VARIABLE CHROM_X 1; VARIABLE CHROM_Y 1;
+                   VARIABLE CHROM_X_1 1; VARIABLE CHROM_Y_1 1;
+  VARIABLE quadKx 1; VARIABLE quadKy 1; VARIABLE quadKz 1; VARIABLE MU0 1;
+  VARIABLE MU_TP 800 3;
+  WRITE 6 'BEGIN';
+  SGx1 := SEXTGx1; SGy1 := SEXTGy1; EB1 := EBE;
+  SGx2 := SEXTGx2; SGy2 := SEXTGy2;
+  WRITE 6 'SGx1, SGy1, EB1 = '&ST(SGx1)&' '&ST(SGy1)&' '&ST(EB1);
+  WRITE 6 'SGx2, SGy2 = '&ST(SGx2)&' '&ST(SGy2);
+  GAMMA := 1.12792344429;
+  FIT SGx1 SGy1;
+    LATTICE SGx1 SGy1 SGx2 SGy2 EB1 1;
+    TP MU_TP;
+    CHROM_X:= (MU_TP(1)|(0&0&0&0&1))*(1+1/GAMMA);
+    CHROM_Y:= (MU_TP(2)|(0&0&0&0&1))*(1+1/GAMMA);
+
+    OBJ:= SQRT(SQR(CHROM_X) + SQR(CHROM_Y));
+
+    WRITE 6 'SGx1, SGy1, EB1 = '&ST(SGx1)&' '&ST(SGy1)&' '&ST(EB1);
+    WRITE 6 'SGx2, SGy2 = '&ST(SGx2)&' '&ST(SGy2);
+    WRITE 6 'CHROM_X, CHROM_Y='&ST(CHROM_X)&' '&ST(CHROM_Y);
+    WRITE 6 'OBJ ='&ST(OBJ);
+    ENDFIT 1E-5 2000 1 OBJ;
+
+    WRITE 6 '====================================';
+    WRITE 6 'SGx1, SGx2, SGy1, SGy2, EB1 = '&ST(SGx1)&' '&ST(SGy1)&' '&ST(EB1);
+    WRITE 6 'SGx2, SGy2 = '&ST(SGx2)&' '&ST(SGy2);
+    WRITE 6 'CHROM_X, CHROM_Y='&ST(CHROM_X)&' '&ST(CHROM_Y);
+    WRITE 6 'OBJ ='&ST(OBJ);
+    SEXTGx1 := SGx1; SEXTGy1 := SGy1;
+ENDPROCEDURE; {OPTIMIZE}
+
+PROCEDURE OPTIMIZE_CHROM_TILT SEXTGx1 SEXTGy1 SEXTGx2 SEXTGy2 EBE TILTARR;
+  VARIABLE MU 800; VARIABLE NBAR 800 3;
+  VARIABLE OBJ1 1; VARIABLE OBJ2 1; VARIABLE OBJ 1;
+                   VARIABLE SGx1 1; VARIABLE SGy1 1;
+                   VARIABLE SGx2 1; VARIABLE SGy2 1;
+                   VARIABLE EB1 1; VARIABLE EB2 1;
+                   VARIABLE E1 1;
+                   VARIABLE GAMMA 1;
+                   VARIABLE CHROM_X 1; VARIABLE CHROM_Y 1;
+                   VARIABLE CHROM_X_1 1; VARIABLE CHROM_Y_1 1;
+                   VARIABLE MU0 1;    VARIABLE MU_TP 800 3;
+                   VARIABLE TILT 48;
+
+  TILT := TILTARR;
+  WRITE 6 'BEGIN';
+  SGx1 := SEXTGx1; SGy1 := SEXTGy1; EB1 := EBE;
+  SGx2 := SEXTGx2; SGy2 := SEXTGy2;
+  WRITE 6 'SGx1, SGy1, EB1 = '&ST(SGx1)&' '&ST(SGy1)&' '&ST(EB1);
+  WRITE 6 'SGx2, SGy2 = '&ST(SGx2)&' '&ST(SGy2);
+  GAMMA := 1.143914;
+  {FIT SGx1 SGy1 SGx2;}
+  FIT SGx1 SGx2 SGy1;
+    LATTICE SGx1 SGy1 SGx2 SGy2 EB1 1 TILT 0;
+    TP MU_TP;
+    CHROM_X:= (MU_TP(1)|(0&0&0&0&1))*(1+1/GAMMA);
+    CHROM_Y:= (MU_TP(2)|(0&0&0&0&1))*(1+1/GAMMA);
+
+    OBJ:= SQRT(SQR(CHROM_X) + SQR(CHROM_Y));
+
+    WRITE 6 'SGx1, SGy1, EB1 = '&ST(SGx1)&' '&ST(SGy1)&' '&ST(EB1);
+    WRITE 6 'SGx2, SGy2 = '&ST(SGx2)&' '&ST(SGy2);
+    WRITE 6 'CHROM_X, CHROM_Y='&ST(CHROM_X)&' '&ST(CHROM_Y);
+    WRITE 6 'OBJ ='&ST(OBJ);
+  ENDFIT 1E-7 1000 1 OBJ;
+
+    WRITE 6 '====================================';
+    WRITE 6 'SGx1, SGy1, EB1 = '&ST(SGx1)&' '&ST(SGy1)&' '&ST(EB1);
+    WRITE 6 'SGx2, SGy2 = '&ST(SGx2)&' '&ST(SGy2);
+    WRITE 6 'CHROM_X, CHROM_Y='&ST(CHROM_X)&' '&ST(CHROM_Y);
+    WRITE 6 'OBJ ='&ST(OBJ);
+    SEXTGx1 := SGx1; SEXTGy1 := SGy1; SEXTGx2 := SGx2; SEXTGy2 := SGy2;
+ENDPROCEDURE; {OPTIMIZE}
+
+PROCEDURE OPTIMIZE SEXTGx1 SEXTGy1 EBE;
+  VARIABLE MU 800; VARIABLE NBAR 800 3;
+  VARIABLE OBJ1 1; VARIABLE OBJ2 1; VARIABLE OBJ 1;
+                   VARIABLE SGx1 1; VARIABLE SGx2 1; VARIABLE SGy1 1; VARIABLE SGy2 1; VARIABLE EB1 1; VARIABLE EB2 1;
+                   VARIABLE E1 1;
+                   VARIABLE GAMMA 1;
+                   VARIABLE CHROM_X 1; VARIABLE CHROM_Y 1;
+  VARIABLE quadKx 1; VARIABLE quadKy 1; VARIABLE quadKz 1; VARIABLE MU0 1;
+  VARIABLE MU_TP 800 3;
+  WRITE 6 'BEGIN';
+  SGx1 := SEXTGx1; SGy1 := SEXTGy1; EB1 := EBE;
+  WRITE 6 'SGx1, SGy1, EB1 = '&ST(SGx1)&' '&ST(SGy1)&' '&ST(EB1);
+  GAMMA := 1.12792344429;
+  FIT SGx1 SGy1;
+    LATTICE SGx1 SGy1 EB1 1;
+    TSS MU NBAR 0;
+    MU0 := CONS(MU);
+    DAPEE MU 11 quadKx;
+    DAPEE MU 33 quadKy;
+    {DAPEE MU 66 quadKz;}
+    {OBJ := SQRT(SQR(quadKx) + SQR(quadKy)+SQR(quadKz));}
+    OBJ := SQRT(SQR(quadKx) + SQR(quadKy));
+    WRITE 6 'SGx1, SGy1, EB1 = '&ST(SGx1)&' '&ST(SGy1)&' '&ST(EB1);
+    WRITE 6 'quadKx, quadKy= '&ST(quadKx)&' '&ST(quadKy);
+    WRITE 6 'MU0 = '&ST(MU0);
+    WRITE 6 'OBJ ='&ST(OBJ);
+  ENDFIT 1E-9 2000 1 OBJ;
+
+    WRITE 6 '====================================';
+    WRITE 6 'SGx1, SGy1, EB1 = '&ST(SGx1)&' '&ST(SGy1)&' '&ST(EB1);
+    WRITE 6 'quadKx, quadKy= '&ST(quadKx)&' '&ST(quadKy);
+    WRITE 6 'MU0 = '&ST(MU0);
+    WRITE 6 'OBJ ='&ST(OBJ);
+    SEXTGx1 := SGx1; SEXTGy1 := SGy1;
+ENDPROCEDURE; {OPTIMIZE}
+
+PROCEDURE OPTIMIZE_CORR SEXTGx1 SEXTGy1 SEXTGx2 SEXTGy2 EBE;
+  VARIABLE MU 800; VARIABLE NBAR 800 3;
+  VARIABLE OBJ1 1; VARIABLE OBJ2 1; VARIABLE OBJ 1;
+                   VARIABLE SGx1 1; VARIABLE SGy1 1; VARIABLE EB1 1;
+                   VARIABLE SGx2 1; VARIABLE SGy2 1;
+                   VARIABLE E1 1;
+                   VARIABLE GAMMA 1; VARIABLE BETA 1;
+                   VARIABLE CHROM_X 1; VARIABLE CHROM_Y 1;
+  VARIABLE quadKx 1; VARIABLE quadKy 1; VARIABLE quadKz 1; VARIABLE MU0 1;
+  VARIABLE MU_TP 800 3;
+  VARIABLE ALPHA0 1; VARIABLE ALPHA1 1;
+  VARIABLE ETA0 1; VARIABLE ETA1 1;
+  WRITE 6 'BEGIN';
+  SGx1 := SEXTGx1; SGy1 := SEXTGy1; EB1 := EBE;
+  SGx2 := SEXTGx2; SGy2 := SEXTGy2;
+  WRITE 6 'SGx1, SGy1, EB1 = '&ST(SGx1)&' '&ST(SGy1)&' '&ST(EB1);
+  WRITE 6 'SGx2, SGy2 ='&ST(SGx2)&' '&ST(SGy2);
+  GAMMA := 1.143914;
+  BETA := SQRT(1-1/(GAMMA*GAMMA));
+
+  FIT SGx1 SGy1 SGx2;
+    LATTICE SGx1 SGy1 SGx2 SGy2 EB1 1;
+    TSS MU NBAR 0;
+    MU0 := CONS(MU);
+    DAPEE MU 11 quadKx;
+    DAPEE MU 33 quadKy;
+    DAPEE MU 66 quadKz;
+    OBJ := SQRT(SQR(quadKx) + SQR(quadKy) + SQR(quadKz));
+    MCMCALC ALPHA0 ALPHA1;
+    ETA1 := ALPHA1+(3/2)*(BETA*BETA)/(GAMMA*GAMMA)-ALPHA0/(GAMMA*GAMMA)+1/(GAMMA*GAMMA*GAMMA*GAMMA);
+
+    WRITE 6 'SGx1, SGy1, EB1 = '&ST(SGx1)&' '&ST(SGy1)&' '&ST(EB1);
+    WRITE 6 'SGx2, SGy2 ='&ST(SGx2)&' '&ST(SGy2);
+    WRITE 6 'ETA1 = '&ST(ETA1);
+    WRITE 6 'quadKx, quadKy, quadKz= '&ST(quadKx)&' '&ST(quadKy)&' '&ST(quadKz);
+    WRITE 6 'MU0 = '&ST(MU0);
+    WRITE 6 'OBJ ='&ST(OBJ);
+
+  ENDFIT 1E-15 200 1 OBJ;
+
+    WRITE 6 '====================================';
+    WRITE 6 'SGx1, SGy1, EB1 = '&ST(SGx1)&' '&ST(SGy1)&' '&ST(EB1);
+    WRITE 6 'SGx2, SGy2 ='&ST(SGx2)&' '&ST(SGy2);
+    WRITE 6 'quadKx, quadKy, quadKz= '&ST(quadKx)&' '&ST(quadKy)&' '&ST(quadKz);
+    WRITE 6 'MU0 = '&ST(MU0);
+    WRITE 6 'OBJ ='&ST(OBJ);
+    SEXTGx1 := SGx1; SEXTGy1 := SGy1; SEXTGx2 := SGx2; SEXTGy2 := SGy2;
+ENDPROCEDURE; {OPTIMIZE}
+
+PROCEDURE OPTIMIZE_CORR_TILT SEXTGx1 SEXTGy1 SEXTGx2 SEXTGy2 EBE TILTARR;
+  VARIABLE MU 800; VARIABLE NBAR 800 3;
+  VARIABLE OBJ1 1; VARIABLE OBJ2 1; VARIABLE OBJ 1;
+                   VARIABLE SGx1 1; VARIABLE SGy1 1; VARIABLE EB1 1;
+                   VARIABLE SGx2 1; VARIABLE SGy2 1;
+                   VARIABLE E1 1;
+                   VARIABLE GAMMA 1; VARIABLE BETA 1;
+                   VARIABLE CHROM_X 1; VARIABLE CHROM_Y 1;
+  VARIABLE quadKx 1; VARIABLE quadKy 1; VARIABLE quadKz 1; VARIABLE MU0 1;
+  VARIABLE MU_TP 800 3;
+  VARIABLE ALPHA0 1; VARIABLE ALPHA1 1;
+  VARIABLE ETA0 1; VARIABLE ETA1 1;
+  VARIABLE TILT 48;
+
+  WRITE 6 'BEGIN';
+  TILT := TILTARR;
+  SGx1 := SEXTGx1; SGy1 := SEXTGy1; EB1 := EBE;
+  SGx2 := SEXTGx2; SGy2 := SEXTGy2;
+  WRITE 6 'SGx1, SGy1, EB1 = '&ST(SGx1)&' '&ST(SGy1)&' '&ST(EB1);
+  WRITE 6 'SGx2, SGy2 ='&ST(SGx2)&' '&ST(SGy2);
+  GAMMA := 1.143914;
+  BETA := SQRT(1-1/(GAMMA*GAMMA));
+
+  FIT SGx1 SGy1 SGx2 ;
+    LATTICE SGx1 SGy1 SGx2 SGy2 EB1 1 TILT 0;
+    TSS MU NBAR 0;
+    MU0 := CONS(MU);
+    DAPEE MU 11 quadKx;
+    DAPEE MU 33 quadKy;
+    DAPEE MU 66 quadKz;
+    OBJ := SQRT(SQR(quadKx) + SQR(quadKy) + SQR(quadKz));
+
+    WRITE 6 'SGx1, SGy1, EB1 = '&ST(SGx1)&' '&ST(SGy1)&' '&ST(EB1);
+    WRITE 6 'SGx2, SGy2 ='&ST(SGx2)&' '&ST(SGy2);
+    WRITE 6 'quadKx, quadKy, quadKz= '&ST(quadKx)&' '&ST(quadKy)&' '&ST(quadKz);
+    WRITE 6 'MU0 = '&ST(MU0);
+    WRITE 6 'OBJ ='&ST(OBJ);
+
+  ENDFIT 1E-10 500 1 OBJ;
+
+    WRITE 6 '====================================';
+    WRITE 6 'SGx1, SGy1, EB1 = '&ST(SGx1)&' '&ST(SGy1)&' '&ST(EB1);
+    WRITE 6 'SGx2, SGy2 ='&ST(SGx2)&' '&ST(SGy2);
+    WRITE 6 'quadKx, quadKy, quadKz= '&ST(quadKx)&' '&ST(quadKy)&' '&ST(quadKz);
+    WRITE 6 'MU0 = '&ST(MU0);
+    WRITE 6 'OBJ ='&ST(OBJ);
+    SEXTGx1 := SGx1; SEXTGy1 := SGy1; SEXTGx2 := SGx2; SEXTGy2 := SGy2;
+ENDPROCEDURE; {OPTIMIZE}
+
+  {optimization}
+PROCEDURE MAIN;
+  VARIABLE GAMMA 1;
+  VARIABLE SGx1 1; VARIABLE SGy1 1; VARIABLE EB1 1;
+  VARIABLE SGx2 1; VARIABLE SGy2 1;
+  VARIABLE MU 800; VARIABLE NBAR 800 3;
+  VARIABLE TILT 48;
+
+  GAMMA := 1.143914;
+  TILT := ZEROS(48);
+
+  OV 2 3 0;
+  {OV 2 2 1;}
+  DAEPS 1E-12;
+  { SET lattice parameters }
+  SET_FOR_DEUTERONS GAMMA;
+  {SET_FOR_DEUTERONS_CHROM GAMMA;}
+
+  {WIEN FILTER}
+  {spin tune ~ 10^-7}
+  EB1 := 0.0;
+  EB1 := 129.5058235952117; {8-period}
+  {EB1 := 129.0;
+  EB1 := 132.6727764948780; {16-period}
+  EB1 := 131.5;}
+
+  {SEXTUPOLES}
+  {natural chromaticity}
+  SGx1 := 0.0;
+  SGy1 := 0.0;
+  SGX2 := 0.0;
+  SGy2 := 0.0;
+
+  SGx1 := -.6799259350554631E-002;
+  SGy1 := -.4691403605045742E-001;
+  SGx2 := 0.6869494176206414E-001;
+
+  WRITE 6 'SGx1, SGy1, EB1 = '&ST(SGx1)&' '&ST(SGy1)&' '&ST(EB1);
+  WRITE 6 'SGx2, SGy2 = '&ST(SGx2)&' '&ST(SGy2);
+  {OPTIMIZE SGx1 SGy1 EB1;}
+  {OPTIMIZE_CHROM SGx1 SGy1 EB1;}
+  {OPTIMIZE_CHROM SGx1 SGy1 SGx2 SGy2 EB1;}
+  {OPTIMIZE_CORR SGx1 SGy1 SGx2 SGy2 EB1;}
+  OPTIMIZE_CORR_TILT SGx1 SGy1 SGx2 SGy2 EB1 TILT;
+  {OPTIMIZE_CHROM_TILT SGx1 SGy1 SGx2 SGy2 EB1 TILT;}
+  WRITE 6 'USE EB1 = '&ST(EB1);
+  WRITE 6 'SGx1 := '&ST(SGx1)&';';
+  WRITE 6 'SGy1 := '&ST(SGy1)&';';
+  WRITE 6 'SGx2 := '&ST(SGx2)&';';
+  WRITE 6 'SGy2 := '&ST(SGy2)&';';
+
+  ENDPROCEDURE; {MAIN}
+
+PROCEDURE RUN;
+  MAIN;
+ENDPROCEDURE;
+RUN; END;

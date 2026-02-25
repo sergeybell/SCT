@@ -1,0 +1,122 @@
+INCLUDE 'BYPASS_REAL_4_fam';
+
+PROCEDURE MCMCALC ALPHA0 ALPHA1;
+      VARIABLE TMPALPHA 100;
+      VARIABLE I 1;
+      VARIABLE MCM0 1;
+      VARIABLE MCM1 1;
+      VARIABLE MCM2 1;
+      VARIABLE MCM3 1;
+      VARIABLE MCM4 1;
+
+      {L0:=183.4720631502572;}
+
+      MCM MAP SPOS TMPALPHA;
+      MCM0 := -TMPALPHA|(0&0&0&0&0&0);
+      MCM1 := -TMPALPHA|(0&0&0&0&0&1);
+      MCM2 := -2*TMPALPHA|(0&0&0&0&0&2);
+      MCM3 := -2*3*TMPALPHA|(0&0&0&0&0&3);
+      MCM4 := -2*3*4*TMPALPHA|(0&0&0&0&0&4);
+
+      ALPHA0:= MCM1;
+      ALPHA1:= MCM2;
+
+      WRITE 6 '++++++++ MOMENTUM COMPACTION FACTOR ++++++++';
+      WRITE 6 'MC0 = '&ST(MCM0);
+      WRITE 6 'MC1 = '&ST(MCM1);
+      WRITE 6 'MC2 = '&ST(MCM2);
+      WRITE 6 'MC3 = '&ST(MCM3);
+      WRITE 6 'MC4 = '&ST(MCM4);
+      WRITE 6 '++++++++++++++++++++++++++++++++++++++++++++';
+
+ENDPROCEDURE;
+
+PROCEDURE MAIN;
+  VARIABLE GAMMA 1; VARIABLE BETA 1;
+  VARIABLE SGx1 1; VARIABLE SGy1 1; VARIABLE EB1 1;
+  VARIABLE SGx2 1; VARIABLE SGy2 1;
+  VARIABLE MU 800; VARIABLE NBAR 800 3;
+  VARIABLE MU_N_ARR 5000 1000;
+  VARIABLE CHROM_X 1; VARIABLE CHROM_Y 1;
+  VARIABLE VALUE0 1; VARIABLE VALUE1 1;
+  VARIABLE ALPHA0 1; VARIABLE ALPHA1 1;
+  VARIABLE ETA1 1;
+
+  GAMMA := 1.12792344429;
+  OV 3 3 0;
+  {DAEPS 1E-12;}
+  { SET lattice parameters }
+  SET_FOR_DEUTERONS GAMMA;
+
+  {WIEN FILTER}
+  {EB1 := 0.0;}
+  {spin tune ~ 10^-4}
+  {EB1 := 0.0;}
+  EB1 := 99.04;
+  {spin tune ~ 10^-7}
+  {EB1 := 99.14849674631157;}
+  {EB1 := 0.0;}
+
+  {SEXTUPOLES}
+  {SGx1 := 0.0;
+  SGy1 := 0.0;
+  SGx2 := 0.0;
+  SGy2 := 0.0;}
+
+  {FR 3;}
+  LATTICE SGx1 SGy1 SGx2 SGy2 EB1 1;
+
+  {SR 0 0 0 0 0 0 0 0 1; SSR 0 0 1;
+  SR 0 0 2.6*1*1E-3 0 0 0 0 0 1; SSR 0 0 1;
+  SR 0 0 2.6*2*1E-3 0 0 0 0 0 1; SSR 0 0 1;
+  SR 0 0 2.6*5*1E-3 0 0 0 0 0 1; SSR 0 0 1;}
+
+  SR 0 0 0 0 0 0 0 0 1; SSR 0 0 1;
+  SR 1*1E-3 0 0 0 0 0 0 0 1; SSR 0 0 1;
+  SR 0 0 1*1E-3 0 0 0 0 0 1; SSR 0 0 1;
+  SR 0 0 0 0 0 (5*1E-3)/10 0 0 1; SSR 0 0 1;
+
+  WRITE 6 '+++++++++++++++++++++SEXTUPOLES+++++++++++++++++++++++++++';
+  WRITE 6 'EB1 = '&ST(EB1);
+  WRITE 6 'SGx1 := '&ST(SGx1)&';';
+  WRITE 6 'SGy1 := '&ST(SGy1)&';';
+  WRITE 6 'SGx2 := '&ST(SGx2)&';';
+  WRITE 6 'SGy2 := '&ST(SGy2)&';';
+  {write all sextupoles in FILE}
+  OPENF 3618 'dat/ALPHA/SEXTUPOLES.dat' 'REPLACE';
+    WRITE 3618 ST(SGx1);
+    WRITE 3618 ST(SGy1);
+    WRITE 3618 ST(SGx2);
+    WRITE 3618 ST(SGy2);
+  CLOSEF 3618;
+
+  TSS MU NBAR 0;
+  GET_TUNE_ENSEMBLE MU_N_ARR;
+  {WRITE 6 'SPIN-TUNE' MU_N_ARR(1)|1-CONS(MU) MU_N_ARR(1)|2-CONS(MU);}
+  WRITE 6 '+++++++++++++++++++++++++SPIN TUNE+++++++++++++++++++++++++';
+  WRITE 6 'CONS(MU)' CONS(MU);
+  WRITE 6 'MU_N_ARR' MU_N_ARR(1)|1 MU_N_ARR(1)|2 MU_N_ARR(1)|3 MU_N_ARR(1)|4 MU_N_ARR(1)|5;
+  WRITE 6 'SPIN-TUNE' MU_N_ARR(1)|3-CONS(MU) MU_N_ARR(1)|4-CONS(MU) MU_N_ARR(1)|5-CONS(MU);
+  WRITE 6 '+++++++++++++++++++++++++ALPHA++++++++++++++++++++++++++++';
+  MCMCALC ALPHA0 ALPHA1;
+  WRITE 6 'ALPHA0 = '&ST(ALPHA0);
+  WRITE 6 'ALPHA1 = '&ST(ALPHA1);
+  ETA1 := ALPHA1+(3/2)*(BETA*BETA)/(GAMMA*GAMMA)-ALPHA0/(GAMMA*GAMMA)+1/(GAMMA*GAMMA*GAMMA*GAMMA);
+  WRITE 6 'ETA1 = '&ST(ETA1);
+  WRITE 6 '++++++++++++++++++++++CHROMATICITY++++++++++++++++++++++++++';
+  OS 'cosy Chrom.fox';
+  OPENF 100500 'dat/ALPHA/CHROM.dat' 'OLD';
+    READ 100500 VALUE0;
+    READ 100500 VALUE1;
+    CHROM_X := VALUE0;
+    CHROM_Y := VALUE1;
+  CLOSEF 100500;
+  WRITE 6 'CHROM_X, CHROM_Y = '&ST(CHROM_X)&' '&ST(CHROM_Y);
+
+  WRITE 6 '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++';
+  ENDPROCEDURE; {MAIN}
+
+PROCEDURE RUN;
+  MAIN;
+ENDPROCEDURE;
+RUN; END;

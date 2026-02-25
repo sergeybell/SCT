@@ -1,0 +1,77 @@
+INCLUDE 'SEQFULL';
+
+PROCEDURE BETAFUNC;
+  VARIABLE WHERE 100; VARIABLE GAMMA 1;
+  VARIABLE RFFLAG 1; VARIABLE NSEQ 1;
+  VARIABLE VRF 1 1 1;
+  VARIABLE FREQ 1;
+  VARIABLE HNUM 1;
+  VARIABLE RFFLAG 1;
+  {lattice parameters}
+  VARIABLE KS 1 2; VARIABLE X 1 2;  VARIABLE XS 1 2;
+  VARIABLE MAPPARAMS 1 6; {HOLDS THE ABOVE VALUES}
+  VARIABLE MAPARR 1000 6 1281; VARIABLE SPNRARR 1000 3 3 1281; {element map arrays}
+  {variables required by GT}
+  VARIABLE F 100 6; VARIABLE A 100 2; VARIABLE B 100 2;
+  VARIABLE G 100 2; VARIABLE R 100 2; VARIABLE MU 100 2;
+
+  VARIABLE EL 1; {index of the current starting element}
+  VARIABLE EL0 1; VARIABLE EL1 1; {selec lattice segment from EL0 to EL1 for test}
+  VARIABLE PCL 2 2; VARIABLE PID 1; {selec which particle (proton, deuteron) to inject}
+
+  PROCEDURE PICK INDEX;
+    VARIABLE I 1; VARIABLE J 1;
+    LOOP I 1 TWOND; MSC(I) := MAPARR(I, INDEX); ENDLOOP;
+    LOOP I 1 3; LOOP J 1 3; SSCR(I,J) := SPNRARR(I,J,INDEX) + 0*DD(1);
+    ENDLOOP;ENDLOOP;
+  ENDPROCEDURE;
+  PROCEDURE MAKEMAP FROM TO START; {lattice segment FROM index TO index, beginning at START index}
+    VARIABLE J 1;
+    WRITE 6 '* '&ST(START);
+    LMAPS START MAPARR SPNRARR; {sets the MAP, SPNR transfer maps to those of the i-th element}
+    LOOP J (START+1) TO; WRITE 6 '**       '&ST(J);
+      PICK J; LOCSET 0 0 0 0 0 0; UPDATE 1 1;
+      ENDLOOP;
+    LOOP J FROM (START-1); WRITE 6 '**       '&ST(J);
+      PICK J; LOCSET 0 0 0 0 0 0; UPDATE 1 1;
+      ENDLOOP;
+  ENDPROCEDURE;
+
+  {********** CONTROLS **********}
+  GAMMA := 1.14; {beam injection energy}
+  RFFLAG := 1; {insert RF at the beginning of lattice}
+  NSEQ := 1280; {number of elements in sequence PRIOR to the inserion}
+  {******************************}
+
+  GROUTF 'img/dump/TR' 1;
+
+  OV 3 2 0; SET_FOR_DEUTERONS GAMMA;
+
+
+  LATTICE MAPPARAMS MAPARR SPNRARR; {computes element matrices}
+  IF RFFLAG=1;
+    UM; RF VRF 0 FREQ 0 0.05;
+    INSERT 1 MAPARR SPNRARR NSEQ;
+    NSEQ := NSEQ + 1;
+  ENDIF;
+
+  EL0 := 1; EL1 := NSEQ;
+  OPENF 3617 'BETA.dat' 'REPLACE';
+  OPENF 3618 'MU.dat' 'REPLACE';
+  WRITE 3617 '# EL BX-RE BX-IM BY-RE BY-IM';
+  LOOP EL EL0 EL1;
+    MAKEMAP EL0 EL1 EL; OPENF 935 'MAP'&MRK(EL) 'REPLACE'; PM 935; CLOSEF 935;
+    GT MAP F MU A B G R;
+    B(1) := CM(CONS(B(1))); B(2) := CM(CONS(B(2)));
+    MU(1) := CM(CONS(MU(1))); MU(2) := CM(CONS(MU(2)));
+    WRITE 3617 SF(EL,'(I6)')&SF(B(1)|1,'(E15.7)')&SF(B(1)|2,'(E15.7)')&SF(B(2)|1,'(E15.7)')&SF(B(2)|2,'(E15.7)');
+    WRITE 3618 SF(EL,'(I6)')&SF(MU(1)|1,'(E15.7)')&SF(MU(1)|2,'(E15.7)')&SF(MU(2)|1,'(E15.7)')&SF(MU(2)|2,'(E15.7)');
+  ENDLOOP;
+  CLOSEF 3617; CLOSEF 3618;
+
+ENDPROCEDURE; {BETAFUNC}
+
+PROCEDURE RUN;
+  BETAFUNC;
+ENDPROCEDURE;
+RUN; END;
