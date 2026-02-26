@@ -1,0 +1,327 @@
+#======================================================================================================
+#                   FROZEN SPIN LATTICE with  "E + B"  elements on arc designed by Yury Senichev
+#======================================================================================================
+
+
+
+#=====================================Short discription=====================================================
+
+# The ring consists of two arcs and two Straight sections: RING=ARC+STRSEC+ARC+STRSEC
+#Each ARC has 16 "E+B" bend elements: 	 ARC= 16*("E+B" elements), 
+#Each STRSEC has 3 FODO cells: STRSEC= 3 * (FODO cells)
+# Total lattice is : RING={16*["E+B"elements]}+		<==        first ARC
+#                                       +{3 * [FODO]}+		<==        first STRSEC		
+#                                       +{16*["E+B"elements]}+		<==        second ARC
+#                                       +{3 * [FODO]}		<==        second STRSEC
+#------------------------------------------PARAMETERS--------------------------------------------------------------------------------------------------------------------
+#======================================================================================================
+
+#-------------------------------------------------------------------------------BEAM------------------------------------------------------------------------------------------
+# Proton Momentum in [MeV/c]
+
+#---------------------------------
+#250 MeV
+#232.79774
+#$Pc=729.135;  =>     729.135
+$gamma = sqrt(1/1.792847337 + 1);  =>  1.24810736
+$E_p = (1.24810736-1)*938.272046;  =>    232.79220029
+#-----------------------------------
+#proton mass in [MeV] 
+$Mp=938.272046;  =>  938.272046
+#----------------------------------
+#energy in [MeV]
+$En=$Mp*($gamma-1);  =>  232.792198
+#----------------------------------
+# proton mass in  [kG]
+$Mpr=1.6726e-27;  =>  1.6726e-27
+# deutron mass in  [kG]
+$Mdeu=2*1.6726e-27;  =>  3.3452e-27
+#----------------------------------
+#el  charge in [C]
+$Qp=1.6022e-19;  =>  1.6022e-19
+$Q=1*$Qp;  =>  1.6022e-19
+#----------------------------------
+#relative velocity
+$beta=sqrt(1-1/$gamma/$gamma);  =>  0.59837908
+#---------------------------------
+#Momentum
+$Ps=$Mp*$c*$beta*$gamma/100;  =>2.1007667e+11
+#electric field in deflector in MV/m
+$Edef=-12.0;  =>         -12
+# Total length of deflector
+$Rdef=$gamma*$Mp*$beta*$beta/$Edef;  => -34.9423635
+$Lall_def=2*$pi*$Rdef;  => -219.549345
+# number of deflectors on ring
+$Ndef=50;  =>          50
+#length of one deflector in m
+$Ldef=$Lall_def/$Ndef;  =>  -4.3909869
+$Rdef1 =-37.2836553;  => -37.2836553
+#electric rigidity of fs ring
+$chie1 = $gamma*$Mp*$beta*$beta;  =>  419.308363
+#electric rigidity of original ring
+$chie2 = $Rdef1*$Edef;  =>  447.403864
+$E2=$chie1/$Rdef1;  => -11.2464392
+$k = $chie1/$chie2;  => 0.937203267
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#********************************************************************************VALUEs********************************
+
+
+OptiM
+#  Insert comment here
+#Energy[MeV]=250.01275   Mass[MeV]= 938.272046 
+Energy[MeV]=232.7922   Mass[MeV]=938.272046 
+Emittance: ex[cm]=0.001  ey[cm]=0.001  DP/P=0.001 
+
+
+Initial:	BetaX[cm]=2170.51 	BetaY[cm]=775.695 
+	AlfaX=-1.27694e-15 	AlfaY=-7.42905e-16 
+	DispersX[cm]=-0.635762 	DispersY[cm]=0 
+	Dsp_PrimeX=-4.12632e-16 	DspPrimeY=0 
+
+	X[cm]=0.000    	Y[cm]=0.000    	Z[cm]=0.000    	S[cm]=0.000    
+	tetaX[deg]=0        	tetaY[deg]=0        
+begin lattice. Number of periods=1 
+
+
+
+#===========1-th SUPERPERIOD==================
+ Lds  OD1 SDP OD2  OR1  OD2 BPM  OD1  Lfs
+
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+
+Lfs  OD1 SFP OD2  OR1  OD2 BPM  OD1  Lds 
+
+
+#===========2-d SUPERPERIOD================
+
+ Lds  OD1 SDP OD2  OR1  OD2 BPM  OD1  Lfs
+
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+
+Lfs  OD1 SFP OD2  OR1  OD2 BPM  OD1  Lds 
+
+#===========3-d SUPERPERIOD================
+ Lds  OD1 SDP OD2  OR1  OD2 BPM  OD1  Lfs
+
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+
+Lfs  OD1 SFP OD2  OR1  OD2 BPM  OD1  Lds 
+
+#===========4-th SUPERPERIOD================
+ Lds  OD1 SDP OD2  OR1  OD2 BPM  OD1  Lfs
+
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+
+Lfs  OD1 SFP OD2  OR1  OD2 BPM  OD1  Lds 
+
+#===========5-th SUPERPERIOD================
+ Lds  OD1 SDP OD2  OR1  OD2 BPM  OD1  Lfs
+
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+Lf  OD1 SFP OD2  R1  OD2 BPM  OD1  Ld  Ld  OD1 SDP OD2  R1  OD2 BPM  OD1  Lf
+
+Lfs  OD1 SFP OD2  OR1  OD2 BPM  OD1  Lds 
+
+
+
+
+end lattice
+begin list
+# Magnetostatic ARC
+OD1 	L[cm]=25       
+OD2 	L[cm]=25
+OR1 	L[cm]=468.5       
+
+       
+
+ORE 	L[cm]=217      
+ORB 	L[cm]=220      
+
+OSF 	L[cm]=15       
+OSD 	L[cm]=15       
+
+ 
+QFA1 	L[cm]=10         	G[kG/cm]=0.265   	Tilt[deg]=0
+QDA1 	L[cm]=10         	G[kG/cm]=-0.285  	Tilt[deg]=0
+
+
+      
+Ld 	L[cm]=50         	Ge[kV/cm^2]=6.7855 
+Lf 	L[cm]=50         	Ge[kV/cm^2]=-6.1863 
+
+Lds 	L[cm]=50         	Ge[kV/cm^2]=7.9336 
+Lfs 	L[cm]=50         	Ge[kV/cm^2]=-7.11305 
+
+
+
+
+#SFP 	L[cm]=15         	S[kG/cm/cm)]=0.0027695769   Tilt[deg]=0
+#SDP 	L[cm]=15         	S[kG/cm/cm)]=-0.00339597809   Tilt[deg]=0
+#SFN 	L[cm]=15         	S[kG/cm/cm)]=-0.00209836542   Tilt[deg]=0
+#SDN 	L[cm]=15         	S[kG/cm/cm)]=0.00079310524   Tilt[deg]=0
+
+SFP 	L[cm]=15         	S[kG/cm/cm)]=0   Tilt[deg]=0
+SDP 	L[cm]=15         	S[kG/cm/cm)]=0   Tilt[deg]=0
+
+
+
+
+BPM 	L[cm]=15         	B[kG]=0          	G[kG/cm]=0        	Tilt[deg]=0
+BA 	L[cm]=180.78027   	B[kG]=3.7758427   	G[kG/cm]=0        	Tilt[deg]=0
+
+
+
+# "E+B" element 
+
+
+R1 	L[cm]=468.5      	B[kG]=0          	Gb[kG/cm]=0  	E[kV/cm]=112.46439  	Ge[kV/cm^2]=0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end list of elements
+
+BetaFitBlock  dL[cm]=0.001  dB[kGs]=0.001  dG[kGs/cm]=0.0001
+Maximum Betas[cm]: Beta_X=500000 	dBeta_X=-1 	Beta_Y=500000 	dBeta_Y=-1 
+#Fitting parametrs at the end of the lattice
+Beta_X[cm]=528.05 	dBeta_X[cm]=0.01 	Alfa_X=0  	dAlfa_X=0.001
+Beta_Y[cm]=70.154 	dBeta_Y[cm]=0.01 	Alfa_Y=0  	dAlfa_Y=0.001 
+Disp_X[cm]=25.0747 	dDisp_X[cm]=0.01 	D_prime_X=0 	dD_prime_X=0.001 
+Disp_Y[cm]=0 	dDisp_Y[cm]=0.011 	D_prime_Y=0 	dD_prime_Y=0.001 
+Qx=0.375 	dQx=0.001 
+Qy=0.25 	dQy=0.001 
+#
+#Groups of elements below. Each group has to be located on one line
+#begining from the letter describing the changable parameter such as: L:, Q: 
+G: QFA
+G: BDA
+L: OD2
+L: OD1
+EndBetaFitBlock
+
+
+TrajParamBlock
+	X[cm]=0.0 	Teta_X[rad]=0.0
+	Y[cm]=0.0 	Teta_Y[rad]=0.0
+	s[cm]=0.0 	DeltaP/P=0.0
+EndTrajParamBlock
+
+
+
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  R1  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  R1  OD2 BPM  OD1  QFA1
+

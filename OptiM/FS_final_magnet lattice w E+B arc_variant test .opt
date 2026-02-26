@@ -1,0 +1,421 @@
+#======================================================================================================
+#                   FROZEN SPIN LATTICE with  "E + B"  elements on arc designed by Yury Senichev
+#======================================================================================================
+
+
+
+#=====================================Short discription=====================================================
+
+# The ring consists of two arcs and two Straight sections: RING=ARC+STRSEC+ARC+STRSEC
+#Each ARC has 16 "E+B" bend elements: 	 ARC= 16*("E+B" elements), 
+#Each STRSEC has 3 FODO cells: STRSEC= 3 * (FODO cells)
+# Total lattice is : RING={16*["E+B"elements]}+		<==        first ARC
+#                                       +{3 * [FODO]}+		<==        first STRSEC		
+#                                       +{16*["E+B"elements]}+		<==        second ARC
+#                                       +{3 * [FODO]}		<==        second STRSEC
+#------------------------------------------PARAMETERS--------------------------------------------------------------------------------------------------------------------
+#======================================================================================================
+
+#
+#------------------------------------------------------------------BEAM-------------------------------------------------
+# Deutron Momentum in [MeV/c]
+$Pc=1042.24 ;  =>     1042.24
+#-----------------------------------
+#deutron mass in [MeV] 
+$Md=2*$Mp;  =>  1876.54409
+#----------------------------------
+# Lorentz factor
+$gamma=sqrt($Pc*$Pc/$Md/$Md+1);  =>  1.14388529
+#----------------------------------
+#energy in [MeV]
+$En=$Md*($gamma-1);  =>  270.007083
+#----------------------------------
+# deutron mass in  [kG]
+$Mdeu=2*1.6726e-27;  =>  3.3452e-27
+#----------------------------------
+#el  charge in [C]
+$Qp=1.6022e-19;  =>  1.6022e-19
+$Q=1*$Qp;  =>  1.6022e-19
+#----------------------------------
+#relative velocity
+$beta=sqrt(1-1/$gamma/$gamma);  =>  0.48554165
+#----------------------------------
+#rest Energy of deuteron
+$Mc=2*938.2796;  =>   1876.5592
+#---------------------------------
+#Momentum
+$c;  =>2.99792458e+10
+$Ps=$Mdeu*$c*$beta*$gamma/100;  =>5.56995587e-19
+
+
+#==============================INSERTION for calculation of Revolution frequency and separatrix sizes and so on===================
+#Ring circumference in m
+$Cir=145.85;  =>      145.85
+#-----------------------------------
+#average radius of ring, in m
+$Rav=$Cir/$pi/2;  =>  23.2127484
+#-----------------------------------
+#Period of revolution in sec
+$T=$Cir/$beta/$c*100;  =>1.00198043e-06
+#-----------------------------------
+#Revolution frequency in Herz
+$Frev=1/$T;  =>  998023.482
+#-----------------------------------
+#Revolution frequency in MHz
+$FrevMHz=$Frev/1000000;  => 0.998023482
+#----------------------------------
+#the angular frequency in rad per sec
+$OmegaR=$Frev*2*$pi;  =>  6270766.48
+#----------------------------------
+#Harmonic number
+$h=50;  =>          50
+#---------------------------------
+#RF cavity frequency in MHz
+$RFfreq=$h*$FrevMHz;  =>  49.9011741
+#--------------------------------
+#Quater wave Cavity length in m
+$Lcavity=($c*0.01)/($RFfreq*10^6)/4;  =>  1.50193088
+#Usually the cavity is shorter since we load cavity by ferrite, but it gives a scale of size
+#--------------------------------
+#Voltage per gap in MV
+$V=0.200000;  =>         0.2
+#-------------------------------
+#Transition energy or momentum compaction factor
+$MCF=0.0332419;  =>   0.0332419
+#------------------------------
+#etta fcator
+$etta=1/$gamma^2-$MCF;  => 0.731007406
+#-----------------------------
+#Total energy, kinetic+potenttial, in MeV
+$W=$Md+$En;  =>  2146.55117
+#----------------------------
+#Longitudinal angular frequency in rad per second
+$OmegaZ=sqrt($V*$h*$etta/(2*$pi*$W))*$c/$Rav/100 ;  =>  300673.026
+#----------------------------
+#Longitudinal tune, number longitudinal oscillation per one turn
+$Nuz=sqrt($V*$h*$etta/(2*$pi*$W))/$beta;  =>0.0479483692
+#----------------------------
+#Turns number for one longitudinal oscillation, inversal value of longitudinal tune
+$Nzturn=1/$Nuz;  =>  20.8557667
+#---------------------------
+# separatrix size by relative energy +-(dW/W)max:
+$dWsep=$beta*sqrt($V/($pi*$h*$etta*$W*2));  =>0.000309268038
+#---------------------------
+#separatrix size by relative momentum +-dp/p:
+$dPsep=$dWsep/$beta^2;  =>0.0013118436
+#---------------------------
+#Maximum relative  momentum spread in bunch +-dp/p=$dp
+$dp=0.0005;  =>      0.0005
+#--------------------------
+#Maximum energy spread in bunch +-dW
+$dW=$dp*$beta^2;  =>0.000117875347
+#-------------------------
+#Ratio of momentum bunch size and momentum separatriz size
+$Rdp=$dp/$dPsep;  => 0.381142997
+#------------------------
+#Longitudinal bunch size in rad +-dF:
+$dF=$h*$etta*$c/100/$beta/$Rav/$OmegaZ*$dW;  => 0.381142997
+#-----------------------
+# or longitudinal bunch size in rad +-dF through momentum relative spread dp/p of bunch; it has to be the same
+$dF=$h*$etta/$Nuz*$dp;  => 0.381142997
+#----------------------
+#or longitudinal bunch size in degrees +-dFdeg
+$dFdeg=$dF*180/$pi;  =>  21.8378851
+#----------------------
+$G=-0.143;  =>      -0.143
+#************************************************************************************************
+#*****************************NOW WE HAVE TO TEST THE MAIN CONDITIONs**********************
+#1. The bunch length has to be less +-60 degree
+$HalfLengthBunch=$dFdeg;  =>  21.8378851
+#-----------------------------------------------------------
+#2. The value Spin Tune Spread (G*delta gamma=G*$gamma*$dW) has to be one-two order less than the longitudinal spin tune ($Nuz)
+$SpinTuneSpread=-$G*$gamma*$dW;  =>1.92815301e-05
+$LongitudinalParticleTune=$Nuz;  =>0.0479483692
+#----------------------------------------------------------
+#If these two CONDITIONS are fulfilled we make choice for the final RF frequency of cavity (cavity length ~15 m) and voltage gap (V~0.1-0.2 MV per gap)
+#-----------------------------------------------------------
+#3. The cavity length has to be about 14-16 m
+$CavityLength=$Lcavity;  =>  1.50193088
+#----------------------------------------------------------
+#4. Voltage per Gap has to be ~0.1-0.5 MV
+$VoltagePerGap=$V;  =>         0.2
+
+#-----------------------------------------------------------
+
+
+
+
+#=============================================================END of INSERTION===========================
+
+
+#=================================================================
+#-------------------------------------------------"E+B" element-----------------------------------------------
+#=================================================================
+
+#Electrical  Rigidity R*E calculation in [MV/m*m]
+$RE=$Mc*$gamma*$gamma*$gamma*$beta*$beta*$G/(-$G-1)*1e6;  =>   110488706
+#-----------------------------------------------------------------
+#test: comparizon RE with RE1
+$gam=1/($gamma*$gamma-1);  =>  3.24176906
+$G1=-$G;  =>       0.143
+$RE1=$Mc*$gamma*$beta*$beta*$G1/(-$G1+($gam+$G1)*$beta*$beta)*1e6;  =>   110488706
+#------------------------------------------------------------------
+
+# Electrical Field between  plates of  "E+B" element [V/m]
+$Ebp=-12.0e6;  =>-12000000
+# in [kV/cm]
+$Eplate=$Ebp/1.e5;  =>        -120
+#---------------------------------
+
+#Curvature Radius   of "E+B" element in [m]
+$Rbp=-$RE/$Ebp*1;  =>  9.20739214
+#in [cm]
+$Rplate=$Rbp*100;  =>  920.739214
+#---------------------------------
+
+# magnetic field in Tesla in "E+B" element
+$Bplate=$Ebp*(1./($gamma*$gamma-1.)-$G)*$beta/$c*100/$G;  => 0.460023521
+
+# magnetic field in kGauss in "E+B" element
+$Bbe=$Bplate*10;  =>  4.60023521
+
+$Bneg=$Ebp/($beta*$c/100);  =>-0.082439254
+$Btotal=($Bplate+$Bneg)*10;  =>  3.77584267
+#-------------------------------------
+# Magnetic Rigidity Btotal*R
+$BR=$Mdeu*$gamma*$beta*$c*0.01/$Q;  =>  3.47644231
+$R=$BR*10/$Btotal;  =>  9.20706347
+# Total lebgth of all magnets
+$LB_all=2*$pi*$R;  =>  57.8496859
+$Lone=$LB_all/(16*2);  =>  1.80780268
+
+#---------------------------------
+$R=$Mdeu*$gamma*$beta*$beta*$c*0.01*$c*0.01/($Q*($beta*$c*0.01*$Bplate+$Ebp));  =>  9.20706347
+#number of "E+B" elements on one arc
+$Nplate=16.;  =>          16
+
+#turn angle in rad in each"E+B" element
+$Dfrad=$pi/$Nplate;  => 0.196349541
+
+#turn angle in deg in each "E+B" element
+$Dfdeg=$Dfrad*180/$pi;  =>       11.25
+
+# length of one"E+B" element in [m]
+$Lbp=$pi*$Rbp/$Nplate ;  =>  1.80786722
+
+#length of one "E+B" element in [cm]
+$Lplate=$Lbp*100;  =>  180.786722
+#--------------------------------------------------
+
+#-------------------------------TEST for SPIN--------------------------------------
+#anomalous magnetic moment od Deuteron
+$G=-0.143;  =>      -0.143
+#----------------------------------
+#spin turn in electrostatic part of ring in {rad]
+$FIspin_el=(1./($gamma*$gamma-1.)-$G)*$beta*(-$Ebp)/$c*100;  =>0.0657833635
+#----------------------------------
+#spin turn in magnetostatic part of ring in {rad]
+$FIspin_magn=$G*$Bplate;  =>-0.0657833635
+# Total spin deviation on arc
+$FIspin_total=$FIspin_magn+$FIspin_el;  =>           0
+
+#------------MAIN PARAMETERS of DEFLECTOR------------------------
+#Since we use the magnet with B field only instead the deflector with E and B field then we have to substitute B field=Bdef-Edef/(betta*c)
+# Magnetic field in deflector
+$Bdef=$Btotal;  =>  3.77584267
+#Electric field in deflector
+$Edef=$Eplate;  =>        -120
+#Lenth of deflector
+$Ldef=$Lplate;  =>  180.786722
+
+
+
+
+
+
+
+
+
+#********************************************************************************VALUEs********************************
+
+
+OptiM
+#  Insert comment here
+#Energy[MeV]=270.01275   Mass[MeV]=1876.5592 
+Energy[MeV]=270.11275   Mass[MeV]=1876.5592 
+Emittance: ex[cm]=0.001  ey[cm]=0.001  DP/P=0.001 
+
+
+Initial:	BetaX[cm]=548.985 	BetaY[cm]=1405.65 
+	AlfaX=4.42898e-16 	AlfaY=-1.3109e-16 
+	DispersX[cm]=0.111104 	DispersY[cm]=0 
+	Dsp_PrimeX=-2.57551e-16 	DspPrimeY=0 
+
+	X[cm]=0.000    	Y[cm]=0.000    	Z[cm]=0.000    	S[cm]=0.000    
+	tetaX[deg]=0        	tetaY[deg]=0        
+begin lattice. Number of periods=1 
+
+#===============2-d half of 1-th SS================
+QDA2   OD1 OSD OD2  ORB  OD2  BPM  OD1  QFA2
+QFA2  OD1 OSF OD2  ORB OD2 BPM OD1   QDA2 
+ QDA2   OD1 OSD OD2  ORB  OD2  BPM  OD1  QFA2
+
+#===========FIRST ARC==================
+
+
+QFA1  OD1 SFP OD2  BA  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  BA  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  BA  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  BA  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  BA  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  BA  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  BA  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  BA  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  BA  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  BA  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  BA  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  BA  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  BA  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  BA  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  BA  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  BA  OD2 BPM  OD1  QFA1
+
+#====================1-t half of 2-d SS=========
+
+QFA2  OD1 OSD OD2  ORB OD2 BPM OD1   QDA2 
+QDA2   OD1 OSD OD2  ORB  OD2  BPM  OD1  QFA2
+QFA2  OD1 OSD OD2  ORB OD2 BPM OD1   QDA2 
+
+
+#===============2-t half of 2-d SS================
+QDA2   OD1 OSD OD2  ORB  OD2  BPM  OD1  QFA2
+QFA2  OD1 OSF OD2  ORB OD2 BPM OD1   QDA2 
+ QDA2   OD1 OSD OD2  ORB  OD2  BPM  OD1  QFA2
+
+#===========SECOND  ARC==================
+
+
+
+QFA1  OD1 SFP OD2  BA  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  BA  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  BA  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  BA  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  BA  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  BA  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  BA  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  BA  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  BA  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  BA  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  BA  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  BA  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  BA  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  BA  OD2 BPM  OD1  QFA1
+
+QFA1  OD1 SFP OD2  BA  OD2 BPM  OD1  QDA1  
+QDA1  OD1 SDP OD2  BA  OD2 BPM  OD1  QFA1
+
+#====================1-t half of 1-t SS=========
+
+QFA2  OD1 OSD OD2  ORB OD2 BPM OD1   QDA2 
+QDA2   OD1 OSD OD2  ORB  OD2  BPM  OD1  QFA2
+QFA2  OD1 OSD OD2  ORB OD2 BPM OD1   QDA2 
+
+
+
+end lattice
+begin list
+# Magnetostatic ARC
+OD1 	L[cm]=25       
+OD2 	L[cm]=25       
+
+       
+
+ORE 	L[cm]=217      
+ORB 	L[cm]=220      
+
+OSF 	L[cm]=15       
+OSD 	L[cm]=15       
+
+ 
+
+      
+QFA1 	L[cm]=5          	G[kG/cm]=1.365   	Tilt[deg]=0
+QDA1 	L[cm]=5          	G[kG/cm]=-1.013  	Tilt[deg]=0
+QFA2 	L[cm]=5          	G[kG/cm]=0.816   	Tilt[deg]=0
+QDA2 	L[cm]=5          	G[kG/cm]=-0.83   	Tilt[deg]=0
+
+
+
+
+#SFP 	L[cm]=15         	S[kG/cm/cm)]=0.0027695769   Tilt[deg]=0
+#SDP 	L[cm]=15         	S[kG/cm/cm)]=-0.00339597809   Tilt[deg]=0
+#SFN 	L[cm]=15         	S[kG/cm/cm)]=-0.00209836542   Tilt[deg]=0
+#SDN 	L[cm]=15         	S[kG/cm/cm)]=0.00079310524   Tilt[deg]=0
+
+SFP 	L[cm]=15         	S[kG/cm/cm)]=0.012   Tilt[deg]=0
+SDP 	L[cm]=15         	S[kG/cm/cm)]=-0.01529   Tilt[deg]=0
+
+
+
+BPM 	L[cm]=15         	B[kG]=0          	G[kG/cm]=0        	Tilt[deg]=0
+BA 	L[cm]=180.78027   	B[kG]=3.7758427   	G[kG/cm]=0        	Tilt[deg]=0
+
+
+
+# "E+B" element 
+
+
+#R1 	L[cm]=180.786722   	B[kG]=4.6002779   	Gb[kG/cm]=0  	E[kV/cm]=-120      	Ge[kV/cm^2]=0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end list of elements
+
+BetaFitBlock  dL[cm]=0.001  dB[kGs]=0.001  dG[kGs/cm]=0.0001
+Maximum Betas[cm]: Beta_X=500000 	dBeta_X=-1 	Beta_Y=500000 	dBeta_Y=-1 
+#Fitting parametrs at the end of the lattice
+Beta_X[cm]=528.05 	dBeta_X[cm]=0.01 	Alfa_X=0  	dAlfa_X=0.001
+Beta_Y[cm]=70.154 	dBeta_Y[cm]=0.01 	Alfa_Y=0  	dAlfa_Y=0.001 
+Disp_X[cm]=25.0747 	dDisp_X[cm]=0.01 	D_prime_X=0 	dD_prime_X=0.001 
+Disp_Y[cm]=0 	dDisp_Y[cm]=0.011 	D_prime_Y=0 	dD_prime_Y=0.001 
+Qx=0.375 	dQx=0.001 
+Qy=0.25 	dQy=0.001 
+#
+#Groups of elements below. Each group has to be located on one line
+#begining from the letter describing the changable parameter such as: L:, Q: 
+G: QFA
+G: BDA
+L: OD2
+L: OD1
+EndBetaFitBlock
+
+
+TrajParamBlock
+	X[cm]=0.0 	Teta_X[rad]=0.0
+	Y[cm]=0.0 	Teta_Y[rad]=0.0
+	s[cm]=0.0 	DeltaP/P=0.0
+EndTrajParamBlock

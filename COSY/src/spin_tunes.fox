@@ -1,5 +1,4 @@
-{INCLUDE 'BYPASS_REAL_4_fam_NEW';}
-INCLUDE 'seq_Nuclotron_Mod';
+INCLUDE 'lattice_sext';
 
 PROCEDURE MAIN;
   VARIABLE WHERE 100; VARIABLE MRKR 10;
@@ -11,36 +10,24 @@ PROCEDURE MAIN;
   VARIABLE NTURN 1;
   VARIABLE TUNE 800 3;
   VARIABLE MU_TP 800 3;
-  VARIABLE CHROM_X 1;
-  VARIABLE CHROM_Y 1;
+  VARIABLE CHROM_X 1; VARIABLE CHROM_Y 1;
   VARIABLE SGx1 1; VARIABLE SGx2 1;
-  VARIABLE SGy1 1;  VARIABLE SGy2 1;
-  VARIABLE EB1 1; VARIABLE EB2 1;
-  VARIABLE quadKx 1; VARIABLE quadKy 1; VARIABLE quadKz 1; VARIABLE MU0 1;
-  VARIABLE R_E 1;
-  VARIABLE E1 1;
+  VARIABLE SGy1 1; VARIABLE SGy2 1;
+  VARIABLE EB1 1;  VARIABLE EB2 1;
+  VARIABLE quadKx 1; VARIABLE quadKy 1; VARIABLE quadKz 1; 
+  VARIABLE MU0 1;
+  VARIABLE R_E 1; VARIABLE E1 1;
   VARIABLE ANGDEF 1;
   VARIABLE L 1;
-  VARIABLE TILT 48;
 
-  TILT := ZEROS(48);
-
-  GROUTF 'img/dump/TR' 1;
   {GAMMA :=1.28783;}
   GAMMA := 1.143914;
-  MRKR := 'NUC1';
+  MRKR := 'magnetic';
 
-  OV 3 3 0;
+  OV 3 3 1;
   {DAEPS 1E-12;}
   { SET lattice parameters }
-  SET_FOR_DEUTERONS GAMMA;
-
-  {WIEN FILTER}
-  {spin tune ~ 10^-4}
-
-  {spin tune ~ 10^-7}
-  EB1 := 128.0; {3.27*2}
-  {EB1 := 0.0;}
+  SET_FOR_DEUTERONS_CHROM GAMMA;
 
   {EL DEFLECTOR}
 
@@ -51,10 +38,18 @@ PROCEDURE MAIN;
   SGx2 :=  0.0;
   SGy2  := 0.0;
 
-  {LATTICE SGx1 SGy1 SGx2 SGy2 EB1 1; PM 6;}
-  LATTICE SGx1 SGy1 SGx2 SGy2 EB1 1 TILT 0; PM 6;
+  LATTICE SGx1 SGy1 SGx2 SGy2 EB1 1; PM 6;
   WRITE 6 '++++++++++ Magnetic Rigidity';
   WRITE 6 CONS(CHIM);
+
+  {Chromaticity}
+  TP MU_TP ;
+  WRITE 6 'DELTA DEPENDENT TUNES' MU_TP(1) MU_TP(2) ;
+  CHROM_X:= (MU_TP(1)|(0&0&0&0&1))*(1+1/GAMMA);
+  CHROM_Y:= (MU_TP(2)|(0&0&0&0&1))*(1+1/GAMMA);
+  WRITE 6 'CHROM_X' CHROM_X 'CHROM_Y' CHROM_Y;
+
+  {Spin coherence}
   TSS MU NBAR 0;
    OPENF 3618 'dat/'&MRKR&'/NU_'&MRKR&'.dat' 'REPLACE';
       WRITE 3618 MU;
@@ -66,31 +61,15 @@ PROCEDURE MAIN;
     ENDLOOP;}
 
   MU0 := CONS(MU);
-  DAPEE MU 11 quadKx;
-  DAPEE MU 33 quadKy;
-  DAPEE MU 66 quadKz;
+  DAPEE MU 11 quadKx; DAPEE MU 33 quadKy; DAPEE MU 66 quadKz;
   WRITE 6 MU;
 
   WRITE 6 'EB1 = '&ST(EB1);
-  WRITE 6 'SGx1 := '&ST(SGx1)&';';
-  WRITE 6 'SGy1 := '&ST(SGy1)&';';
-  WRITE 6 'SGx2 := '&ST(SGx2)&';';
-  WRITE 6 'SGy2 := '&ST(SGy2)&';';
+  WRITE 6 'SGx1 := '&ST(SGx1)&';'; WRITE 6 'SGy1 := '&ST(SGy1)&';';
+  WRITE 6 'SGx2 := '&ST(SGx2)&';'; WRITE 6 'SGy2 := '&ST(SGy2)&';';
 
   WRITE 6 'quadKx, quadKy, quadKz= '&ST(quadKx)&' '&ST(quadKy)&' '&ST(quadKz);
   WRITE 6 'MU0 = '&ST(MU0);
-
-  L := 2.955;
-  E1:=EB1*1e5;   {in V/m}
-  R_E:=(CONS(CHIE)/E1);
-  ANGDEF:=L/R_E;
-
-  WRITE 6 'CHIE' CONS(CHIE);
-  WRITE 6 'ELD';
-  WRITE 6 'E1' E1;
-  WRITE 6 'R_E' R_E;
-  WRITE 6 'R_E' R_E;
-  WRITE 6 'ANGDEF' ANGDEF;
 
 ENDPROCEDURE; {MAIN}
 

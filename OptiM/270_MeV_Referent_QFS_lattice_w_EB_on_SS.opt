@@ -1,0 +1,472 @@
+#=======================Short discription====================================================================
+# The ring consists of two arcs and two Straight sections: RING=ARC+STR+ARC+STR
+#Each ARC has 4 bend magnets and in the middle of each arc  the straight section is inserted:  ARC= B+B+STR SEC+B+B, 
+#Each STR has 8  B+E" elements: STR= 8 * ("B+E" elements)
+# Total lattice is : RING={[B+B]+[STR SEC]+[B+B]}+		<==        first ARC
+#                                       +{8 * ["B+E" elements]}+		<==        first STR		
+#                                       +{[B+B]+[STR SEC]+[B+B]}+	<==        second ARC
+#                                       +{8 * ["B+E" elements]}		<==        second STR
+#------------------------------------------PARAMETERS--------------------------------------------------------------------------------------------------------------------
+#======================================================================================================
+#
+#-------------------------------------------------------------------------------BEAM------------------------------------------------------------------------------------------
+# Deutron Momentum in [MeV/c]
+#---------------------------------
+#75 MeV
+$Pc=536 ;  =>         536
+#---------------------------------
+#270 MeV
+$Pc=1042.2255 ;  =>   1042.2255
+#-----------------------------------
+#deutron mass in [MeV] 
+$Md=2*$Mp;  =>  1876.54409
+#----------------------------------
+# Lorentz factor
+$gamma=sqrt($Pc*$Pc/$Md/$Md+1);  =>  1.14388153
+#----------------------------------
+#energy in [MeV]
+$En=$Md*($gamma-1);  =>  270.000043
+#----------------------------------
+# deutron mass in  [kG]
+$Mdeu=2*1.6726e-27;  =>  3.3452e-27
+#----------------------------------
+#el  charge in [C]
+$Qp=1.6022e-19;  =>  1.6022e-19
+$Q=1*$Qp;  =>  1.6022e-19
+#----------------------------------
+#relative velocity
+$beta=sqrt(1-1/$gamma/$gamma);  => 0.485536488
+#---------------------------------
+#Momentum
+$Ps=$Mdeu*$c*$beta*$gamma/100;  =>5.56987838e-19
+
+
+#==============================INSERTION for calculation of Revolution frequency and separatrix sizes and so on===================
+#Ring circumference in m
+$Cir=251.5;  =>       251.5
+#-----------------------------------
+#average radius of ring, in m
+$Rav=$Cir/$pi/2;  =>  40.0274682
+#-----------------------------------
+#Period of revolution in sec
+$T=$Cir/$beta/$c*100;  =>1.72780774e-06
+#-----------------------------------
+#Revolution frequency in Herz
+$Frev=1/$T;  =>    578768.1
+#-----------------------------------
+#Revolution frequency in MHz
+$FrevMHz=$Frev/1000000;  =>   0.5787681
+#----------------------------------
+#the angular frequency in rad per sec
+$OmegaR=$Frev*2*$pi;  =>  3636507.22
+#----------------------------------
+#Harmonic number
+$h=100;  =>         100
+#---------------------------------
+#RF cavity frequency in MHz
+$RFfreq=$h*$FrevMHz;  =>    57.87681
+#--------------------------------
+#Quater wave Cavity length in m
+$Lcavity=($c*0.01)/($RFfreq*10^6)/4;  =>  1.29495932
+#Usually the cavity is shorter since we load cavity by ferrite, but it gives a scale of size
+#--------------------------------
+#Voltage per gap in MV
+$V=0.200000;  =>         0.2
+#-------------------------------
+#Transition energy or momentum compaction factor
+$MCF=0.0066;  =>      0.0066
+#------------------------------
+#etta fcator
+$etta=1/$gamma^2-$MCF;  => 0.757654319
+#-----------------------------
+#Total energy, kinetic+potenttial, in MeV
+$W=$Md+$En;  =>  2146.54413
+#----------------------------
+#Longitudinal angular frequency in rad per second
+$OmegaZ=sqrt($V*$h*$etta/(2*$pi*$W))*$c/$Rav/100 ;  =>  251045.988
+#----------------------------
+#Longitudinal tune, number longitudinal oscillation per one turn
+$Nuz=sqrt($V*$h*$etta/(2*$pi*$W))/$beta;  =>0.0690349209
+#----------------------------
+#Turns number for one longitudinal oscillation, inversal value of longitudinal tune
+$Nzturn=1/$Nuz;  =>  14.4854225
+#---------------------------
+# separatrix size by relative energy +-(dW/W)max:
+$dWsep=$beta*sqrt($V/($pi*$h*$etta*$W*2));  =>0.000214803559
+#---------------------------
+#separatrix size by relative momentum +-dp/p:
+$dPsep=$dWsep/$beta^2;  =>0.000911166467
+#---------------------------
+#Maximum relative  momentum spread in bunch +-dp/p=$dp
+$dp=0.0006;  =>      0.0006
+#--------------------------
+#Maximum energy spread in bunch +-dW
+$dW=$dp*$beta^2;  =>0.000141447409
+#-------------------------
+#Ratio of momentum bunch size and momentum separatriz size
+$Rdp=$dp/$dPsep;  => 0.658496577
+#------------------------
+#Longitudinal bunch size in rad +-dF:
+$dF=$h*$etta*$c/100/$beta/$Rav/$OmegaZ*$dW;  => 0.658496577
+#-----------------------
+# or longitudinal bunch size in rad +-dF through momentum relative spread dp/p of bunch; it has to be the same
+$dF=$h*$etta/$Nuz*$dp;  => 0.658496577
+#----------------------
+#or longitudinal bunch size in degrees +-dFdeg
+$dFdeg=$dF*180/$pi;  =>  37.7290747
+#----------------------
+$G=-0.143;  =>      -0.143
+#************************************************************************************************
+#*****************************NOW WE HAVE TO TEST THE MAIN CONDITIONs**********************
+#1. The bunch length has to be less +-60 degree
+$HalfLengthBunch=$dFdeg;  =>  37.7290747
+#-----------------------------------------------------------
+#2. The value Spin Tune Spread (G*delta gamma=G*$gamma*$dW) has to be one-two order less than the longitudinal spin tune ($Nuz)
+$SpinTuneSpread=-$G*$gamma*$dW;  =>2.31372683e-05
+$LongitudinalParticleTune=$Nuz;  =>0.0690349209
+#----------------------------------------------------------
+#If these two CONDITIONS are fulfilled we make choice for the final RF frequency of cavity (cavity length ~15 m) and voltage gap (V~0.1-0.2 MV per gap)
+#-----------------------------------------------------------
+#3. The cavity length has to be about 14-16 m
+$CavityLength=$Lcavity;  =>  1.29495932
+#----------------------------------------------------------
+#4. Voltage per Gap has to be ~0.1-0.5 MV
+$VoltagePerGap=$V;  =>         0.2
+
+#-----------------------------------------------------------
+
+#=========================================================================================================
+#--------------------------------------------------------------------------E+B elements on the straight sections----------------------------------------------------------------
+#=========================================================================================================
+#-------------Full Equetion:                                 dS/dt=e/(m*gamma)*S*{ [gamma*(G+1/gamma)*B]-[(gamma*G)+gamma/(gamma+1)*beta x E/c]}	(1)
+#---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#anomalous magnetic moment od Deuteron
+$G=-0.143;  =>      -0.143
+
+#--------------------------------
+# spin tune in one arc (22.5 degrees turn) in bending magnet relative of momentum vector:                                                                       gamma*G/2	(2)
+$gammaG=$gamma*$G/16;  =>-0.0102234412
+
+#--------------------------------
+#coefficient in front of spin tune in real space in B field:                                                                                                    [gamma*(G+1/gamma)*B]	(3)  
+$tauspinB=$gamma*($G+1/$gamma);  => 0.836424941
+
+#--------------------------------
+#coefficient in front of spin tune in real space in E field:                                                                        [(gamma*G)+gamma/(gamma+1)*beta x E/c]	(4)
+$tauspinE=($gamma*$G+$gamma/($gamma+1))*$beta*$beta;  =>0.0872214834
+#--------------------------------
+#magnetic rigidity B*R in T*m:                                                                                                                                          B*R=m*gamma*beta*c/Q	(5)
+$Rig=$Mdeu*$gamma*$beta*$c/$Q/100;  =>  3.47639395
+#--------------------------------
+#magnetic rigidity B*R in kGs*cm:                                                                                                                                          B*R=m*gamma*beta*c/Q	(5)
+$RigB=$Rig*1000;  =>  3476.39395
+#----------------------------------
+# Larc*Barc in arc (half ring) in T*m:					B*pi*R=pi*m*gamma*beta*c/Q	(6)
+$LBarc=$pi*$Rig;  =>  10.9214137
+#---------------------------------
+#Lss*Bss in straight section (one section) in T*m:                                                                                  Lss*Bss=-Larc*Barc*{gamma^2*G/(1+gamma)}	(7)
+$LBss=-$G*$gamma*$gamma*$LBarc/(1+$G);  =>  2.38449366
+#--------------------------------
+#Lss*Ess in straight section (one section): since Ess=c*betta*Bss in V                                                                  Lss*Ess=Lss*Bss*c*beta	(8)
+$LEss=$LBss*$c*$beta/100;  =>   347087319
+# or it is the same through original ratio just to controll		Lss*Ess=-{gamma^2*G/(1+gamma)}*pi*m*gamma*beta^2*c^2/Q	(9)
+#taking into account:			betta^2=(gamma^2-1)/gamma^2			(10)
+#				Lss*Ess=-{G/(1+gamma)}*pi*m*gamma*(gamma^2-1)*c^2/Q	(11)
+#---in result:
+$LEss=-$Mdeu*$gamma*$c*$c/$Q/10000*$G*$pi*($gamma*$gamma-1)/(1+$G);  =>   347087319
+#--------------------------------
+# Ess in MV/m Ess=12MV/m
+$Ess=12000000;  =>12000000
+# Ess in kV/cm
+$Esm=120;  =>         120
+#--------------------------------
+#Magnetic field in E+B elements: Bss in Tesla				Bss=Ess/(c*betta)		(12)
+$Bss=$Ess/($beta*$c/100);  =>0.0824401305
+#Magnetic field in E+B elements: Bss in kGs
+$BsskGs=$Bss*10;  => 0.824401305
+#---------------------------------
+# The total length of electrodes in m:
+$Lss=$LEss/$Ess;  =>  28.9239433
+#--------
+# The total length of electrodes in cm:
+$Lsm=$Lss*100;  =>  2892.39433
+#-------------------------------
+#number of E+B elements s on one straight section for 270 MeV
+$Nbe=2.;  =>           2
+#number of E+B elements s on one straight section for 75 MeV
+#$Nbe=2.;  =>           2
+#------------------------------
+# length of one E+B element in [m]
+$Lbe=$Lss/$Nbe;  =>  14.4619716
+
+#length of one E+B element in [cm]
+$Lplate=$Lbe*100;  =>  1446.19716
+#------------------------------
+
+
+
+#==========================================================================================================
+#----------------------------------------------------------BEND MAGNET in ARC-----------------------------------------------------------------------------------------------
+#==========================================================================================================
+#Magnetic field in arc magnet in Tesla
+$Bfield=1.8;  =>         1.8
+#Magnetic field in arc magnet in kGs
+$Bfld=18.0;  =>          18
+#Radius of curvature in arc magnet in m
+$Rb=$Rig/$Bfield;  =>  1.93132997
+#Radius of magnet curvature in cm
+$Rbcm=$Rb*100;  =>  193.132997
+#Number of magnets on half ring
+$Nb=4;  =>           4
+
+#Length of one arc bend magnet  in cm
+$Lbm=$pi*$Rbcm/$Nb;  =>  151.686301
+#Total length of bend magnet on one arc
+$Larc=$Nb*$Lbm/100;  =>  6.06745205
+#========================================================================================================
+#-------------------------------------------------------Test of spin rotation------------------------------------------------------------------------------------------------------
+#========================================================================================================
+
+#Spin rotation in arc
+$FspinBfield=$gamma*$G*0.5;  =>-0.0817875297
+#----------------------------
+#Spin rotation in straight section magnet field
+$FspinBss=($gamma*$G+1)/2*$Bss*$Lss/($Bfield*$Larc);  =>0.0913091484
+#---------------------------
+#Spin rotation in straight section electric field
+$FspinEss=-($gamma*$G+$gamma/($gamma+1))/2*$Ess*$Lss*$beta/(0.01*$c*$Bfield*$Larc);  =>-0.00952161872
+#---------------------------
+#Spin rotation in E+B element
+$FspinEB=$FspinBss+$FspinEss;  =>0.0817875297
+
+#--------------------------
+#Total spin rotation in arc+SS
+$Fspin=$FspinBfield+$FspinBss+$FspinEss;  =>-2.60208521e-17
+
+
+#========================================================================================================
+#------------------------------------------------Second test------------------------------------------------------------------------------------------------------------------------
+#========================================================================================================
+#Momentum rotation in rad only in magnetic field of deflector
+$FiMomentumBss=$Q*$Bss*$Lss/($Mdeu*$gamma*0.01*$c*$beta);  => 0.685910082
+#------------------------------
+#Spin angle rotation in magnetic field of all deflectors of one str sec in rad
+$FiSpinBss=$FiMomentumBss*($gamma*$G+1);  =>   0.5737123
+#-----------------------------
+#Spin angle rotation in electric field in rad
+$FiSpinEss=-$FiMomentumBss*($gamma*$G+$gamma/($gamma+1))*$beta^2;  =>-0.0598260948
+#----------------------------
+#Spin angle rotation in both E and B field of deflector in rad
+$FiSpinEssBss=$FiSpinBss+$FiSpinEss;  => 0.513886205
+#---------------------------
+#Momentum rotation in rad only in magnetic field of  one ARC
+$FiMomentumBarc=$Q*$Bfield*$Larc/($Mdeu*$gamma*0.01*$c*$beta);  =>  3.14159265
+#---------------------------
+#Spin angle rotation in magnetic field of one arc  in rad
+$FiSpinBarc=$FiMomentumBarc*($gamma*$G);  =>-0.513886205
+#---------------------------
+#Total spin rotation on one arc and one str sec
+$FiSpinTotal=$FiSpinBarc+$FiSpinEssBss;  =>-2.22044605e-16
+
+
+
+
+
+#========================================================================================================
+#------------------------------------------------QUADRUPOLES----------------------------------------------------------------------------------------------------------------
+#========================================================================================================
+#------K1 from MAD (K1QFA1, and so on... in quadrupole QFA1)--------------------------------------
+$K1QFA1=2.528339251 	;  =>  2.52833925
+$K1QDA1=-2.597372404 	;  =>  -2.5973724
+$K1QFA2= 2.390272943	;  =>  2.39027294
+$K1QDA2=-2.473688004	;  =>   -2.473688
+#-----Quadrupole Gradient in kG/cm for using in OPTIM  (GQFA1, and so on... in quadrupole QFA1) -----------------------
+$GQFA1=$K1QFA1*$Rig*0.1 	;  => 0.878950327
+$GQDA1=$K1QDA1*$Rig*0.1 	;  =>-0.902948971
+$GQFA2= $K1QFA2*$Rig*0.1	;  => 0.830953039
+$GQDA2=$K1QDA2*$Rig*0.1;  =>-0.859951401
+#===============================================================
+#------------------------------------------------SEXTUPOLES---------------------------------------
+#===============================================================
+#------K2 from MAD (K2SFP, and so on... in sextupole SFP)--------------------------------------
+$K2SFP=7.966763E-01 	;  =>   0.7966763
+$K2SDP= -9.768623E-01 	;  =>  -0.9768623
+$K2SFN=-6.036005E-01	;  =>  -0.6036005
+$K2SDN=  1.091097E+00	;  =>    1.091097
+
+#-----Sextupole Gradient in kG/cm^2 for using in OPTIM  (GSFP, and so on... in sextupole SFP) -----------------------
+$GSFP=$K2SFP*$Rig*0.001 	;  =>0.00276956067
+$GSDP=$K2SDP*$Rig*0.001 	;  =>-0.00339595819
+$GSFN= $K2SFN*$Rig*0.001	;  =>-0.00209835313
+$GSDN=$K2SDN*$Rig*0.001            ;  =>0.00379308301
+
+
+
+#************************************************VALUEs******************************************************************
+
+
+OptiM
+#  Insert comment here
+Energy[MeV]=270.00518   Mass[MeV]=1876.5592 
+Emittance: ex[cm]=0.0003  ey[cm]=0.001  DP/P=0.001 
+
+
+Initial:	BetaX[cm]=279.613 	BetaY[cm]=1528.47 
+	AlfaX=9.8494e-16 	AlfaY=1.45619e-15 
+	DispersX[cm]=-2.29749 	DispersY[cm]=0 
+	Dsp_PrimeX=-2.97709e-15 	DspPrimeY=0 
+
+	X[cm]=0.000    	Y[cm]=0.000    	Z[cm]=0.000    	S[cm]=0.000    
+	tetaX[deg]=0        	tetaY[deg]=0        
+begin lattice. Number of periods=1 
+
+#*********************************************************FIRST HALF**********
+#===============DRIFT=======================
+QDA2  OD1 OSD OD2  ORB  OD2  BPM  OD1  QFA2
+QFA2  OD1 OSF OD2  ORB  OD2  BPM  OD1  QDA2 
+QDA2  OD1 OSD OD2  ORB  OD2  BPM  OD1  QFA2
+
+#==============BEND magnet==================
+
+QFA1  OD1 OSF OD2  BDA  OD2  BPM  OD1   QDA1  
+QDA1   OD1 SDP OD2  BDA  OD2 BPM  OD1  QFA1
+
+#==========WIEN filter======================
+
+QFA2  OD1 SFP OD2  R3  OD2 BPM OD1   QDA2  
+QDA2   OD1 SDP OD2 R3  OD2 BPM OD1  QFA2
+QFA2  OD1 SFP OD2  R3  OD2 BPM OD1   QDA2  
+QDA2   OD1 SDN OD2  R3  OD2 BPM OD1  QFA2
+
+#===========================================
+
+
+#============WIEN filter====================
+
+QFA2  OD1 SFN OD2  R3  OD2 BPM OD1   QDA2  
+QDA2   OD1 SDN OD2  R3  OD2 BPM OD1  QFA2
+QFA2  OD1 SFP OD2  R3  OD2 BPM OD1   QDA2  
+QDA2   OD1 SDP OD2  R3  OD2 BPM OD1  QFA2
+
+#============BEND magnet====================
+
+QFA1 OD1 SFP OD2  BDA  OD2 BPM OD1   QDA1  
+QDA1   OD1 SDP OD2  BDA  OD2 BPM OD1  QFA1
+
+#===============DRIFT=======================
+
+QFA2  OD1 SFP OD2  ORB OD2 BPM OD1   QDA2 
+QDA2   OD1 SDP OD2  ORB  OD2  BPM  OD1  QFA2
+QFA2  OD1 SFP OD2  ORB OD2 BPM OD1   QDA2 
+
+
+#******************************************************SECOND HALF**********
+
+#===============DRIFT=======================
+QDA2   OD1 OSD OD2  ORB  OD2  BPM  OD1  QFA2
+QFA2  OD1 OSF OD2  ORB OD2 BPM OD1   QDA2 
+ QDA2   OD1 OSD OD2  ORB  OD2  BPM  OD1  QFA2
+
+#==============BEND magnet==================
+
+QFA1  OD1 OSF OD2  BDA  OD2  BPM  OD1   QDA1  
+QDA1   OD1 SDP OD2  BDA  OD2 BPM  OD1  QFA1
+
+#==========WIEN filter======================
+
+QFA2  OD1 SFP OD2  R3  OD2 BPM OD1   QDA2  
+QDA2   OD1 SDP OD2 R3  OD2 BPM OD1  QFA2
+QFA2  OD1 SFP OD2  R3  OD2 BPM OD1   QDA2  
+QDA2   OD1 SDN OD2  R3  OD2 BPM OD1  QFA2
+
+#===========================
+
+#============WIEN filter====================
+
+QFA2  OD1 SFN OD2  R3  OD2 BPM OD1   QDA2  
+QDA2   OD1 SDN OD2  R3  OD2 BPM OD1  QFA2
+QFA2  OD1 SFP OD2  R3  OD2 BPM OD1   QDA2  
+QDA2   OD1 SDP OD2  R3  OD2 BPM OD1  QFA2
+
+#=============BEND magnet====================
+
+QFA1 OD1 SFP OD2  BDA  OD2 BPM OD1   QDA1  
+QDA1   OD1 SDP OD2  BDA  OD2 BPM OD1  QFA1
+
+#==============DRIFT=========================
+
+QFA2  OD1 SFP OD2  ORB OD2 BPM OD1   QDA2 
+QDA2   OD1 SDP OD2  ORB  OD2  BPM  OD1  QFA2
+QFA2  OD1 SFP OD2  ORB OD2 BPM OD1   QDA2 
+
+#=============================================
+
+#*******************************************************************
+
+
+end lattice
+begin list
+# Magnetostatic ARC
+OD1 	L[cm]=25       
+OD2 	L[cm]=25            
+
+ORE 	L[cm]=217      
+ORB 	L[cm]=220      
+      
+OSF 	L[cm]=15       
+OSD 	L[cm]=15       
+
+      
+QFA1 	L[cm]=5          	G[kG/cm]=1.4061  	Tilt[deg]=0
+QDA1 	L[cm]=5          	G[kG/cm]=-1.1853 	Tilt[deg]=0
+QFA2 	L[cm]=5          	G[kG/cm]=1.0051  	Tilt[deg]=0
+QDA2 	L[cm]=5          	G[kG/cm]=-1.0309 	Tilt[deg]=0
+
+BDA 	L[cm]=151.6863   	B[kG]=18         	G[kG/cm]=0        	Tilt[deg]=0
+g 	B[kG]=40         Angle[deg]=0  EffLen[cm]=5  Tilt[deg]=0  
+ 
+SFP 	L[cm]=15         	S[kG/cm/cm)]=0.00276958   Tilt[deg]=0
+SDP 	L[cm]=15         	S[kG/cm/cm)]=-0.00339598   Tilt[deg]=0
+SFN 	L[cm]=15         	S[kG/cm/cm)]=-0.00209837   Tilt[deg]=0
+SDN 	L[cm]=15         	S[kG/cm/cm)]=0.00379311   Tilt[deg]=0
+
+BPM 	L[cm]=15         	B[kG]=0          	G[kG/cm]=0        	Tilt[deg]=0
+
+     
+
+
+#Electrostatic arc
+
+# cylindrical deflector 
+R3 	L[cm]=361.55403   	B[kG]=0.82439761   	Gb[kG/cm]=0  	E[kV/cm]=-120      	Ge[kV/cm^2]=0
+
+
+
+
+
+
+
+
+
+
+
+
+end list of elements
+
+BetaFitBlock  dL[cm]=0.001  dB[kGs]=0.001  dG[kGs/cm]=0.0001
+Maximum Betas[cm]: Beta_X=500000 	dBeta_X=-1 	Beta_Y=500000 	dBeta_Y=-1 
+#Fitting parametrs at the end of the lattice
+Beta_X[cm]=528.05 	dBeta_X[cm]=0.01 	Alfa_X=0  	dAlfa_X=0.001
+Beta_Y[cm]=70.154 	dBeta_Y[cm]=0.01 	Alfa_Y=0  	dAlfa_Y=0.001 
+Disp_X[cm]=25.0747 	dDisp_X[cm]=0.01 	D_prime_X=0 	dD_prime_X=0.001 
+Disp_Y[cm]=0 	dDisp_Y[cm]=0.011 	D_prime_Y=0 	dD_prime_Y=0.001 
+Qx=0.375 	dQx=0.001 
+Qy=0.25 	dQy=0.001 
+#
+#Groups of elements below. Each group has to be located on one line
+#begining from the letter describing the changable parameter such as: L:, Q: 
+G: QFA
+G: BDA
+L: OD2
+L: OD1
+EndBetaFitBlock
