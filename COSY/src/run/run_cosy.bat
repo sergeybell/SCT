@@ -1,15 +1,15 @@
 @echo off
 echo ========================================
-echo RUNNING: lattice.fox
+echo RUNNING: lattice_sext.fox
 echo ========================================
 cd ..
-cosy.exe lattice.fox
+cosy.exe lattice_sext.fox
 cd run
 echo.
 echo ========================================
-echo RUNNING: Chrom.fox
+echo RUNNING: mapping.fox
 echo ========================================
 cd ..
-cosy.exe Chrom.fox
+cosy.exe mapping.fox
 cd run
 echo.
