@@ -1,9 +1,9 @@
 @echo off
 echo ========================================
-echo RUNNING: lattice_sext.fox
+echo RUNNING: lattice_mod_sext.fox
 echo ========================================
 cd ..
-cosy.exe lattice_sext.fox
+cosy.exe lattice_mod_sext.fox
 cd run
 echo.
 echo ========================================
