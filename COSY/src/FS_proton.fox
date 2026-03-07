@@ -1,0 +1,157 @@
+{ ************************************************************ }
+{ COSY Infinity Lattice Converter }
+{ Purpose: Conversion from MADX to COSY Infinity }
+{ Author: Kolokolchikov S. }
+{ Date: 2026-03-07 15:51:33 }
+{ Input file: C:/GIT_REPOS/SCT/MADX/1.Sequences/FS_deutron.seq }
+{ Output file: C:/GIT_REPOS/SCT/COSY/src/FS_deutron.fox        }
+{ TOTAL ELEMENTS: 540 }
+{ ************************************************************ }
+
+INCLUDE 'header';
+
+PROCEDURE LATTICE SEXTGx1 SEXTGy1 SEXTGx2 SEXTGy2 y RFFLAG;
+ VARIABLE VRF 1 1 1; VARIABLE FREQ 1; VARIABLE HNUM 1; VARIABLE I 1;
+ VARIABLE A 1; VARIABLE EBE 1;
+ VARIABLE L_OD1 1;
+ VARIABLE L_OD2 1;
+ VARIABLE L_OR1 1;
+ VARIABLE L_LD 1;
+ VARIABLE L_LF 1;
+ VARIABLE L_LDS 1;
+ VARIABLE L_LFS 1;
+ VARIABLE L_SFP 1;
+ VARIABLE L_SDP 1;
+ VARIABLE L_BPM 1;
+ VARIABLE ANG_BPM 1;
+ VARIABLE L_R1 1; VARIABLE ANG_R1 1;
+ VARIABLE SF1 1; VARIABLE SF2 1; VARIABLE SD 1; VARIABLE SD1 1;
+ VARIABLE GAMMA 1;
+
+ GAMMA := y;
+ {LATTICE PARAMETERS}
+ A := 0.05;
+ SF1 := SEXTGx1; SF2 := SEXTGx2; SD := SEXTGy1; SD1 := SEXTGy2;
+
+ {ELEMENT VALUES FROM MADX}
+ L_OD1 := 0.25;
+ L_OD2 := 0.25;
+ L_OR1 := 4.685;
+ L_LD := 0.5;
+ L_LF := 0.5;
+ L_LDS := 0.5;
+ L_LFS := 0.5;
+ L_SFP := 0.15;
+ L_SDP := 0.15;
+ L_BPM := 0.15;
+ ANG_BPM := 0;
+ L_R1 := 4.685;
+ ANG_R1 := (3.14159 / 180) * 360 / (5 * 10);
+
+ {SETTING RF PARAMETERS}
+ HNUM := 66; VRF(1, 1) := 100/HNUM; FREQ := HNUM*REVFREQ(fACCLEN(1));
+ UM; CR; IF RFFLAG=1; RF VRF 0 FREQ 0 0.05; ENDIF;
+
+ {BEGIN LATTICE}
+LOOP I 1 2;
+ DL L_LDS ; {LDS}
+ DL L_OD1 ; {OD1}
+ DL L_OD2 ; {OD2}
+ DL L_OR1 ; {OR1}
+ DL L_OD2 ; {OD2}
+ DL L_BPM ; {BPM}
+ DL L_OD1 ; {OD1}
+ DL L_LFS ; {LFS}
+ DL L_LF ; {LF}
+ DL L_OD1 ; {OD1}
+ DL L_OD2 ; {OD2}
+ WIEN2D L_R1 ANG_R1 GAMMA 0 ; {R1}
+ DL L_OD2 ; {OD2}
+ DL L_BPM ; {BPM}
+ DL L_OD1 ; {OD1}
+ DL L_LD ; {LD}
+ DL L_LD ; {LD}
+ DL L_OD1 ; {OD1}
+ DL L_OD2 ; {OD2}
+ WIEN2D L_R1 ANG_R1 GAMMA 0 ; {R1}
+ DL L_OD2 ; {OD2}
+ DL L_BPM ; {BPM}
+ DL L_OD1 ; {OD1}
+ DL L_LF ; {LF}
+ DL L_LF ; {LF}
+ DL L_OD1 ; {OD1}
+ DL L_OD2 ; {OD2}
+ WIEN2D L_R1 ANG_R1 GAMMA 0 ; {R1}
+ DL L_OD2 ; {OD2}
+ DL L_BPM ; {BPM}
+ DL L_OD1 ; {OD1}
+ DL L_LD ; {LD}
+ DL L_LD ; {LD}
+ DL L_OD1 ; {OD1}
+ DL L_OD2 ; {OD2}
+ WIEN2D L_R1 ANG_R1 GAMMA 0 ; {R1}
+ DL L_OD2 ; {OD2}
+ DL L_BPM ; {BPM}
+ DL L_OD1 ; {OD1}
+ DL L_LF ; {LF}
+ DL L_LF ; {LF}
+ DL L_OD1 ; {OD1}
+ DL L_OD2 ; {OD2}
+ WIEN2D L_R1 ANG_R1 GAMMA 0 ; {R1}
+ DL L_OD2 ; {OD2}
+ DL L_BPM ; {BPM}
+ DL L_OD1 ; {OD1}
+ DL L_LD ; {LD}
+ DL L_LD ; {LD}
+ DL L_OD1 ; {OD1}
+ DL L_OD2 ; {OD2}
+ WIEN2D L_R1 ANG_R1 GAMMA 0 ; {R1}
+ DL L_OD2 ; {OD2}
+ DL L_BPM ; {BPM}
+ DL L_OD1 ; {OD1}
+ DL L_LF ; {LF}
+ DL L_LF ; {LF}
+ DL L_OD1 ; {OD1}
+ DL L_OD2 ; {OD2}
+ WIEN2D L_R1 ANG_R1 GAMMA 0 ; {R1}
+ DL L_OD2 ; {OD2}
+ DL L_BPM ; {BPM}
+ DL L_OD1 ; {OD1}
+ DL L_LD ; {LD}
+ DL L_LD ; {LD}
+ DL L_OD1 ; {OD1}
+ DL L_OD2 ; {OD2}
+ WIEN2D L_R1 ANG_R1 GAMMA 0 ; {R1}
+ DL L_OD2 ; {OD2}
+ DL L_BPM ; {BPM}
+ DL L_OD1 ; {OD1}
+ DL L_LF ; {LF}
+ DL L_LF ; {LF}
+ DL L_OD1 ; {OD1}
+ DL L_OD2 ; {OD2}
+ WIEN2D L_R1 ANG_R1 GAMMA 0 ; {R1}
+ DL L_OD2 ; {OD2}
+ DL L_BPM ; {BPM}
+ DL L_OD1 ; {OD1}
+ DL L_LD ; {LD}
+ DL L_LD ; {LD}
+ DL L_OD1 ; {OD1}
+ DL L_OD2 ; {OD2}
+ WIEN2D L_R1 ANG_R1 GAMMA 0 ; {R1}
+ DL L_OD2 ; {OD2}
+ DL L_BPM ; {BPM}
+ DL L_OD1 ; {OD1}
+ DL L_LF ; {LF}
+ DL L_LFS ; {LFS}
+ DL L_OD1 ; {OD1}
+ DL L_OD2 ; {OD2}
+ DL L_OR1 ; {OR1}
+ DL L_OD2 ; {OD2}
+ DL L_BPM ; {BPM}
+ DL L_OD1 ; {OD1}
+ DL L_LDS ; {LDS}
+ENDLOOP;
+ENDPROCEDURE;
+
+{elem-counting: 540}
+SAVE 'FS_proton';

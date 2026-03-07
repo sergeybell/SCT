@@ -56,7 +56,7 @@ PROCEDURE MAIN;
 
     { 1. Начальные значения секступолей и параметров }
     EB1  := 0.0 ;
-    SGx1_0 := 0.0 ; SGy1_0 := -320.0 ; 
+    SGx1_0 := 0.0 ; SGy1_0 := -375.0 ; 
     SGx2_0 := 0.0 ; SGy2_0 := 0.0 ;
     {SGx1_0 := 2000.0 ; SGy1_0 := -6700.0 ; 
     SGx2_0 := 2000.0 ; SGy2_0 := 0.0 ;}
@@ -65,10 +65,10 @@ PROCEDURE MAIN;
     SGx2 := SGx2_0; SGy2 := SGy2_0;
 
     {mapping step}
-    step_x := 50 ;
+    step_x := 100 ;
     step_y := -5 ;
-    N0 :=  20; N1 := 11; N2 := 11;
-
+    {N0 :=  20; N1 := 11; N2 := 11;} { casual mode}
+    N0 :=  2; N1 := 5; N2 := 5; { edge mode}
     OPENF 3618 'dat/'&structure&'/integrals.dat' 'REPLACE'; 
     OPENF 3620 'dat/'&structure&'/particle_spin_tune.dat' 'REPLACE'; 
     WRITE 3618 ' SGx1               SGx2              SGy1                SGy2              chrom_x            chrom_y            CONS(MU)           quad_Kx                 quad_Ky                 quad_Kz                  alpha_0              alpha_1            eta_1';

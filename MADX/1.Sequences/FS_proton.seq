@@ -1,0 +1,53 @@
+!TITLE Converted from LATTICE EDITOR: electrost_lattice_w_E_arc+cylindrical_electrod+electr_quadr+SSone_PP.opt[*].  Sat Mar 07 15:45:26 2026
+
+!  Kinetic energy=232.792 MeV, mass=938.272 MeV
+!  BetaX=21.7051 m,  AlphaX=-1.27694e-15,  BetaY=7.75695 m,  AlphaY=-7.42905e-16 
+!  DispX=-0.00635762 m,  DispPX=-4.12632e-16,  DispY=0 m,  DispPY=0 
+
+OD1: DRIFT, L=0.25 ;
+OD2: DRIFT, L=0.25 ;
+OR1: DRIFT, L=4.685 ;
+Ld: DRIFT, L=0.5 ;
+Lf: DRIFT, L=0.5 ;
+Lds: DRIFT, L=0.5 ;
+Lfs: DRIFT, L=0.5 ;
+SFP: SEXTUPOLE, L=0.15, K2=0;
+SDP: SEXTUPOLE, L=0.15, K2=0;
+BPM: SBEND,  L=0.15,  ANGLE=0;
+R1: DRIFT, L=4.685 ;
+
+MACHINE: LINE=(Lds, OD1, SDP, OD2, OR1, OD2, BPM, OD1, Lfs, Lf, OD1, SFP,  
+OD2, R1, OD2, BPM, OD1, Ld, Ld, OD1, SDP, OD2, R1, OD2, BPM, OD1, Lf, Lf,  
+OD1, SFP, OD2, R1, OD2, BPM, OD1, Ld, Ld, OD1, SDP, OD2, R1, OD2, BPM, OD1,  
+Lf, Lf, OD1, SFP, OD2, R1, OD2, BPM, OD1, Ld, Ld, OD1, SDP, OD2, R1, OD2,  
+BPM, OD1, Lf, Lf, OD1, SFP, OD2, R1, OD2, BPM, OD1, Ld, Ld, OD1, SDP, OD2,  
+R1, OD2, BPM, OD1, Lf, Lf, OD1, SFP, OD2, R1, OD2, BPM, OD1, Ld, Ld, OD1,  
+SDP, OD2, R1, OD2, BPM, OD1, Lf, Lfs, OD1, SFP, OD2, OR1, OD2, BPM, OD1,  
+Lds, Lds, OD1, SDP, OD2, OR1, OD2, BPM, OD1, Lfs, Lf, OD1, SFP, OD2, R1,  
+OD2, BPM, OD1, Ld, Ld, OD1, SDP, OD2, R1, OD2, BPM, OD1, Lf, Lf, OD1, SFP,  
+OD2, R1, OD2, BPM, OD1, Ld, Ld, OD1, SDP, OD2, R1, OD2, BPM, OD1, Lf, Lf,  
+OD1, SFP, OD2, R1, OD2, BPM, OD1, Ld, Ld, OD1, SDP, OD2, R1, OD2, BPM, OD1,  
+Lf, Lf, OD1, SFP, OD2, R1, OD2, BPM, OD1, Ld, Ld, OD1, SDP, OD2, R1, OD2,  
+BPM, OD1, Lf, Lf, OD1, SFP, OD2, R1, OD2, BPM, OD1, Ld, Ld, OD1, SDP, OD2,  
+R1, OD2, BPM, OD1, Lf, Lfs, OD1, SFP, OD2, OR1, OD2, BPM, OD1, Lds, Lds,  
+OD1, SDP, OD2, OR1, OD2, BPM, OD1, Lfs, Lf, OD1, SFP, OD2, R1, OD2, BPM,  
+OD1, Ld, Ld, OD1, SDP, OD2, R1, OD2, BPM, OD1, Lf, Lf, OD1, SFP, OD2, R1,  
+OD2, BPM, OD1, Ld, Ld, OD1, SDP, OD2, R1, OD2, BPM, OD1, Lf, Lf, OD1, SFP,  
+OD2, R1, OD2, BPM, OD1, Ld, Ld, OD1, SDP, OD2, R1, OD2, BPM, OD1, Lf, Lf,  
+OD1, SFP, OD2, R1, OD2, BPM, OD1, Ld, Ld, OD1, SDP, OD2, R1, OD2, BPM, OD1,  
+Lf, Lf, OD1, SFP, OD2, R1, OD2, BPM, OD1, Ld, Ld, OD1, SDP, OD2, R1, OD2,  
+BPM, OD1, Lf, Lfs, OD1, SFP, OD2, OR1, OD2, BPM, OD1, Lds, Lds, OD1, SDP,  
+OD2, OR1, OD2, BPM, OD1, Lfs, Lf, OD1, SFP, OD2, R1, OD2, BPM, OD1, Ld, Ld,  
+OD1, SDP, OD2, R1, OD2, BPM, OD1, Lf, Lf, OD1, SFP, OD2, R1, OD2, BPM, OD1,  
+Ld, Ld, OD1, SDP, OD2, R1, OD2, BPM, OD1, Lf, Lf, OD1, SFP, OD2, R1, OD2,  
+BPM, OD1, Ld, Ld, OD1, SDP, OD2, R1, OD2, BPM, OD1, Lf, Lf, OD1, SFP, OD2,  
+R1, OD2, BPM, OD1, Ld, Ld, OD1, SDP, OD2, R1, OD2, BPM, OD1, Lf, Lf, OD1,  
+SFP, OD2, R1, OD2, BPM, OD1, Ld, Ld, OD1, SDP, OD2, R1, OD2, BPM, OD1, Lf,  
+Lfs, OD1, SFP, OD2, OR1, OD2, BPM, OD1, Lds, Lds, OD1, SDP, OD2, OR1, OD2,  
+BPM, OD1, Lfs, Lf, OD1, SFP, OD2, R1, OD2, BPM, OD1, Ld, Ld, OD1, SDP, OD2,  
+R1, OD2, BPM, OD1, Lf, Lf, OD1, SFP, OD2, R1, OD2, BPM, OD1, Ld, Ld, OD1,  
+SDP, OD2, R1, OD2, BPM, OD1, Lf, Lf, OD1, SFP, OD2, R1, OD2, BPM, OD1, Ld,  
+Ld, OD1, SDP, OD2, R1, OD2, BPM, OD1, Lf, Lf, OD1, SFP, OD2, R1, OD2, BPM,  
+OD1, Ld, Ld, OD1, SDP, OD2, R1, OD2, BPM, OD1, Lf, Lf, OD1, SFP, OD2, R1,  
+OD2, BPM, OD1, Ld, Ld, OD1, SDP, OD2, R1, OD2, BPM, OD1, Lf, Lfs, OD1, SFP,  
+OD2, OR1, OD2, BPM, OD1, Lds);

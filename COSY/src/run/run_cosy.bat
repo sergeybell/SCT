@@ -1,15 +1,15 @@
 @echo off
 echo ========================================
-echo RUNNING: lattice_mod_sext.fox
+echo RUNNING: QFS_deuteron_maps.fox
 echo ========================================
 cd ..
-cosy.exe lattice_mod_sext.fox
+cosy.exe QFS_deuteron_maps.fox
 cd run
 echo.
 echo ========================================
-echo RUNNING: mapping.fox
+echo RUNNING: Twiss.fox
 echo ========================================
 cd ..
-cosy.exe mapping.fox
+cosy.exe Twiss.fox
 cd run
 echo.
