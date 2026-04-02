@@ -2,7 +2,7 @@
 { COSY Infinity Lattice Converter }
 { Purpose: Conversion from MADX to COSY Infinity }
 { Author: Kolokolchikov S. }
-{ Date: 2026-03-20 19:01:07 }
+{ Date: 2026-03-20 17:29:09 }
 { Input file: C:/GIT_REPOS/SCT/MADX/1.Sequences/magnetic.seq }
 { TOTAL ELEMENTS: 360 }
 { ************************************************************ }
@@ -413,4 +413,4 @@ PROCEDURE LATTICE SEXTGx1 SEXTGy1 SEXTGx2 SEXTGy2 EB1 RFFLAG;
 ENDPROCEDURE;
 
 {elem-counting: 360}
-SAVE 'magnetic';
+SAVE 'lattice';
