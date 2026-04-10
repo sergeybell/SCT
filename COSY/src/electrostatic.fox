@@ -5,32 +5,26 @@ PROCEDURE LATTICE SEXTGx1 SEXTGy1 SEXTGx2 SEXTGy2 EB1 RFFLAG;
   VARIABLE FREQ 1;
   VARIABLE HNUM 1;
   VARIABLE I 1;
-
   VARIABLE LEN_S 1; VARIABLE A 1; VARIABLE LEN_S_1 1;
   VARIABLE EBE 1; VARIABLE BBE 1;
   VARIABLE QF0 1;
   VARIABLE QFA1 1; VARIABLE QDA1 1;
   VARIABLE QFA2 1; VARIABLE QDA2 1;
-  VARIABLE SFP 1; VARIABLE SFN 1;
-  VARIABLE SDP 1; VARIABLE SDN 1;
   VARIABLE GAMMA 1;
-VARIABLE Lf 1;
-VARIABLE Ld 1;
-VARIABLE Lfs 1;
-VARIABLE Lds 1;
-  
-  EBE := EB1;
-  
-  {LATTICE PARAMETERS}
+  VARIABLE Lf 1;
+  VARIABLE Ld 1;
+  VARIABLE Lfs 1;
+  VARIABLE Lds 1;
+  VARIABLE SF1 1; VARIABLE SF2 1; VARIABLE SD 1; VARIABLE SD1 1;
 
-  A := 0.05;
-  LEN_S := 0.15;
-  LEN_S_1 := 0.000001;
+  {LATTICE PARAMETERS}
+  EBE := EB1;
+
+  A := 0.05; LEN_S := 0.15; LEN_S_1 := 0.000001;
 
 {SFP, SDP - betatron chrom}
 
-  SFP := SEXTGx1; SFN := SEXTGx2;
-  SDP := SEXTGy1; SDN := SEXTGy2;
+  SF1 := SEXTGx1; SF2 := SEXTGx2; SD := SEXTGy1; SD1 := SEXTGy2;
 
 {FS for E=232.79774 invert cilindr}
 
@@ -41,8 +35,6 @@ VARIABLE Lds 1;
 
 	{Lfs:=(-6.76805*A*A*1E+4)*1/2;
 	Lds:=(7.1736*A*A*1E+4)*1/2;}
-
-
 
   {SETTING RF PARAMETERS}
   HNUM := 66;
@@ -66,129 +58,70 @@ LOOP I 1 5;
 {BEGIN PERIOD}
 
 EQ 0.5 Lds A; {Lds}
-DL 0.25; {OD1}
-DL 0.15; {SDP}
-DL 0.25; {OD2}
-DL 4.685; {OR1}
-DL 0.25; {OD2}
-DL 0.15; {BPM}
-DL 0.25; {OD1}
+DL 5.985;
 EQ 0.5 Lfs A; {Lfs}
 
 EQ 0.5 Lf A; {Lf}
-DL 0.25; {OD1}
-DL 0.15; {SFP}
-DL 0.25; {OD2}
+DL 0.65;
+ED 4.685 EBE 0; {R1}
+DL 0.65;
+EQ 2*0.5 Ld A; {2 Ld}
+DL 0.65;
+ED 4.685 EBE 0; {R1}
+DL 0.65; {OD2}
+EQ 2*0.5 Lf A; {2 Lf}
+DL 0.65;
 ED 4.685 EBE 0; {R1}
 DL 0.25; {OD2}
-DL 0.15; {BPM}
+MH 0.15 SF1 0.05; {SF1}
 DL 0.25; {OD1}
-EQ 0.5 Ld A; {Ld}
-EQ 0.5 Ld A; {Ld}
-DL 0.25; {OD1}
-DL 0.15; {SDP}
-DL 0.25; {OD2}
+EQ 2*0.5 Ld A; {2 Ld}
+DL 0.65;
 ED 4.685 EBE 0; {R1}
 DL 0.25; {OD2}
-DL 0.15 ; {BPM}
+MH 0.15 SD 0.05; {SD}
 DL 0.25; {OD1}
+EQ 2*0.5 Lf A; {2 Lf}
+DL 0.65;
+ED 4.685 EBE 0; {R1}
+DL 0.25; {OD2}
+MH 0.15 SF2 0.05; {SF2}
+DL 0.25; {OD1}
+EQ 2*0.5 Ld A; {2 Ld}
+DL 0.65;
+ED 4.685 EBE 0; {R1}
+DL 0.25; {OD2}
+MH 0.15 SD 0.05; {SD}
+DL 0.25; {OD1}
+EQ 2*0.5 Lf A; {2 Lf}
+DL 0.65;
+ED 4.685 EBE 0; {R1}
+DL 0.25; {OD2}
+MH 0.15 SF1 0.05; {SF1}
+DL 0.25; {OD1}
+EQ 2*0.5 Ld A; {2 Ld}
+DL 0.65;
+ED 4.685 EBE 0; {R1}
+DL 0.65;
+EQ 2*0.5 Lf A; {2 Lf}
+DL 0.65;
+ED 4.685 EBE 0; {R1}
+DL 0.65;
+EQ 2*0.5 Ld A; {2 Ld}
+DL 0.65;
+ED 4.685 EBE 0; {R1}
+DL 0.65;
 EQ 0.5 Lf A; {Lf}
-
-EQ 0.5 Lf A; {Lf}
-DL 0.25; {OD1}
-DL 0.15; {SFP}
-DL 0.25; {OD2}
-ED 4.685 EBE 0; {R1}
-DL 0.25; {OD2}
-MH 0.15 SFP 0.05; {BPM}
-DL 0.25; {OD1}
-EQ 0.5 Ld A; {Ld}
-EQ 0.5 Ld A; {Ld}
-DL 0.25; {OD1}
-DL 0.15; {SDP}
-DL 0.25; {OD2}
-ED 4.685 EBE 0; {R1}
-DL 0.25; {OD2}
-MH 0.15 SDP 0.05; {BPM}
-DL 0.25; {OD1}
-EQ 0.5 Lf A; {Lf}
-
-EQ 0.5 Lf A; {Lf}
-DL 0.25; {OD1}
-DL 0.15; {SFP}
-DL 0.25; {OD2}
-ED 4.685 EBE 0; {R1}
-DL 0.25; {OD2}
-MH 0.15 SFN 0.05; {BPM}
-DL 0.25; {OD1}
-EQ 0.5 Ld A; {Ld}
-EQ 0.5 Ld A; {Ld}
-DL 0.25; {OD1}
-DL 0.15; {SDP}
-DL 0.25; {OD2}
-ED 4.685 EBE 0; {R1}
-DL 0.25; {OD2}
-MH 0.15 SDP 0.05; {BPM}
-DL 0.25; {OD1}
-EQ 0.5 Lf A; {Lf}
-
-EQ 0.5 Lf A; {Lf}
-DL 0.25; {OD1}
-DL 0.15; {SFP}
-DL 0.25; {OD2}
-ED 4.685 EBE 0; {R1}
-DL 0.25; {OD2}
-MH 0.15 SFP 0.05; {BPM}
-DL 0.25; {OD1}
-EQ 0.5 Ld A; {Ld}
-EQ 0.5 Ld A; {Ld}
-DL 0.25; {OD1}
-DL 0.15; {SDP}
-DL 0.25; {OD2}
-ED 4.685 EBE 0; {R1}
-DL 0.25; {OD2}
-DL 0.15; {BPM}
-DL 0.25; {OD1}
-EQ 0.5 Lf A; {Lf}
-
-EQ 0.5 Lf A; {Lf}
-DL 0.25; {OD1}
-DL 0.15; {SFP}
-DL 0.25; {OD2}
-ED 4.685 EBE 0; {R1}
-DL 0.25; {OD2}
-DL 0.15; {BPM}
-DL 0.25; {OD1}
-EQ 0.5 Ld A; {Ld}
-EQ 0.5 Ld A; {Ld}
-DL 0.25; {OD1}
-DL 0.15; {SDP}
-DL 0.25; {OD2}
-ED 4.685 EBE 0; {R1}
-DL 0.25; {OD2}
-DL 0.15; {BPM}
-DL 0.25; {OD1}
-EQ 0.5 Lf A; {Lf}
-
 
 EQ 0.5 Lfs A; {Lfs}
-DL 0.25; {OD1}
-DL 0.15; {SFP}
-DL 0.25; {OD2}
-DL 4.685; {OR1}
-DL 0.25; {OD2}
-DL 0.15; {BPM}
-DL 0.25; {OD1}
+DL 5.985; 
 EQ 0.5 Lds A; {Lds}
 
-{END PERIOD}
-RSY 0.01;
-{RSY 0.00005 ; {10^-6}}
 ENDLOOP;
 
 ENDPROCEDURE; {FSp SETUP}
 
-SAVE 'C:/Users/palo4/Desktop/MEPHI/Master/HNP/MIPT conf/cosy/electrostatic';
+SAVE 'electrostatic';
 
 
 

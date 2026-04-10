@@ -1,9 +1,9 @@
 @echo off
 echo ========================================
-echo RUNNING: magnetic_mod_sext.fox
+echo RUNNING: seq_Nuclotron_16.fox
 echo ========================================
 cd ..
-cosy.exe magnetic_mod_sext.fox
+cosy.exe seq_Nuclotron_16.fox
 cd run
 echo.
 echo ========================================

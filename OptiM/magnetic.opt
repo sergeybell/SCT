@@ -224,6 +224,12 @@ QF O2 BM O2 QD QD O2 BM O2 QF
 QF O2 BM O2 QD QD O2 BM O2 QF
 #=================================Straight Section================================
 QF1 O2 OBM O2 QD1 QD1 O2 OBM O2 QF1
+#====================================ARC==========================================
+QF O2 BM O2 QD QD O2 BM O2 QF
+QF O2 BM O2 QD QD O2 BM O2 QF
+QF O2 BM O2 QD QD O2 BM O2 QF
+QF O2 BM O2 QD QD O2 BM O2 QF
+#=================================Straight Section================================
 QF1 O2 OBM O2 QD1 QD1 O2 OBM O2 QF1
 #====================================ARC==========================================
 QF O2 BM O2 QD QD O2 BM O2 QF
@@ -232,8 +238,6 @@ QF O2 BM O2 QD QD O2 BM O2 QF
 QF O2 BM O2 QD QD O2 BM O2 QF
 #=================================Straight Section================================
 QF1 O2 OBM O2 QD1 QD1 O2 OBM O2 QF1
-QF1 O2 OBM O2 QD1 QD1 O2 OBM O2 QF1
-
 #====================================ARC==========================================
 QF O2 BM O2 QD QD O2 BM O2 QF
 QF O2 BM O2 QD QD O2 BM O2 QF
@@ -241,8 +245,6 @@ QF O2 BM O2 QD QD O2 BM O2 QF
 QF O2 BM O2 QD QD O2 BM O2 QF
 #=================================Straight Section================================
 QF1 O2 OBM O2 QD1 QD1 O2 OBM O2 QF1
-QF1 O2 OBM O2 QD1 QD1 O2 OBM O2 QF1
-
 #====================================ARC==========================================
 QF O2 BM O2 QD QD O2 BM O2 QF
 QF O2 BM O2 QD QD O2 BM O2 QF
@@ -250,8 +252,6 @@ QF O2 BM O2 QD QD O2 BM O2 QF
 QF O2 BM O2 QD QD O2 BM O2 QF
 #=================================Straight Section================================
 QF1 O2 OBM O2 QD1 QD1 O2 OBM O2 QF1
-QF1 O2 OBM O2 QD1 QD1 O2 OBM O2 QF1
-
 #====================================ARC==========================================
 QF O2 BM O2 QD QD O2 BM O2 QF
 QF O2 BM O2 QD QD O2 BM O2 QF
@@ -259,20 +259,6 @@ QF O2 BM O2 QD QD O2 BM O2 QF
 QF O2 BM O2 QD QD O2 BM O2 QF
 #=================================Straight Section================================
 QF1 O2 OBM O2 QD1 QD1 O2 OBM O2 QF1
-QF1 O2 OBM O2 QD1 QD1 O2 OBM O2 QF1
-
-#====================================ARC==========================================
-QF O2 BM O2 QD QD O2 BM O2 QF
-QF O2 BM O2 QD QD O2 BM O2 QF
-QF O2 BM O2 QD QD O2 BM O2 QF
-QF O2 BM O2 QD QD O2 BM O2 QF
-#=================================Straight Section================================
-QF1 O2 OBM O2 QD1 QD1 O2 OBM O2 QF1
-QF1 O2 OBM O2 QD1 QD1 O2 OBM O2 QF1
-
-
-
-
 #===============================End of Straight Section===========================
 ##################################################################################
 
@@ -294,11 +280,11 @@ Osf 	L[cm]=10
 Osd 	L[cm]=10       
   
 #---------------------------QUADRUPOLES-------------------------------
-QF 	L[cm]=21         	G[kG/cm]=0.452   	Tilt[deg]=0
+QF 	L[cm]=21         	G[kG/cm]=0.453   	Tilt[deg]=0
 QD 	L[cm]=20         	G[kG/cm]=-0.482  	Tilt[deg]=0
 
 QF1 	L[cm]=20         	G[kG/cm]=0.537   	Tilt[deg]=0
-QD1 	L[cm]=20         	G[kG/cm]=-0.535  	Tilt[deg]=0
+QD1 	L[cm]=20         	G[kG/cm]=-0.515  	Tilt[deg]=0
 
 QF0 	L[cm]=20         	G[kG/cm]=0.347674 	Tilt[deg]=0
 

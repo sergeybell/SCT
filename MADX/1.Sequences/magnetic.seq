@@ -1,35 +1,48 @@
-!TITLE Converted from LATTICE EDITOR: magnetic.opt[*].  Thu Feb 26 17:10:02 2026
+!TITLE Converted from LATTICE EDITOR: magnetic.opt[*].  Tue Apr 07 17:37:26 2026
 
 !  Kinetic energy=270 MeV, mass=1876.54 MeV
-!  BetaX=8.85371 m,  AlphaX=3.443e-15,  BetaY=1.60579 m,  AlphaY=-1.00619e-14 
-!  DispX=0 m,  DispPX=0,  DispY=0 m,  DispPY=0 
+!  BetaX=9.61411 m,  AlphaX=0.000401108,  BetaY=1.2366 m,  AlphaY=0.00542292 
+!  DispX=0.000590734 m,  DispPX=0.000258088,  DispY=0 m,  DispPY=0 
+
+OPTION, -ECHO;
+ASSIGN, ECHO="line.echo";
 
 BM: SBEND,  L=1.7764716,  ANGLE=0.1308996918;
 OBM: DRIFT, L=1.7764716 ;
 O2: DRIFT, L=0.25 ;
-QF: QUADRUPOLE,  L=0.21,  K1=1.300162062;
+QF: QUADRUPOLE,  L=0.21,  K1=1.303038527;
 QD: QUADRUPOLE,  L=0.2,  K1=-1.386456004;
 QF1: QUADRUPOLE,  L=0.2,  K1=1.544661565;
-QD1: QUADRUPOLE,  L=0.2,  K1=-1.538908636;
+QD1: QUADRUPOLE,  L=0.2,  K1=-1.481379341;
 
 MACHINE: LINE=(QF, O2, BM, O2, QD, QD, O2, BM, O2, QF, QF, O2, BM, O2, QD,  
 QD, O2, BM, O2, QF, QF, O2, BM, O2, QD, QD, O2, BM, O2, QF, QF, O2, BM, O2,  
-QD, QD, O2, BM, O2, QF, QF1, O2, OBM, O2, QD1, QD1, O2, OBM, O2, QF1, QF1,  
-O2, OBM, O2, QD1, QD1, O2, OBM, O2, QF1, QF, O2, BM, O2, QD, QD, O2, BM,  
-O2, QF, QF, O2, BM, O2, QD, QD, O2, BM, O2, QF, QF, O2, BM, O2, QD, QD, O2,  
-BM, O2, QF, QF, O2, BM, O2, QD, QD, O2, BM, O2, QF, QF1, O2, OBM, O2, QD1,  
-QD1, O2, OBM, O2, QF1, QF1, O2, OBM, O2, QD1, QD1, O2, OBM, O2, QF1, QF,  
+QD, QD, O2, BM, O2, QF, QF1, O2, OBM, O2, QD1, QD1, O2, OBM, O2, QF1, QF,  
 O2, BM, O2, QD, QD, O2, BM, O2, QF, QF, O2, BM, O2, QD, QD, O2, BM, O2, QF,  
 QF, O2, BM, O2, QD, QD, O2, BM, O2, QF, QF, O2, BM, O2, QD, QD, O2, BM, O2,  
-QF, QF1, O2, OBM, O2, QD1, QD1, O2, OBM, O2, QF1, QF1, O2, OBM, O2, QD1,  
-QD1, O2, OBM, O2, QF1, QF, O2, BM, O2, QD, QD, O2, BM, O2, QF, QF, O2, BM,  
-O2, QD, QD, O2, BM, O2, QF, QF, O2, BM, O2, QD, QD, O2, BM, O2, QF, QF, O2,  
-BM, O2, QD, QD, O2, BM, O2, QF, QF1, O2, OBM, O2, QD1, QD1, O2, OBM, O2,  
-QF1, QF1, O2, OBM, O2, QD1, QD1, O2, OBM, O2, QF1, QF, O2, BM, O2, QD, QD,  
+QF, QF1, O2, OBM, O2, QD1, QD1, O2, OBM, O2, QF1, QF, O2, BM, O2, QD, QD,  
 O2, BM, O2, QF, QF, O2, BM, O2, QD, QD, O2, BM, O2, QF, QF, O2, BM, O2, QD,  
 QD, O2, BM, O2, QF, QF, O2, BM, O2, QD, QD, O2, BM, O2, QF, QF1, O2, OBM,  
-O2, QD1, QD1, O2, OBM, O2, QF1, QF1, O2, OBM, O2, QD1, QD1, O2, OBM, O2,  
-QF1, QF, O2, BM, O2, QD, QD, O2, BM, O2, QF, QF, O2, BM, O2, QD, QD, O2,  
-BM, O2, QF, QF, O2, BM, O2, QD, QD, O2, BM, O2, QF, QF, O2, BM, O2, QD, QD,  
-O2, BM, O2, QF, QF1, O2, OBM, O2, QD1, QD1, O2, OBM, O2, QF1, QF1, O2, OBM,  
-O2, QD1, QD1, O2, OBM, O2, QF1);
+O2, QD1, QD1, O2, OBM, O2, QF1, QF, O2, BM, O2, QD, QD, O2, BM, O2, QF, QF,  
+O2, BM, O2, QD, QD, O2, BM, O2, QF, QF, O2, BM, O2, QD, QD, O2, BM, O2, QF,  
+QF, O2, BM, O2, QD, QD, O2, BM, O2, QF, QF1, O2, OBM, O2, QD1, QD1, O2,  
+OBM, O2, QF1, QF, O2, BM, O2, QD, QD, O2, BM, O2, QF, QF, O2, BM, O2, QD,  
+QD, O2, BM, O2, QF, QF, O2, BM, O2, QD, QD, O2, BM, O2, QF, QF, O2, BM, O2,  
+QD, QD, O2, BM, O2, QF, QF1, O2, OBM, O2, QD1, QD1, O2, OBM, O2, QF1, QF,  
+O2, BM, O2, QD, QD, O2, BM, O2, QF, QF, O2, BM, O2, QD, QD, O2, BM, O2, QF,  
+QF, O2, BM, O2, QD, QD, O2, BM, O2, QF, QF, O2, BM, O2, QD, QD, O2, BM, O2,  
+QF, QF1, O2, OBM, O2, QD1, QD1, O2, OBM, O2, QF1);
+
+beam, MASS=1.876544,CHARGE=1, ENERGY=2.146544,
+      EX=2e-05, EY=2e-05, SIGE=0.001;
+
+use,period=machine;
+
+twiss energy=2.146544, betx=9.61411, alfx=0.000401108, 
+     bety=1.2366, alfy=0.00542292, 
+     dx=0.000590734, dpx=0.000258088, 
+     dy=0, dpy=0;
+
+survey,;
+
+stop;
