@@ -1,9 +1,9 @@
 @echo off
 echo ========================================
-echo RUNNING: seq_Nuclotron_16.fox
+echo RUNNING: electrostatic.fox
 echo ========================================
 cd ..
-cosy.exe seq_Nuclotron_16.fox
+cosy.exe electrostatic.fox
 cd run
 echo.
 echo ========================================
