@@ -190,4 +190,4 @@ UM;	QUAD QUAD_LENGHT 0 QD1 ; {QD} SMAPS 100 MAPARR SPNRARR;
 ENDPROCEDURE; {FSp SETUP}
 
 {elem-counting: 100}
-SAVE 'C:/Users/palo4/Desktop/MEPHI/Master/HNP/MIPT conf/cosy/magnetic_2p_maps';
+SAVE 'magnetic_2p_maps';
