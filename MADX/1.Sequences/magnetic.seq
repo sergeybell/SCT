@@ -1,8 +1,8 @@
-!TITLE Converted from LATTICE EDITOR: magnetic.opt[*].  Tue Apr 07 17:37:26 2026
+!TITLE Converted from LATTICE EDITOR: magnetic.opt[*].  Sat May 02 13:09:52 2026
 
 !  Kinetic energy=270 MeV, mass=1876.54 MeV
-!  BetaX=9.61411 m,  AlphaX=0.000401108,  BetaY=1.2366 m,  AlphaY=0.00542292 
-!  DispX=0.000590734 m,  DispPX=0.000258088,  DispY=0 m,  DispPY=0 
+!  BetaX=9.15788 m,  AlphaX=-0.000544773,  BetaY=1.50706 m,  AlphaY=0.00105112 
+!  DispX=0.00873906 m,  DispPX=-0.000842744,  DispY=0 m,  DispPY=0 
 
 OPTION, -ECHO;
 ASSIGN, ECHO="line.echo";
@@ -11,9 +11,9 @@ BM: SBEND,  L=1.7764716,  ANGLE=0.1308996918;
 OBM: DRIFT, L=1.7764716 ;
 O2: DRIFT, L=0.25 ;
 QF: QUADRUPOLE,  L=0.21,  K1=1.303038527;
-QD: QUADRUPOLE,  L=0.2,  K1=-1.386456004;
-QF1: QUADRUPOLE,  L=0.2,  K1=1.544661565;
-QD1: QUADRUPOLE,  L=0.2,  K1=-1.481379341;
+QD: QUADRUPOLE,  L=0.2,  K1=-1.400838328;
+QF1: QUADRUPOLE,  L=0.2,  K1=1.242632767;
+QD1: QUADRUPOLE,  L=0.2,  K1=-1.251262162;
 
 MACHINE: LINE=(QF, O2, BM, O2, QD, QD, O2, BM, O2, QF, QF, O2, BM, O2, QD,  
 QD, O2, BM, O2, QF, QF, O2, BM, O2, QD, QD, O2, BM, O2, QF, QF, O2, BM, O2,  
@@ -38,9 +38,9 @@ beam, MASS=1.876544,CHARGE=1, ENERGY=2.146544,
 
 use,period=machine;
 
-twiss energy=2.146544, betx=9.61411, alfx=0.000401108, 
-     bety=1.2366, alfy=0.00542292, 
-     dx=0.000590734, dpx=0.000258088, 
+twiss energy=2.146544, betx=9.15788, alfx=-0.000544773, 
+     bety=1.50706, alfy=0.00105112, 
+     dx=0.00873906, dpx=-0.000842744, 
      dy=0, dpy=0;
 
 survey,;

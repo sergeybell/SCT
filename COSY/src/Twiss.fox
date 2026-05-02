@@ -1,8 +1,9 @@
-{INCLUDE 'magnetic_mod_sextupoles_maps';}
-{INCLUDE 'magnetic_sext_maps';}
-INCLUDE 'electrostatic_maps';
-{INCLUDE 'seq_Nuclotron_16_maps';}
-{INCLUDE 'seq_Nuclotron_8_maps';}
+{INCLUDE 'electrostatic_maps';}
+{INCLUDE 'magnetic_2p_maps';}
+{INCLUDE 'magnetic_sextupoles_maps';}
+INCLUDE 'magnetic_mod_maps';
+{INCLUDE 'Nuclotron_8_maps';}
+{INCLUDE 'Nuclotron_16_maps';}
 
 PROCEDURE PICK INDEX MAPARR SPNRARR;
     VARIABLE I 1; VARIABLE J 1;
@@ -121,26 +122,46 @@ PROCEDURE MAIN;
     VARIABLE NUM_ELE 1;
     VARIABLE MU_TP 800 3 ;
 
-    {GAMMA := 1.143914;} {deuteron 270 MeV}
-    GAMMA := 1.24810736; {proton 233 MeV - frozen}
+    GAMMA := 1.143914; {deuteron 270 MeV}
+    {GAMMA := 1.24810736;} {proton 233 MeV - frozen}
     
-    NUM_ELE := 57;
+    NUM_ELE := 47;
 
     OV 3 3 0;
     {DAEPS 1E-12;}
     { SET lattice parameters }
-    {SET_FOR_DEUTERONS GAMMA;}
-    SET_FOR_PROTONS GAMMA;
+    SET_FOR_DEUTERONS GAMMA;
+    {SET_FOR_PROTONS GAMMA;}
     
     {WIEN FILTER}
-    EB1  := 112.464392 ; {electrostatic}
+    {EB1  := 112.464392 ;} {electrostatic}
     {EB1 := 0 ;}
-    {EB1 := 132.6739162456733;} {Nuclotron_16}
+    EB1 := 132.6739162456733; {Nuclotron_16}
     {EB1 := 130;}
 
     {SEXTUPOLES} {natural chromaticity}
     SGx1 := 0.0; SGx2 := 0.0;
     SGy1 := 0.0; SGy2 := 0.0;
+
+    DISPX0:=0.0;       DISPXPR0:=0.0;
+    DISPY0:=0.0;        DISPYPR0:=0.0;
+
+    {electrostatic}
+    {BETAX0:=21.7051 ;	BETAY0:=7.75695; 
+	ALPHAX0:=0.0 ; ALPHAY0:=0.0;}
+
+    {magnetic_2p}
+    {BETAX0:=2.98732;  BETAY0:=35.1547;
+    ALPHAX0:=0.0; ALPHAY0:=0.0;}
+
+    {magnetic_sextupoles}
+    {BETAX0:=9.47086 ; ALPHAX0:=0.0;
+    BETAY0:=1.3627  ; ALPHAY0:=0.0;}
+
+    {magnetic_mod}
+    BETAX0:=19.6959 ; ALPHAX0:=0.0;
+    BETAY0:=5.6178; ALPHAY0:=0.0;
+    DISPX0:=0.0365057 ;
 
     {Nuclotron_8}
     {BETAX0:=1.60128;  BETAY0:=12.7239;
@@ -150,23 +171,8 @@ PROCEDURE MAIN;
     {BETAX0:=2.39604;  BETAY0:=12.0604;
     ALPHAX0:=0.0; ALPHAY0:=0.0;}
 
-    {electrostatic}
-    BETAX0:=21.7051 ;	BETAY0:=7.75695; 
-	ALPHAX0:=0.0 ; ALPHAY0:=0.0;
-
-    {magnetic_mod}
-    {BETAX0:=20.7084 ;	BETAY0:=5.01532; 
-	ALPHAX0:=-0.001683 ; ALPHAY0:=-0.00475646;}
-
-    {magnetic}
-    {BETAX0:=9.61411 ; ALPHAX0:=0.000401108;
-    BETAY0:=1.2366  ; ALPHAY0:=0.00542292;}
-    
     GAMMAX0:=(1+SQR(ALPHAX0))/BETAX0;
     GAMMAY0:=(1+SQR(ALPHAY0))/BETAY0;
-    
-    DISPX0:=0.0;       DISPXPR0:=0.0;
-    DISPY0:=0.0;        DISPYPR0:=0.0;
 
     LATTICE SGx1 SGy1 SGx2 SGy1 EB1 1 MAPARR1 SPNRARR1; PM 6;
     {LATTICE SGx1 SGy1 SGx2 SGy1 GAMMA 0 MAPARR1 SPNRARR1; PM 6;}

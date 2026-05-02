@@ -1,9 +1,9 @@
 @echo off
 echo ========================================
-echo RUNNING: electrostatic.fox
+echo RUNNING: magnetic_sextupoles.fox
 echo ========================================
 cd ..
-cosy.exe electrostatic.fox
+cosy.exe magnetic_sextupoles.fox
 cd run
 echo.
 echo ========================================
