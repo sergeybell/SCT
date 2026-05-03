@@ -78,7 +78,7 @@
 #=============================================================================
 
 #max fielf in magnet in Tesla
-	$Bmax=1.8;  =>         1.8
+	$Bmax=0.25616589;  =>  0.25616589
 
 #----------------------------------------------------------------------
 #-----------------First for 96-th option of structure
@@ -156,29 +156,19 @@
 
 #Magnetic rigidity [T*m]---------------------------------
 	$BR=$A/$Z*$P0/$c*1.e+8;  =>  3.47648969
+	$R = $BR/$Bmax;  =>  13.5712436
 #Test of magnetic rigidity
 	$BR_test=$m_d*$GAMBET*$c_light/$Z/$Qp;  =>  3.47471354
 
 #Number of all magnets on ring ----------------------------------
-	$Nmag=8*6;  =>          48
-
-#Radius of curvature in m
-	$R270=$R48;  =>  13.5712434
-	$R=$R270;  =>  13.5712434
+	$Nmag=8*5;  =>          40
 	
-	$Lmag=$R*2*$pi/$Nmag;  =>   1.7764716
+	$Lmag=$R*2*$pi/$Nmag;  =>  2.13176595
 #Magnetic field in magnet at 270 MeV
-	$B270=$BR/$R;  => 0.256165894
-	$B=$B270;  => 0.256165894
+	$B270=$BR/$R;  =>  0.25616589
+	$B=$B270;  =>  0.25616589
 #Ratio between fields at max energy and 270 MeV
-	$Bratio=1.8/$B270;  =>  7.02669654
-
-
-#WIEN FILTER in [MV/m]------------
-	$E_max = 13;  =>          13
-	$E = -13;  =>         -13
-	$R_def = - ($m_p*$c_light*$c_light/($Qp*$Z)) * ($BETA*$BETA*$GAMMA) / ($E*1000000);  =>  19.4624795
-	$E_kV_cm = $E*10;  =>        -130
+	$Bratio=1.8/$B270;  =>  7.02669665
 
 #
 #=========8 ARCs STRUCTURE============================
@@ -252,13 +242,7 @@ QF O2 BM O2 QD QD O2 BM O2 QF
 QF O2 BM O2 QD QD O2 BM O2 QF
 #=================================Straight Section================================
 QF1 O2 OBM O2 QD1 QD1 O2 OBM O2 QF1
-#====================================ARC==========================================
-QF O2 BM O2 QD QD O2 BM O2 QF
-QF O2 BM O2 QD QD O2 BM O2 QF
-QF O2 BM O2 QD QD O2 BM O2 QF
-QF O2 BM O2 QD QD O2 BM O2 QF
-#=================================Straight Section================================
-QF1 O2 OBM O2 QD1 QD1 O2 OBM O2 QF1
+
 
 ##################################################################################
 
@@ -267,8 +251,8 @@ begin list
 #=================================================================================
 
 #---------------------------BENDING MAGNETS---------------------------------
-BM 	L[cm]=177.64716   	B[kG]=2.5616589   	G[kG/cm]=0        	Tilt[deg]=0
-OBM 	L[cm]=177.64716    
+BM 	L[cm]=213.176595   	B[kG]=2.5616589        	G[kG/cm]=0        	Tilt[deg]=0
+OBM 	L[cm]=213.176595
 
 #-----------------------------DRIFTS---------------------------------
 O1 	L[cm]=327      
@@ -280,11 +264,11 @@ Osf 	L[cm]=10
 Osd 	L[cm]=10       
   
 #---------------------------QUADRUPOLES-------------------------------
-QF 	L[cm]=21         	G[kG/cm]=0.453   	Tilt[deg]=0
-QD 	L[cm]=20         	G[kG/cm]=-0.482  	Tilt[deg]=0
+QF 	L[cm]=21         	G[kG/cm]=0.3955  	Tilt[deg]=0
+QD 	L[cm]=20         	G[kG/cm]=-0.429  	Tilt[deg]=0
 
-QF1 	L[cm]=20         	G[kG/cm]=0.517   	Tilt[deg]=0
-QD1 	L[cm]=20         	G[kG/cm]=-0.51   	Tilt[deg]=0
+QF1 	L[cm]=20         	G[kG/cm]=0.47    	Tilt[deg]=0
+QD1 	L[cm]=20         	G[kG/cm]=-0.45   	Tilt[deg]=0
 
 QF0 	L[cm]=20         	G[kG/cm]=0.347674 	Tilt[deg]=0
 

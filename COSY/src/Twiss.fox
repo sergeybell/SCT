@@ -1,7 +1,7 @@
 {INCLUDE 'electrostatic_maps';}
 {INCLUDE 'magnetic_2p_maps';}
-{INCLUDE 'magnetic_sextupoles_maps';}
-INCLUDE 'magnetic_mod_maps';
+INCLUDE 'magnetic_sextupoles_maps';
+{INCLUDE 'magnetic_mod_maps';}
 {INCLUDE 'Nuclotron_8_maps';}
 {INCLUDE 'Nuclotron_16_maps';}
 
@@ -158,10 +158,14 @@ PROCEDURE MAIN;
     {BETAX0:=9.47086 ; ALPHAX0:=0.0;
     BETAY0:=1.3627  ; ALPHAY0:=0.0;}
 
+    {magnetic_sextupoles_5}
+    BETAX0:=10.72 ; ALPHAX0:=0.0;
+    BETAY0:=1.55343  ; ALPHAY0:=0.0;
+
     {magnetic_mod}
-    BETAX0:=19.6959 ; ALPHAX0:=0.0;
+    {BETAX0:=19.6959 ; ALPHAX0:=0.0;
     BETAY0:=5.6178; ALPHAY0:=0.0;
-    DISPX0:=0.0365057 ;
+    DISPX0:=0.0365057 ;}
 
     {Nuclotron_8}
     {BETAX0:=1.60128;  BETAY0:=12.7239;
