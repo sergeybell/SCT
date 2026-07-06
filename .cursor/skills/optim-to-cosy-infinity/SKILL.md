@@ -11,22 +11,53 @@ disable-model-invocation: true
 Run the converter script:
 
 ```bash
-python COSY/analysis/optim_to_cosy.py OptiM/magnetic/magnetic_2.opt COSY/src/magnetic_2.fox
+python COSY/analysis/optim_to_cosy.py OptiM/magnetic/magnetic_2.opt
 ```
 
-If output path is omitted, it defaults to `COSY/src/<input_stem>.fox`.
+Default output: `COSY/structures/<stem>/<stem>.fox` and `<stem>_maps.fox`.
 
-The converter writes **two** files:
-- `COSY/src/<stem>.fox` — base lattice with mandatory RF block (`RFFLAG`-controlled)
-- `COSY/src/<stem>_maps.fox` — same lattice with per-element `SMAPS` for Twiss (`Twiss.fox`)
+Optional explicit output path:
+
+```bash
+python COSY/analysis/optim_to_cosy.py OptiM/magnetic/magnetic_2.opt COSY/structures/magnetic_2/magnetic_2.fox
+```
+
+The converter writes **two** files and embeds a `{--- TWISS SETUP (from OptiM) ---}` block with initial β, α, dispersion (cm→m), γ, particle type.
+
+## Run COSY Twiss
+
+`cosy.exe` must run with `cwd=COSY/src`. Use the launcher (does not replace `run.ipynb`):
+
+```bash
+python COSY/src/run/run_cosy.py --pre
+python COSY/src/run/run_cosy.py --twiss magnetic_2
+```
+
+Twiss data lands in `COSY/src/dat/<stem>/` (BETAX, BETAY, DISPX).
+
+Plot:
+
+```bash
+python COSY/analysis/plot_twiss.py magnetic_2
+```
+
+Saves `COSY/src/dat/<stem>/<stem>_twiss.png`.
+
+## Layout
+
+```
+COSY/structures/<stem>/     # .fox from converter + _generated/Twiss_run.fox
+COSY/src/dat/<stem>/        # Twiss output + PNG
+COSY/src/                   # cosy.exe, header, legacy fox
+```
 
 ## Checks
 
 After generation, confirm the base `.fox` contains:
 - `INCLUDE 'header';`
+- `{--- TWISS SETUP (from OptiM) ---}`
 - `PROCEDURE LATTICE`
 - `{SETTING RF PARAMETERS}` and `IF RFFLAG=1; RF VRF`
-- `LOOP I 1 1;`
 - `SAVE '<stem>';`
 
 Confirm the maps `.fox` contains:

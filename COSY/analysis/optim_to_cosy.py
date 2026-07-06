@@ -26,6 +26,42 @@ class OptimBeam:
         return self.p_mev_c / 299.792458
 
 
+@dataclass(frozen=True)
+class OptimTwissInitial:
+    betax_m: float
+    betay_m: float
+    alphax: float
+    alphay: float
+    dispx_m: float
+    dispy_m: float
+    dispxpr: float
+    dispypr: float
+
+
+@dataclass(frozen=True)
+class TwissSetup:
+    stem: str
+    num_ele: int
+    maps_include: str
+    particle: str  # "deuteron" | "proton"
+    gamma: float
+    set_procedure: str  # SET_FOR_DEUTERONS | SET_FOR_PROTONS
+    rfflag: int
+    eb1: float
+    betax0_m: float
+    betay0_m: float
+    alphax0: float
+    alphay0: float
+    dispx0_m: float
+    dispxpr0: float
+    dispy0_m: float = 0.0
+    dispypr0: float = 0.0
+    sext_gx1: float = 0.0
+    sext_gx2: float = 0.0
+    sext_gy1: float = 0.0
+    sext_gy2: float = 0.0
+
+
 @dataclass
 class OptimElement:
     name: str
@@ -116,6 +152,18 @@ def _eval_optim_expr(expr: str, vars_: Dict[str, float]) -> float:
 
 _re_optim_marker = re.compile(r"^\s*OptiM\s*$")
 _re_energy_mass = re.compile(r"Energy\[MeV\]\s*=\s*(?P<E>[-+0-9.eE$]+)\s+Mass\[MeV\]\s*=\s*(?P<M>[-+0-9.eE$]+)")
+_re_initial_beta = re.compile(
+    r"Initial:\s*BetaX\[cm\]\s*=\s*(?P<bx>[-+0-9.eE]+)\s+BetaY\[cm\]\s*=\s*(?P<by>[-+0-9.eE]+)"
+)
+_re_initial_alfa = re.compile(
+    r"AlfaX\s*=\s*(?P<ax>[-+0-9.eE]+)\s+AlfaY\s*=\s*(?P<ay>[-+0-9.eE]+)"
+)
+_re_initial_disp = re.compile(
+    r"DispersX\[cm\]\s*=\s*(?P<dx>[-+0-9.eE]+)\s+DispersY\[cm\]\s*=\s*(?P<dy>[-+0-9.eE]+)"
+)
+_re_initial_dsp = re.compile(
+    r"Dsp_PrimeX\s*=\s*(?P<dpx>[-+0-9.eE]+)\s+DspPrimeY\s*=\s*(?P<dpy>[-+0-9.eE]+)"
+)
 
 
 def _find_line_idx(lines: List[str], pattern: re.Pattern[str]) -> int:
@@ -222,6 +270,65 @@ def parse_optim(path: Path) -> Tuple[OptimBeam, Dict[str, OptimElement], List[st
     return beam, elements, sequence
 
 
+def parse_optim_twiss_initial(lines: List[str], optim_idx: int) -> OptimTwissInitial:
+    window = "\n".join(lines[optim_idx : optim_idx + 12])
+    m_b = _re_initial_beta.search(window)
+    if not m_b:
+        raise ValueError("Could not find Initial: BetaX/BetaY line after OptiM marker")
+    m_a = _re_initial_alfa.search(window)
+    m_d = _re_initial_disp.search(window)
+    m_p = _re_initial_dsp.search(window)
+    if not all([m_a, m_d, m_p]):
+        raise ValueError("Could not parse Initial twiss lines (Alfa/Dispers/Dsp_Prime) after OptiM marker")
+    return OptimTwissInitial(
+        betax_m=float(m_b.group("bx")) / 100.0,
+        betay_m=float(m_b.group("by")) / 100.0,
+        alphax=float(m_a.group("ax")),
+        alphay=float(m_a.group("ay")),
+        dispx_m=float(m_d.group("dx")) / 100.0,
+        dispy_m=float(m_d.group("dy")) / 100.0,
+        dispxpr=float(m_p.group("dpx")),
+        dispypr=float(m_p.group("dpy")),
+    )
+
+
+def _particle_kind(mass_mev: float) -> Tuple[str, str]:
+    if mass_mev > 1500.0:
+        return "deuteron", "SET_FOR_DEUTERONS"
+    return "proton", "SET_FOR_PROTONS"
+
+
+def build_twiss_setup(
+    stem: str,
+    beam: OptimBeam,
+    twiss: OptimTwissInitial,
+    num_ele: int,
+    *,
+    rfflag: int = 0,
+    eb1: float = 0.0,
+) -> TwissSetup:
+    particle, set_proc = _particle_kind(beam.mass_mev)
+    gamma = 1.0 + beam.energy_mev / beam.mass_mev
+    return TwissSetup(
+        stem=stem,
+        num_ele=num_ele,
+        maps_include=f"{stem}_maps",
+        particle=particle,
+        gamma=gamma,
+        set_procedure=set_proc,
+        rfflag=rfflag,
+        eb1=eb1,
+        betax0_m=twiss.betax_m,
+        betay0_m=twiss.betay_m,
+        alphax0=twiss.alphax,
+        alphay0=twiss.alphay,
+        dispx0_m=twiss.dispx_m,
+        dispxpr0=twiss.dispxpr,
+        dispy0_m=twiss.dispy_m,
+        dispypr0=twiss.dispypr,
+    )
+
+
 def _cosy_header(input_path: Path, elem_count: int) -> List[str]:
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return [
@@ -242,6 +349,22 @@ def _format_float(x: float) -> str:
     if abs(x) < 1e-12:
         return "0"
     return f"{x:.10g}"
+
+
+def format_twiss_block(setup: TwissSetup) -> List[str]:
+    return [
+        "{--- TWISS SETUP (from OptiM) ---}",
+        f"{{ maps_include: {setup.maps_include} }}",
+        f"{{ num_ele: {setup.num_ele} }}",
+        f"{{ particle: {setup.particle} ; gamma: {_format_float(setup.gamma)} ; set: {setup.set_procedure} }}",
+        f"{{ rfflag: {setup.rfflag} ; eb1: {_format_float(setup.eb1)} }}",
+        f"{{ betax0_m: {_format_float(setup.betax0_m)} ; betay0_m: {_format_float(setup.betay0_m)} }}",
+        f"{{ alphax0: {_format_float(setup.alphax0)} ; alphay0: {_format_float(setup.alphay0)} }}",
+        f"{{ dispx0_m: {_format_float(setup.dispx0_m)} ; dispxpr0: {_format_float(setup.dispxpr0)} }}",
+        f"{{ dispy0_m: {_format_float(setup.dispy0_m)} ; dispypr0: {_format_float(setup.dispypr0)} }}",
+        "{--- END TWISS ---}",
+        "",
+    ]
 
 
 _ELEMENT_KEYWORDS = ["QUAD", "SBEND", "DL", "MH", "MS", "MQ", "WIEN2D", "WIEN", "EQ", "ED", "EH"]
@@ -285,6 +408,7 @@ def generate_cosy_fox(
     sequence: List[str],
     output_stem: str,
     input_path: Path,
+    twiss_setup: Optional[TwissSetup] = None,
 ) -> str:
     brho = beam.brho_tm
     A = 0.05
@@ -357,6 +481,8 @@ def generate_cosy_fox(
         elif t == "S":
             out += [f" {name} := {_format_float(d.get('Bpt_T', 0.0))};"]
     out += [""]
+    if twiss_setup is not None:
+        out += format_twiss_block(twiss_setup)
     out += _rf_setup_lines()
 
     out += [" {BEGIN LATTICE}"]
@@ -481,7 +607,7 @@ def generate_cosy_maps_fox(
 def main() -> int:
     ap = argparse.ArgumentParser(description="Convert OptiM .opt lattice to COSY Infinity .fox")
     ap.add_argument("input", type=Path, help="Input OptiM file (.opt)")
-    ap.add_argument("output", type=Path, nargs="?", help="Output COSY file (.fox). Default: COSY/src/<stem>.fox")
+    ap.add_argument("output", type=Path, nargs="?", help="Output COSY file (.fox). Default: COSY/structures/<stem>/<stem>.fox")
     ap.add_argument("--stem", type=str, default=None, help="Override SAVE stem (default: input stem)")
     ap.add_argument(
         "--maps-output",
@@ -491,13 +617,26 @@ def main() -> int:
     )
     args = ap.parse_args()
 
+    raw = args.input.read_text(encoding="utf-8", errors="replace").splitlines()
+    lines = [_strip_comment(ln) for ln in raw]
+    optim_idx = _find_line_idx(lines, _re_optim_marker)
+
     beam, elements, sequence = parse_optim(args.input)
+    twiss_initial = parse_optim_twiss_initial(lines, optim_idx)
 
     stem = args.stem or args.input.stem
-    out_path = args.output or (Path("COSY") / "src" / f"{stem}.fox")
+    twiss_setup = build_twiss_setup(stem, beam, twiss_initial, len(sequence))
+    out_path = args.output or (Path("COSY") / "structures" / stem / f"{stem}.fox")
     maps_path = args.maps_output or (out_path.parent / f"{out_path.stem}_maps.fox")
 
-    out_text = generate_cosy_fox(beam, elements, sequence, output_stem=stem, input_path=args.input)
+    out_text = generate_cosy_fox(
+        beam,
+        elements,
+        sequence,
+        output_stem=stem,
+        input_path=args.input,
+        twiss_setup=twiss_setup,
+    )
     maps_text = generate_cosy_maps_fox(
         out_text,
         input_path=args.input,

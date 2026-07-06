@@ -9,6 +9,9 @@
 # Скомпилированные бинарные файлы
 *.bin
 
+# Ephemeral Twiss generation per structure
+COSY/structures/*/_generated/
+
 # Файлы листинга и отчетов (часто генерируются компиляторами)
 *.lis
 
