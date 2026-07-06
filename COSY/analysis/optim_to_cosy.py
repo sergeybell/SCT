@@ -244,6 +244,41 @@ def _format_float(x: float) -> str:
     return f"{x:.10g}"
 
 
+_ELEMENT_KEYWORDS = ["QUAD", "SBEND", "DL", "MH", "MS", "MQ", "WIEN2D", "WIEN", "EQ", "ED", "EH"]
+_RE_LATTICE_ELEMENT = re.compile(
+    r"^([ \t]*)(" + "|".join(_ELEMENT_KEYWORDS) + r")\b([^;]+;)(.*)",
+    re.IGNORECASE,
+)
+_RF_SKIP_PATTERNS = [
+    re.compile(r"\{SETTING RF PARAMETERS\}", re.I),
+    re.compile(r"^\s*HNUM\s*:=", re.I),
+    re.compile(r"^\s*VRF\s*\(", re.I),
+    re.compile(r"^\s*FREQ\s*:=", re.I),
+    re.compile(r"UM;\s*CR", re.I),
+    re.compile(r"IF\s+RFFLAG", re.I),
+    re.compile(r"^\s*ENDIF", re.I),
+]
+
+
+def _is_rf_setup_line(line: str) -> bool:
+    return any(p.search(line) for p in _RF_SKIP_PATTERNS)
+
+
+def _rf_setup_lines() -> List[str]:
+    """Mandatory RF block (pattern from magnetic_2p.fox); not included in SMAPS."""
+    return [
+        " {SETTING RF PARAMETERS}",
+        " HNUM := 1;",
+        " VRF(1, 1) := 5; {RF Voltage [kV]}",
+        " FREQ := HNUM*REVFREQ(fACCLEN(1)); {RF Frequency}",
+        "",
+        " UM; CR;",
+        " IF RFFLAG=1; RF VRF 0 FREQ 0 0.05;",
+        " ENDIF;",
+        "",
+    ]
+
+
 def generate_cosy_fox(
     beam: OptimBeam,
     elements: Dict[str, OptimElement],
@@ -284,7 +319,13 @@ def generate_cosy_fox(
     out += ["PROCEDURE LATTICE SEXTGx1 SEXTGy1 SEXTGx2 SEXTGy2 EB1 RFFLAG;"]
 
     # All VARIABLE declarations first (no assignments until block is complete).
-    var_lines: List[str] = [" VARIABLE I 1;", " VARIABLE A 1;"]
+    var_lines: List[str] = [
+        " VARIABLE I 1;",
+        " VARIABLE A 1;",
+        " VARIABLE VRF 1 1 1;",
+        " VARIABLE FREQ 1;",
+        " VARIABLE HNUM 1;",
+    ]
     for name in sorted(elements.keys()):
         var_lines.append(f" VARIABLE L_{name} 1;")
         t = elements[name].type_code()
@@ -316,6 +357,7 @@ def generate_cosy_fox(
         elif t == "S":
             out += [f" {name} := {_format_float(d.get('Bpt_T', 0.0))};"]
     out += [""]
+    out += _rf_setup_lines()
 
     out += [" {BEGIN LATTICE}"]
     out += [" LOOP I 1 1;"]
@@ -343,22 +385,131 @@ def generate_cosy_fox(
     return "\n".join(out)
 
 
+def generate_cosy_maps_fox(
+    base_fox_text: str,
+    *,
+    input_path: Path,
+    output_stem: str,
+    maps_output_path: Path,
+) -> str:
+    """
+    Transform a base .fox lattice into a maps version with per-element SMAPS.
+    RF setup lines are preserved without SMAPS numbering (Twiss indexing).
+    """
+    lines = base_fox_text.splitlines()
+    new_save_name = f"{output_stem}_maps"
+    global_idx = 0
+    section_counts: List[int] = []
+    current_section_count = 0
+    processed_lines: List[str] = []
+
+    for line in lines:
+        if "PROCEDURE LATTICE" in line.upper() and "MAPARR" not in line.upper():
+            processed_lines.append(
+                re.sub(
+                    r"(PROCEDURE\s+LATTICE.*?)(?=\s*;)",
+                    r"\1 MAPARR SPNRARR",
+                    line,
+                    flags=re.IGNORECASE,
+                )
+            )
+            continue
+
+        if "SAVE '" in line.upper() and "';" in line:
+            processed_lines.append(f"SAVE '{new_save_name}';")
+            continue
+
+        section_match = re.match(r"^([ \t]*)(\{={2,}.*?={2,}.*?\})", line)
+        if section_match:
+            if current_section_count > 0:
+                section_counts.append(current_section_count)
+                current_section_count = 0
+            indent = section_match.group(1)
+            raw_title = section_match.group(2)
+            name_match = re.search(r"={2,}([A-Za-z\s]+)", raw_title)
+            name = name_match.group(1).strip() if name_match else "SECTION"
+            processed_lines.append(f"{indent}{{========{name}========== elements: REPLACE_ME }}")
+            continue
+
+        if _is_rf_setup_line(line):
+            processed_lines.append(line)
+            continue
+
+        elem_match = _RE_LATTICE_ELEMENT.match(line)
+        if elem_match:
+            global_idx += 1
+            current_section_count += 1
+            indent = elem_match.group(1)
+            elem_cmd = elem_match.group(2) + elem_match.group(3)
+            comment = elem_match.group(4).strip()
+            processed_lines.append(
+                f"{indent}UM; {elem_cmd} {comment} SMAPS {global_idx} MAPARR SPNRARR;"
+            )
+        else:
+            processed_lines.append(line)
+
+    if current_section_count > 0:
+        section_counts.append(current_section_count)
+
+    final_content = "\n".join(processed_lines) + "\n"
+
+    final_content = final_content.replace(
+        "{ Purpose: Conversion from OptiM to COSY Infinity }",
+        "{ Purpose: Auto-generation of maps (SMAPS) for Twiss functions }",
+    )
+    final_content = re.sub(
+        r"(\{ Input file: [^}]+\})\n",
+        rf"\1\n{{ Output file: {maps_output_path.as_posix()} }}\n",
+        final_content,
+        count=1,
+    )
+
+    for count in section_counts:
+        final_content = final_content.replace("REPLACE_ME", str(count), 1)
+
+    if section_counts:
+        total_str = " + ".join(map(str, section_counts))
+        final_content = re.sub(
+            r"\{elem-counting:.*?\}",
+            f"{{elem-counting: {total_str} = {global_idx}}}",
+            final_content,
+        )
+
+    return final_content
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Convert OptiM .opt lattice to COSY Infinity .fox")
     ap.add_argument("input", type=Path, help="Input OptiM file (.opt)")
     ap.add_argument("output", type=Path, nargs="?", help="Output COSY file (.fox). Default: COSY/src/<stem>.fox")
     ap.add_argument("--stem", type=str, default=None, help="Override SAVE stem (default: input stem)")
+    ap.add_argument(
+        "--maps-output",
+        type=Path,
+        default=None,
+        help="Output maps .fox path. Default: <output_stem>_maps.fox next to base output",
+    )
     args = ap.parse_args()
 
     beam, elements, sequence = parse_optim(args.input)
 
     stem = args.stem or args.input.stem
     out_path = args.output or (Path("COSY") / "src" / f"{stem}.fox")
+    maps_path = args.maps_output or (out_path.parent / f"{out_path.stem}_maps.fox")
+
     out_text = generate_cosy_fox(beam, elements, sequence, output_stem=stem, input_path=args.input)
+    maps_text = generate_cosy_maps_fox(
+        out_text,
+        input_path=args.input,
+        output_stem=stem,
+        maps_output_path=maps_path,
+    )
 
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(out_text, encoding="utf-8")
+    maps_path.write_text(maps_text, encoding="utf-8")
     print(f"OK: wrote {out_path}")
+    print(f"OK: wrote {maps_path}")
     return 0
 
 

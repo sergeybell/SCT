@@ -25,7 +25,7 @@ def main() -> int:
     otc = load_converter()
     opt_path = REPO / "OptiM/magnetic/magnetic_2.opt"
     fox_path = REPO / "COSY/src/magnetic_2.fox"
-    smoke_path = REPO / "COSY/src/magnetic_2_smoke.fox"
+    maps_path = REPO / "COSY/src/magnetic_2_maps.fox"
 
     beam, elems, seq = otc.parse_optim(opt_path)
     brho = beam.brho_tm
@@ -57,6 +57,11 @@ def main() -> int:
     print(f"QD1={extract('QD1')}")
     print(f"SBEND={fox.count('SBEND')}, QUAD={fox.count('QUAD')}, MH={fox.count('MH')}, DL={fox.count('DL')}")
 
+    assert "{SETTING RF PARAMETERS}" in fox
+    assert "UM; CR;" in fox
+    assert "IF RFFLAG=1; RF VRF" in fox
+    assert "VARIABLE VRF 1 1 1;" in fox
+
     # cross-check OptiM header notebook value (not used by converter)
     notebook_br = 3.47648969  # from $BR in magnetic_2.opt line 159
     print(f"\nNotebook $BR in .opt header: {notebook_br} T*m (converter Brho: {brho:.9f})")
@@ -64,6 +69,17 @@ def main() -> int:
     smoke_path = REPO / "COSY/src/magnetic_2_smoke.fox"
     if smoke_path.exists():
         print("\nWARNING: magnetic_2_smoke.fox exists (leftover smoke-test artifact; delete it).")
+
+    maps = maps_path.read_text(encoding="utf-8")
+    smaps_indices = [int(m) for m in re.findall(r"SMAPS (\d+) MAPARR", maps)]
+    print("\n=== magnetic_2_maps.fox ===")
+    print(f"SMAPS count={len(smaps_indices)}, last index={smaps_indices[-1] if smaps_indices else 0}")
+    assert "MAPARR SPNRARR" in maps
+    assert "SAVE 'magnetic_2_maps';" in maps
+    assert "IF RFFLAG=1; RF VRF" in maps
+    assert "SMAPS" not in re.split(r"IF RFFLAG=1", maps, maxsplit=1)[0].split("UM; CR;")[-1]
+    assert len(smaps_indices) == len(seq)
+    assert smaps_indices == list(range(1, len(seq) + 1))
 
     # tolerances
     assert abs(extract("ANG_BM") - ang) < 1e-8

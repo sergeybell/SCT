@@ -16,11 +16,20 @@ python COSY/analysis/optim_to_cosy.py OptiM/magnetic/magnetic_2.opt COSY/src/mag
 
 If output path is omitted, it defaults to `COSY/src/<input_stem>.fox`.
 
+The converter writes **two** files:
+- `COSY/src/<stem>.fox` — base lattice with mandatory RF block (`RFFLAG`-controlled)
+- `COSY/src/<stem>_maps.fox` — same lattice with per-element `SMAPS` for Twiss (`Twiss.fox`)
+
 ## Checks
 
-After generation, confirm the output `.fox` contains:
+After generation, confirm the base `.fox` contains:
 - `INCLUDE 'header';`
 - `PROCEDURE LATTICE`
+- `{SETTING RF PARAMETERS}` and `IF RFFLAG=1; RF VRF`
 - `LOOP I 1 1;`
 - `SAVE '<stem>';`
 
+Confirm the maps `.fox` contains:
+- `MAPARR SPNRARR` in `PROCEDURE LATTICE`
+- `SMAPS 1..N` on lattice elements (RF block has no SMAPS)
+- `SAVE '<stem>_maps';`
