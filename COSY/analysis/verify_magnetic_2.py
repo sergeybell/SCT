@@ -24,8 +24,8 @@ def load_converter():
 def main() -> int:
     otc = load_converter()
     opt_path = REPO / "OptiM/magnetic/magnetic_2.opt"
-    fox_path = REPO / "COSY/src/magnetic_2.fox"
-    maps_path = REPO / "COSY/src/magnetic_2_maps.fox"
+    fox_path = REPO / "COSY/structures/magnetic_2/magnetic_2.fox"
+    maps_path = REPO / "COSY/structures/magnetic_2/magnetic_2_maps.fox"
 
     beam, elems, seq = otc.parse_optim(opt_path)
     brho = beam.brho_tm
@@ -61,6 +61,7 @@ def main() -> int:
     assert "UM; CR;" in fox
     assert "IF RFFLAG=1; RF VRF" in fox
     assert "VARIABLE VRF 1 1 1;" in fox
+    assert "SF1 := SEXTGx1" in fox and "SF2 := SEXTGx2" in fox and "SD := SEXTGy1" in fox
 
     # cross-check OptiM header notebook value (not used by converter)
     notebook_br = 3.47648969  # from $BR in magnetic_2.opt line 159

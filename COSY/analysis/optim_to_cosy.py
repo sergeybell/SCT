@@ -464,6 +464,9 @@ def generate_cosy_fox(
 
     out += [" {LATTICE PARAMETERS}"]
     out += [f" A := {_format_float(A)};"]
+    out += [" SF1 := SEXTGx1; SF2 := SEXTGx2; SD := SEXTGy1;"]
+    if "SD1" in elements:
+        out += [" SD1 := SEXTGy2;"]
     out += [""]
 
     out += [" {ELEMENT VALUES FROM OPTIM}"]
@@ -479,7 +482,7 @@ def generate_cosy_fox(
         elif t == "Q":
             out += [f" {name} := {_format_float(d.get('K1', 0.0))};"]
         elif t == "S":
-            out += [f" {name} := {_format_float(d.get('Bpt_T', 0.0))};"]
+            pass  # strength from SEXTG* wiring above
     out += [""]
     if twiss_setup is not None:
         out += format_twiss_block(twiss_setup)

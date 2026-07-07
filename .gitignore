@@ -19,3 +19,6 @@ COSY/structures/*/_generated/
 *.893
 *.892
 *.99
+# Generated mapping fox per structure/mode
+COSY/src/mapping_run/
+
