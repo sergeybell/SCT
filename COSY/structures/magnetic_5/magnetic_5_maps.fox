@@ -2,7 +2,7 @@
 { COSY Infinity Lattice Converter }
 { Purpose: Auto-generation of maps (SMAPS) for Twiss functions }
 { Author: Kolokolchikov Sergey }
-{ Date: 2026-07-07 17:29:00 }
+{ Date: 2026-07-08 14:52:20 }
 { Input file: OptiM/magnetic/magnetic_5.opt }
 { Output file: COSY/structures/magnetic_5/magnetic_5_maps.fox }
 { TOTAL ELEMENTS: 210 }

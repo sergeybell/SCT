@@ -22,6 +22,46 @@ RAW_OUTPUTS = {
     "particle_spin_tune_1.dat": "particle_spin_tune_1",
 }
 
+# Per-structure, per-mode scan steps (SGx1/SGx2 step_x, SGy1 step_y).
+# FR0: 5^3 grid (corner index 4); FR3: 3^3 grid (corner index 2) — larger steps.
+# Three families only: SF1<-SEXTGx1, SF2<-SEXTGx2, SD<-SEXTGy1.
+DEFAULT_STEP_X = 0.02
+DEFAULT_STEP_Y = -0.03
+CHROM_ABS_LIMIT = 20.0
+
+MappingSteps = dict[str, dict[str, tuple[float, float]]]
+
+MAPPING_STEPS: MappingSteps = {
+    "magnetic_2": {
+        "FR0": (0.0044, -0.0066),
+        "FR3": (0.0078, -0.0117),
+    },
+    "magnetic_3": {
+        "FR0": (0.0090, -0.0135),
+        "FR3": (0.0153, -0.0230),
+    },
+    "magnetic_4": {
+        "FR0": (0.0155, -0.0232),
+        "FR3": (0.0255, -0.0383),
+    },
+    "magnetic_5": {
+        "FR0": (0.0222, -0.0333),
+        "FR3": (0.0377, -0.0566),
+    },
+    "magnetic_6": {
+        "FR0": (0.0337, -0.0505),
+        "FR3": (0.0533, -0.0800),
+    },
+    "magnetic_7": {
+        "FR0": (0.0444, -0.0667),
+        "FR3": (0.0703, -0.1055),
+    },
+    "magnetic_8": {
+        "FR0": (0.0595, -0.0893),
+        "FR3": (0.0909, -0.1363),
+    },
+}
+
 sys.path.insert(0, str(REPO / "COSY" / "src" / "run"))
 from run_cosy import run_cosy, run_pre  # noqa: E402
 
@@ -31,6 +71,13 @@ def _lattice_fox(stem: str) -> Path:
     if not p.is_file():
         raise FileNotFoundError(f"Lattice not found: {p}")
     return p
+
+
+def get_mapping_steps(stem: str, mode: str) -> tuple[float, float]:
+    """Return (step_x, step_y) for a structure and fringe mode."""
+    if stem in MAPPING_STEPS and mode in MAPPING_STEPS[stem]:
+        return MAPPING_STEPS[stem][mode]
+    return DEFAULT_STEP_X, DEFAULT_STEP_Y
 
 
 def generate_mapping_fox(stem: str, mode: str) -> str:
@@ -76,6 +123,16 @@ def generate_mapping_fox(stem: str, mode: str) -> str:
         "UM ; {FR 3 ;} LATTICE SGx1 SGy1 SGx2 SGy2 EB1 RF ; {FR 0 ;}",
         fringe_line,
     )
+
+    step_x, step_y = get_mapping_steps(stem, mode)
+    body = re.sub(
+        r"^\s*step_x\s*:=\s*[^;]+;\s*step_y\s*:=\s*[^;]+;",
+        f"    step_x := {step_x}; step_y := {step_y} ;",
+        body,
+        count=1,
+        flags=re.MULTILINE,
+    )
+
     if f"structure := '{stem}'" not in body:
         raise RuntimeError(f"Failed to set structure := '{stem}'")
     return body
@@ -123,7 +180,8 @@ def run_mapping(stem: str, mode: str, *, skip_compile: bool = False) -> Path:
         print(f"Compile lattice: {stem}")
         compile_lattice(stem)
 
-    print(f"Mapping {stem} mode={mode}")
+    step_x, step_y = get_mapping_steps(stem, mode)
+    print(f"Mapping {stem} mode={mode} (3-family, step_x={step_x}, step_y={step_y})")
     run_cosy(fox_path)
     _rename_outputs(stem, mode)
     print(f"Done {stem} {mode} in {time.perf_counter() - t0:.1f}s")
@@ -139,14 +197,18 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Run COSY mapping scan for a magnetic structure")
     ap.add_argument("--stem", action="append", dest="stems", metavar="STEM")
     ap.add_argument("--mode", choices=["FR0", "FR3", "both"], default="both")
-    ap.add_argument("--all-magnetic", action="store_true", help="magnetic_3..magnetic_8")
+    ap.add_argument(
+        "--all-magnetic",
+        action="store_true",
+        help="all magnetic_* stems that have an entry in MAPPING_STEPS",
+    )
     ap.add_argument("--pre", action="store_true")
     ap.add_argument("--skip-compile", action="store_true")
     args = ap.parse_args()
 
     stems: list[str] = list(args.stems or [])
     if args.all_magnetic:
-        stems.extend(f"magnetic_{n}" for n in range(3, 9))
+        stems.extend(sorted(MAPPING_STEPS))
     if not stems:
         ap.print_help()
         return 1
