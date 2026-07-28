@@ -1,0 +1,274 @@
+{
+  "study": "sct_mapping_fr0_magnetic_2_to_5",
+  "created": "2026-07-28",
+  "mode": "FR0",
+  "stems": [
+    "magnetic_2",
+    "magnetic_3",
+    "magnetic_4",
+    "magnetic_5"
+  ],
+  "source_mapping_dat": "COSY/src/dat/<stem>/",
+  "outputs": {
+    "audit": "dat/<stem>/audit.json",
+    "zero_point": "dat/<stem>/zero_point.json",
+    "working_point": "dat/<stem>/working_point.json",
+    "phase_diagram": "plots/<stem>_sext_phase_*.png",
+    "delta_eq_panels": "plots/<stem>_delta_eq_panels.png",
+    "map_panels": "plots/<stem>_map_dnu_panels.png",
+    "tracking": "dat/<stem>/track_*/",
+    "tracking_plots": "plots/<stem>_track_*.png"
+  },
+  "fox": {
+    "validate_istar": "fox/validate_istar_<stem>.fox",
+    "working_point": "fox/working_point_<stem>_<tag>.fox",
+    "track_sct": "fox/track_sct_<stem>_<tag>.fox"
+  },
+  "jobs": [
+    {
+      "job": "validate",
+      "stem": "magnetic_2",
+      "tag": "natural",
+      "dat": "C:\\GIT_REPOS\\SCT\\COSY\\sct_study\\dat\\magnetic_2\\validate_natural.dat"
+    },
+    {
+      "job": "validate",
+      "stem": "magnetic_2",
+      "tag": "Istar",
+      "dat": "C:\\GIT_REPOS\\SCT\\COSY\\sct_study\\dat\\magnetic_2\\validate_Istar.dat"
+    },
+    {
+      "job": "validate",
+      "stem": "magnetic_2",
+      "tag": "natural",
+      "dat": "C:\\GIT_REPOS\\SCT\\COSY\\sct_study\\dat\\magnetic_2\\validate_natural.dat"
+    },
+    {
+      "job": "validate",
+      "stem": "magnetic_2",
+      "tag": "Istar",
+      "dat": "C:\\GIT_REPOS\\SCT\\COSY\\sct_study\\dat\\magnetic_2\\validate_Istar.dat"
+    },
+    {
+      "job": "validate",
+      "stem": "magnetic_3",
+      "tag": "natural",
+      "dat": "C:\\GIT_REPOS\\SCT\\COSY\\sct_study\\dat\\magnetic_3\\validate_natural.dat"
+    },
+    {
+      "job": "validate",
+      "stem": "magnetic_3",
+      "tag": "Istar",
+      "dat": "C:\\GIT_REPOS\\SCT\\COSY\\sct_study\\dat\\magnetic_3\\validate_Istar.dat"
+    },
+    {
+      "job": "validate",
+      "stem": "magnetic_4",
+      "tag": "natural",
+      "dat": "C:\\GIT_REPOS\\SCT\\COSY\\sct_study\\dat\\magnetic_4\\validate_natural.dat"
+    },
+    {
+      "job": "validate",
+      "stem": "magnetic_4",
+      "tag": "Istar",
+      "dat": "C:\\GIT_REPOS\\SCT\\COSY\\sct_study\\dat\\magnetic_4\\validate_Istar.dat"
+    },
+    {
+      "job": "validate",
+      "stem": "magnetic_5",
+      "tag": "natural",
+      "dat": "C:\\GIT_REPOS\\SCT\\COSY\\sct_study\\dat\\magnetic_5\\validate_natural.dat"
+    },
+    {
+      "job": "validate",
+      "stem": "magnetic_5",
+      "tag": "Istar",
+      "dat": "C:\\GIT_REPOS\\SCT\\COSY\\sct_study\\dat\\magnetic_5\\validate_Istar.dat"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_2",
+      "tag": "natural"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_2",
+      "tag": "Istar"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_2",
+      "tag": "ctrl_xi_x"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_2",
+      "tag": "ctrl_xi_y"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_2",
+      "tag": "ctrl_eta1"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_2",
+      "tag": "natural"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_2",
+      "tag": "Istar"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_2",
+      "tag": "ctrl_xi_x"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_2",
+      "tag": "ctrl_xi_y"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_2",
+      "tag": "ctrl_eta1"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_3",
+      "tag": "natural"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_3",
+      "tag": "Istar"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_3",
+      "tag": "ctrl_xi_x"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_3",
+      "tag": "ctrl_xi_y"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_3",
+      "tag": "ctrl_eta1"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_4",
+      "tag": "natural"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_4",
+      "tag": "Istar"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_4",
+      "tag": "ctrl_xi_x"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_4",
+      "tag": "ctrl_xi_y"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_4",
+      "tag": "ctrl_eta1"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_5",
+      "tag": "natural"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_5",
+      "tag": "Istar"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_5",
+      "tag": "ctrl_xi_x"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_5",
+      "tag": "ctrl_xi_y"
+    },
+    {
+      "job": "working_point",
+      "stem": "magnetic_5",
+      "tag": "ctrl_eta1"
+    },
+    {
+      "job": "track",
+      "stem": "magnetic_2",
+      "tag": "natural",
+      "kind": "smoke"
+    },
+    {
+      "job": "track",
+      "stem": "magnetic_2",
+      "tag": "Istar",
+      "kind": "smoke"
+    },
+    {
+      "job": "track",
+      "stem": "magnetic_2",
+      "tag": "ctrl_xi_x",
+      "kind": "smoke"
+    },
+    {
+      "job": "track",
+      "stem": "magnetic_2",
+      "tag": "ctrl_xi_y",
+      "kind": "smoke"
+    },
+    {
+      "job": "track",
+      "stem": "magnetic_2",
+      "tag": "ctrl_eta1",
+      "kind": "smoke"
+    },
+    {
+      "job": "track",
+      "stem": "magnetic_2",
+      "tag": "natural",
+      "kind": "full"
+    },
+    {
+      "job": "track",
+      "stem": "magnetic_2",
+      "tag": "Istar",
+      "kind": "full"
+    },
+    {
+      "job": "track",
+      "stem": "magnetic_2",
+      "tag": "ctrl_xi_x",
+      "kind": "full"
+    },
+    {
+      "job": "track",
+      "stem": "magnetic_2",
+      "tag": "ctrl_xi_y",
+      "kind": "full"
+    },
+    {
+      "job": "track",
+      "stem": "magnetic_2",
+      "tag": "ctrl_eta1",
+      "kind": "full"
+    }
+  ]
+}

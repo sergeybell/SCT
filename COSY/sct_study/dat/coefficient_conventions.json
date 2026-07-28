@@ -1,0 +1,110 @@
+{
+  "coordinate_notes": {
+    "D_in_SR_TRPRAY": "COSY Infinity relative energy/momentum deviation coordinate (6th phase-space var in OV 3..).",
+    "chromaticity": "CHROM = (MU_TP|(0&0&0&0&1))*(1+1/GAMMA); PARA(1) used in SET_FOR_*_CHROM.",
+    "spin_tune_delta": "MU_N_ARR(probe)-CONS(MU) via TSS+POLVAL on fixed-amplitude probes."
+  },
+  "mcm_blocks": {
+    "mapping.fox": {
+      "MCM1": "-TMPALPHA|(0&0&0&0&0&1)",
+      "MCM2": "-TMPALPHA|(0&0&0&0&0&2)",
+      "ALPHA1": "MCM2",
+      "ETA1": "ALPHA1+(3/2)*(BETA*BETA)/(GAMMA*GAMMA)-ALPHA0/(GAMMA*GAMMA)+1/(GAMMA*GAMMA*GAMMA*GAMMA)",
+      "CHROM_X": "(MU_TP(1)|(0&0&0&0&1)) * (1+1/GAMMA)"
+    },
+    "coherence_opt.fox": {
+      "MCM1": "-TMPALPHA|(0&0&0&0&0&1)",
+      "MCM2": "-2*TMPALPHA|(0&0&0&0&0&2)",
+      "ALPHA1": "MCM2",
+      "ETA1": null,
+      "CHROM_X": null
+    },
+    "natural.fox": {
+      "MCM1": "-TMPALPHA|(0&0&0&0&0&1)",
+      "MCM2": "-2*TMPALPHA|(0&0&0&0&0&2)",
+      "ALPHA1": "MCM2",
+      "ETA1": "ALPHA1+(3/2)*(BETA*BETA)/(GAMMA*GAMMA)-ALPHA0/(GAMMA*GAMMA)+1/(GAMMA*GAMMA*GAMMA*GAMMA)",
+      "CHROM_X": "(MU_TP(1)|(0&0&0&0&1)) * (1+1/GAMMA)"
+    }
+  },
+  "factorial_warning": "mapping.fox sets MCM2 := -TMPALPHA|(0&0&0&0&0&2) and ALPHA1:=MCM2. coherence_opt.fox uses MCM2 := -2*TMPALPHA|(...&2). If DA stores Taylor coeffs with 1/n!, multiplying by n! recovers expansion coeffs. Study uses mapping.fox convention consistently for eta_1 already stored in integrals_*.dat.",
+  "fACCLEN_warning": "header.fox fACCLEN=141 m is used for RF frequency in LATTICE when RFFLAG=1, but geometric lengths of magnetic_2..5 are ~117\u2013134 m. Tracking/RF phase may be inconsistent until fACCLEN is set per lattice.",
+  "per_stem": {
+    "magnetic_2": {
+      "geometric_L_m": 117.388296,
+      "header_fACCLEN": 141.0,
+      "L_mismatch_m": 23.611704000000003,
+      "gamma": 1.143914,
+      "beta": 0.4855811586697464,
+      "G": -0.142987,
+      "gammaG": -0.16356483111800002,
+      "chrom_norm_factor_1p1overG": 1.8741915913259213,
+      "SF1_wired": true,
+      "SF2_wired": true,
+      "SD_wired": true,
+      "SD1_present": false,
+      "sample_alpha0": 0.2303626034898867,
+      "sample_alpha1": 0.339531973613825,
+      "sample_eta1": 1.017793580615622,
+      "eta1_rebuilt_from_alpha": 1.017793580615622,
+      "eta1_rebuild_abs_err": 0.0
+    },
+    "magnetic_3": {
+      "geometric_L_m": 122.788296,
+      "header_fACCLEN": 141.0,
+      "L_mismatch_m": 18.211703999999997,
+      "gamma": 1.143914,
+      "beta": 0.4855811586697464,
+      "G": -0.142987,
+      "gammaG": -0.16356483111800002,
+      "chrom_norm_factor_1p1overG": 1.8741915913259213,
+      "SF1_wired": true,
+      "SF2_wired": true,
+      "SD_wired": true,
+      "SD1_present": false,
+      "sample_alpha0": 0.103803562105088,
+      "sample_alpha1": 0.2472532728213623,
+      "sample_eta1": 1.022232683595873,
+      "eta1_rebuilt_from_alpha": 1.022232683595873,
+      "eta1_rebuild_abs_err": 0.0
+    },
+    "magnetic_4": {
+      "geometric_L_m": 128.188296,
+      "header_fACCLEN": 141.0,
+      "L_mismatch_m": 12.811703999999992,
+      "gamma": 1.143914,
+      "beta": 0.4855811586697464,
+      "G": -0.142987,
+      "gammaG": -0.16356483111800002,
+      "chrom_norm_factor_1p1overG": 1.8741915913259213,
+      "SF1_wired": true,
+      "SF2_wired": true,
+      "SD_wired": true,
+      "SD1_present": false,
+      "sample_alpha0": 0.05865826778948489,
+      "sample_alpha1": 0.1616670399020037,
+      "sample_eta1": 0.9711469784073004,
+      "eta1_rebuilt_from_alpha": 0.9711469784073004,
+      "eta1_rebuild_abs_err": 0.0
+    },
+    "magnetic_5": {
+      "geometric_L_m": 133.588296,
+      "header_fACCLEN": 141.0,
+      "L_mismatch_m": 7.411703999999986,
+      "gamma": 1.143914,
+      "beta": 0.4855811586697464,
+      "G": -0.142987,
+      "gammaG": -0.16356483111800002,
+      "chrom_norm_factor_1p1overG": 1.8741915913259213,
+      "SF1_wired": true,
+      "SF2_wired": true,
+      "SD_wired": true,
+      "SD1_present": false,
+      "sample_alpha0": 0.03759566742109821,
+      "sample_alpha1": 0.1105616788806071,
+      "sample_eta1": 0.9361378869774132,
+      "eta1_rebuilt_from_alpha": 0.9361378869774131,
+      "eta1_rebuild_abs_err": 1.1102230246251565e-16
+    }
+  }
+}
