@@ -100,3 +100,21 @@ python COSY/sct_study/py/run_cosy_jobs.py --job track --full --stem magnetic_2
 python COSY/sct_study/py/analyze_working_point.py
 python COSY/sct_study/py/analyze_tracking.py
 ```
+
+---
+
+## 9. Documentation canvas — verified
+- README в `config/`, `py/`, `fox/`, `dat/` (+ stems), `plots/`; расширен корневой `README.md` (словарь smoke/full, C(n)).
+- Единый notebook: `analysis.ipynb` (физика + воспроизведение без нового COSY track).
+- Полярные диаграммы: свой масштаб на stem + результирующий вектор Σ; поле `resultant` в `sext_phase.json`.
+
+## Phase diagrams
+
+- **Статус:** prepared (s/C·Q proxy for μ; update after working_point COSY run)
+- **Команда:** `python COSY/sct_study/py/analyze_phase_advance.py`
+- Диаграмма: длина = |K₂|, угол = μ; знак K₂ → +π; чёрный пунктир = результирующий Σ.
+- Масштаб радиуса — свой для каждой структуры.
+- magnetic_2: 10 magnets; |Σ|_x=0.01527, |Σ|_y=0.01457; magnetic_2_sext_phase_x.png, magnetic_2_sext_phase_y.png
+- magnetic_3: 15 magnets; |Σ|_x=0.08451, |Σ|_y=0.09117; magnetic_3_sext_phase_x.png, magnetic_3_sext_phase_y.png
+- magnetic_4: 20 magnets; |Σ|_x=0.2824, |Σ|_y=0.3531; magnetic_4_sext_phase_x.png, magnetic_4_sext_phase_y.png
+- magnetic_5: 25 magnets; |Σ|_x=1.302, |Σ|_y=1.316; magnetic_5_sext_phase_x.png, magnetic_5_sext_phase_y.png

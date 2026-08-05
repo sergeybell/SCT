@@ -274,5 +274,25 @@
       "mu_y_turns": 0.8205369744667305,
       "K2": -0.29817621339834227
     }
-  ]
+  ],
+  "resultant": {
+    "x": {
+      "plane": "x",
+      "Re": 0.2632725108684085,
+      "Im": -0.10221390139059383,
+      "magnitude": 0.28241830078173463,
+      "angle_rad": -0.37033075982255503,
+      "angle_deg": -21.218389561705358,
+      "note": "Diagnostic sum \u03a3 |K2| e^{i\u03bc_signed}; \u03bc is s/C\u00b7Q proxy, not Twiss phase"
+    },
+    "y": {
+      "plane": "y",
+      "Re": 0.322351208520246,
+      "Im": -0.14418099060962508,
+      "magnitude": 0.3531266907041097,
+      "angle_rad": -0.42058900421833756,
+      "angle_deg": -24.09797485132072,
+      "note": "Diagnostic sum \u03a3 |K2| e^{i\u03bc_signed}; \u03bc is s/C\u00b7Q proxy, not Twiss phase"
+    }
+  }
 }
