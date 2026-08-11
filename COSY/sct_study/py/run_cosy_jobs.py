@@ -103,11 +103,14 @@ def job_working_point(stem_filter=None) -> None:
             update_manifest_job({"job": "working_point", "stem": stem, "tag": tag})
 
 
-def job_track(smoke: bool = True, stem: str | None = None) -> None:
+def job_track(smoke: bool = True, stem: str | None = None, dense: bool = False) -> None:
     cfg = load_config()
     stem = stem or cfg["tracking"]["pilot_stem"]
     compile_lattice(stem)
-    kind = "smoke" if smoke else "full"
+    if dense:
+        kind = "dense"
+    else:
+        kind = "smoke" if smoke else "full"
     zp = json.loads((DAT_OUT / stem / "zero_point.json").read_text(encoding="utf-8"))
     for pt in zp["control_points"]["points"]:
         tag = pt["tag"]
@@ -126,7 +129,8 @@ def main() -> int:
     ap.add_argument("--job", choices=["validate", "working_point", "track", "all"], required=True)
     ap.add_argument("--stem", default=None)
     ap.add_argument("--smoke", action="store_true", help="for track: short NTURN")
-    ap.add_argument("--full", action="store_true", help="for track: full NTURN")
+    ap.add_argument("--full", action="store_true", help="for track: full NTURN, sparse save")
+    ap.add_argument("--dense", action="store_true", help="for track: dense spin save (Δn≤3)")
     args = ap.parse_args()
 
     if args.pre:
@@ -137,10 +141,13 @@ def main() -> int:
     if args.job in ("working_point", "all"):
         job_working_point(args.stem)
     if args.job in ("track", "all"):
-        smoke = not args.full
-        if args.smoke:
-            smoke = True
-        job_track(smoke=smoke, stem=args.stem)
+        if args.dense:
+            job_track(smoke=False, stem=args.stem, dense=True)
+        else:
+            smoke = not args.full
+            if args.smoke:
+                smoke = True
+            job_track(smoke=smoke, stem=args.stem, dense=False)
 
     append_worklog(
         f"## COSY jobs\n\n- **Статус:** run\n- **Команда:** `python COSY/sct_study/py/run_cosy_jobs.py --job {args.job}`\n"

@@ -49,7 +49,7 @@ def main() -> int:
         if df is None:
             write_json(DAT_OUT / stem / "audit.json", {"error": "missing FR0 dat", **audit})
             continue
-        summary = model_summary(df)
+        summary = model_summary(df, stem=stem, mode="FR0")
         out = {
             "stem": stem,
             "wiring_audit": audit,
@@ -57,22 +57,29 @@ def main() -> int:
         }
         write_json(DAT_OUT / stem / "audit.json", out)
         plot = plot_grid_and_istar(stem, df, summary)
+        gr = summary["grid_relation"]
+        d_norm = gr.get("min_distance_normalized", float("nan"))
         rows.append(
             f"| {stem} | {summary['condition_number']:.1f} | "
-            f"{summary['I_star']} | {summary['grid_relation']['inside_axis_aligned_box']} | "
-            f"{summary['grid_relation']['min_distance_to_grid_point']:.4g} | {plot.name} |"
+            f"{summary['I_star']} | {gr['inside_axis_aligned_box']} | "
+            f"{gr['min_distance_to_grid_point']:.4g} | {d_norm:.3g} | {plot.name} |"
         )
-        print(f"OK audit {stem}: cond={summary['condition_number']:.1f} inside={summary['grid_relation']['inside_axis_aligned_box']}")
+        print(
+            f"OK audit {stem}: cond={summary['condition_number']:.1f} "
+            f"inside={gr['inside_axis_aligned_box']} d_norm={d_norm:.3g}"
+        )
 
     append_worklog(
         "## Audit mapping (FR0)\n\n"
         "- **Статус:** verified (offline)\n"
         "- **Команда:** `python COSY/sct_study/py/audit_mapping.py`\n"
         "- **Выход:** `dat/<stem>/audit.json`, `plots/<stem>_grid_vs_istar.png`\n\n"
-        "| stem | cond | I* | inside box | min_dist | plot |\n|------|------|----|------------|----------|------|\n"
+        "| stem | cond | I* | inside box | d_min | d_min/‖ΔI‖ | plot |\n"
+        "|------|------|----|------------|-------|------------|------|\n"
         + "\n".join(rows)
-        + "\n\n**Вывод:** линейность R²≈1, но I* вне оси-aligned box у всех структур "
-        "(нужен отрицательный SGx2). magnetic_2 — ближайший кандидат для пилота.\n"
+        + "\n\n**Вывод:** линейность R²≈1, но I* вне измеренного FR0-домена у всех структур "
+        "(нужен отрицательный SGx2). Сравнивать stems по нормированному расстоянию, "
+        "не по сырому d_min. magnetic_2 — ближайший кандидат для пилота.\n"
     )
     return 0
 

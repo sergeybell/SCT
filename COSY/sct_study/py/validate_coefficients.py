@@ -89,9 +89,15 @@ def main() -> int:
 
     report = {
         "coordinate_notes": {
-            "D_in_SR_TRPRAY": "COSY Infinity relative energy/momentum deviation coordinate (6th phase-space var in OV 3..).",
+            "D_in_SR_TRPRAY": (
+                "COSY Infinity 6th phase-space coordinate (relative energy/momentum "
+                "deviation in OV 3 3 0). Not theoretical Δδ_eq."
+            ),
+            "mean_D_offset": "Tracking proxy ⟨D⟩_i−⟨D⟩_ref after transient cut.",
+            "delta_eq_theory": "Senichev equilibrium momentum shift from ξ_x,ξ_y,η1 and emittances.",
             "chromaticity": "CHROM = (MU_TP|(0&0&0&0&1))*(1+1/GAMMA); PARA(1) used in SET_FOR_*_CHROM.",
             "spin_tune_delta": "MU_N_ARR(probe)-CONS(MU) via TSS+POLVAL on fixed-amplitude probes.",
+            "mcm_convention": "Study uses mapping.fox (ALPHA1:=MCM2 without factorial 2) consistently.",
         },
         "mcm_blocks": blocks,
         "factorial_warning": (

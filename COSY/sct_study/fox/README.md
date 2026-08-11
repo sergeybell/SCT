@@ -1,30 +1,24 @@
 # `fox/` — входные файлы COSY
 
-## Шаблоны (редактировать вручную)
+## Шаблоны
 
 | Файл | Роль |
 |------|------|
-| `_template_validate.fox` | Одноточечная проверка chrom, η₁, \(\Delta\nu_s\) при заданных токах |
-| `_template_working_point.fox` | Рабочая точка: \(Q_x,Q_y,\nu_s,\gamma G\) → `wp_<tag>.dat` |
-| `_template_track.fox` | `INJECT` + multi-turn `TR` → PRAY / TRPRAY / TRPSPI |
+| `_template_validate.fox` | chrom, η₁, \(\Delta\nu_s\) при заданных токах |
+| `_template_working_point.fox` | \(Q_x,Q_y,\nu_s,\gamma G\) → `wp_<tag>.dat` |
+| `_template_track.fox` | `INJECT` + `TR` → PRAY / TRPRAY / TRPSPI |
 
-Плейсхолдеры вида `{{STEM}}`, `{{SGX1}}`, `{{NTURN}}` заполняет `py/generate_fox.py`.
+Плейсхолдеры заполняет `py/generate_fox.py`.
 
-## Сгенерированные файлы (не править руками)
+## Сгенерированные файлы
 
-Имена:
+- `validate_<stem>_{natural,Istar}.fox`
+- `working_point_<stem>_<tag>.fox`
+- `track_<stem>_<tag>_{smoke,full,dense}.fox` (пилот: `magnetic_2`)
 
-- `validate_<stem>_<tag>.fox` — `tag ∈ {natural, Istar}`
-- `working_point_<stem>_<tag>.fox` — `tag ∈ {natural, Istar, ctrl_xi_x, ctrl_xi_y, ctrl_eta1}`
-- `track_<stem>_<tag>_<kind>.fox` — `kind ∈ {smoke, full}` (пилот: `magnetic_2`)
+## Ансамбль `INJECT`
 
-## Ансамбль `INJECT` (трекинг)
-
-В `_template_track.fox`:
-
-1. Reference: \(X=A=Y=B=T=D=0\), спин \(S=(0,\sin\psi,\cos\psi)\), \(\psi=90^\circ\) → \(S=(0,1,0)\).
-2. Группа X: `NUM` лучей с \(X\in[-x_{amp},x_{amp}]\).
-3. Группа Y: то же по \(Y\).
-4. Группа D: \(D = X\cdot d_{scale}\) (масштаб импульсного разброса).
-
-Далее `TR NTURN NINT(NTURN*save_every_frac) ...` пишет орбиту и спин.
+1. Ray 0 — служебный COSY; ray 1 — reference (\(X=\ldots=D=0\)).
+2. Группы X / Y / D по `num_per_group` (linspace; в середине группы амплитуда 0 — классификация по порядку inject, не по |X|).
+3. Спин: `psi_deg=0` → \(S=(0,0,1)\) (горизонтальная/продольная фаза `atan2(Sx,Sz)`).
+4. Сохранение: `TR NTURN SAVE_EVERY ...` с явным `SAVE_EVERY` (dense: 2).

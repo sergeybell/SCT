@@ -1,40 +1,24 @@
-# `py/` — пайплайн анализа
+# `py/` — пайплайн SCT study
 
-Все скрипты запускаются из корня репозитория:
+| Скрипт | Роль |
+|--------|------|
+| `common.py` | пути, \(\Delta\delta_{eq}\), `currents_in_box` + нормированный \(d_{\min}\) |
+| `audit_mapping.py` | FR0 audit + grid vs I* |
+| `validate_coefficients.py` | конвенции MCM/η₁/D |
+| `analyze_zero_point.py` | I* и control points |
+| `analyze_delta_eq.py` | теоретические панели \(\Delta\delta_{eq}\) |
+| `analyze_phase_advance.py` | геометрический proxy \(2\pi Qs/C\) |
+| `analyze_twiss_phase.py` | \(\psi=\int ds/\beta\) на каждом экземпляре секступоля |
+| `analyze_working_point.py` | Qx,Qy,νs из COSY WP |
+| `analyze_resonances.py` | imperfection / intrinsic / synchrotron / combined |
+| `generate_fox.py` | validate / WP / track (smoke, full, dense) |
+| `run_cosy_jobs.py` | запуск COSY (`--dense` для спина) |
+| `analyze_tracking.py` | `mean_D_offset`, C(n), \(\Delta\nu_s\) (dense) |
+| `run_offline_analysis.py` | все offline шаги подряд |
+| `plot_results.py` | сводные картинки |
 
-```bash
-python COSY/sct_study/py/<script>.py
-```
+## Важно
 
-Общие пути и формулы — в [`common.py`](common.py).
-
-## Offline (без `cosy.exe`)
-
-| Скрипт | Что делает | Основные выходы |
-|--------|------------|-----------------|
-| `audit_mapping.py` | Качество линейной модели mapping FR0 | `dat/<stem>/audit.json`, `plots/*_grid_vs_istar.png` |
-| `validate_coefficients.py` | Конвенции η₁, MCM, γG, fACCLEN | `dat/coefficient_conventions.json` |
-| `analyze_zero_point.py` | \(I^*\) и контрольные токи | `dat/<stem>/zero_point.json` |
-| `analyze_delta_eq.py` | Теория \(\Delta\delta_{eq}\) и map-\(\Delta\nu_s\) | панели JSON + PNG |
-| `analyze_phase_advance.py` | Полярные диаграммы секступолей + результирующий вектор | `sext_phase.json`, `*_sext_phase_{x,y}.png` |
-| `analyze_working_point.py` | Парсинг `wp_*.dat`, резонансы | `working_point.json` |
-| `analyze_tracking.py` | Postprocess TRPRAY/TRPSPI → \(C(n)\), \(\overline D\) и диагностический fit фазы | `track_*_analysis.json` |
-| `plot_results.py` | Сводные графики | `plots/summary_*.png` |
-| `run_offline_analysis.py` | Запуск всей offline-цепочки подряд | — |
-
-## Генерация FOX и запуск COSY
-
-| Скрипт | Что делает |
-|--------|------------|
-| `generate_fox.py` | Заполняет `_template_*.fox` токами и путями |
-| `run_cosy_jobs.py` | `--job validate \| working_point \| track` (+ `--smoke` / `--full`) |
-
-## Зависимости
-
-- Python 3 + `numpy`, `pandas`, `matplotlib`
-- Для COSY-jobs: `COSY/src/cosy.exe` и подготовка через `python COSY/src/run/run_cosy.py --pre`
-- Mapping API: `COSY/analysis/map_lat_lib.py`
-
-Внимание: поле `dnu_s` в существующем tracking-анализе получено по редко
-сохранённой абсолютной фазе. Из-за алиасинга оно не является надёжным
-индивидуальным spin tune; подробное объяснение дано в `../analysis.ipynb`.
+- `mean_D_offset` ≠ теоретический \(\Delta\delta_{eq}\).
+- Spin tune только при `save_every ≤ 3` и `psi_deg≈0`.
+- Twiss-фаза — основной результат; geometric polar — preview.

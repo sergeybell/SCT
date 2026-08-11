@@ -2,15 +2,15 @@
   "stem": "magnetic_2",
   "tag": "natural",
   "kind": "smoke",
-  "n_rays": 29,
+  "n_rays": 28,
   "groups": {
-    "0": "ref",
+    "0": "dummy",
     "1": "ref",
     "2": "X",
     "3": "X",
     "4": "X",
     "5": "X",
-    "6": "ref",
+    "6": "X",
     "7": "X",
     "8": "X",
     "9": "X",
@@ -19,7 +19,7 @@
     "12": "Y",
     "13": "Y",
     "14": "Y",
-    "15": "ref",
+    "15": "Y",
     "16": "Y",
     "17": "Y",
     "18": "Y",
@@ -28,29 +28,40 @@
     "21": "D",
     "22": "D",
     "23": "D",
-    "24": "ref",
+    "24": "D",
     "25": "D",
     "26": "D",
     "27": "D",
     "28": "D"
   },
+  "ref_ray": 1,
   "D_ref": 0.0,
   "transient_cut_turn": 40.0,
+  "sampling": {
+    "save_interval_turns": 10.0,
+    "nyquist_max_interval": 3.05689185494458,
+    "nu_s_ref": 0.16356483111800002,
+    "spin_aliased": true,
+    "n_saved_turns": 21,
+    "physical_spin_turns": 32.712966223600006,
+    "observable_spin_turns_note": "Physical spin revolutions \u03bd_s\u00b7\u0394N exist, but phase samples only resolve them if save_interval \u2264 1/(2|\u03bd_s|)."
+  },
+  "nomenclature": {
+    "D": "COSY TRPRAY 6th coordinate (relative momentum/energy deviation)",
+    "mean_D_offset": "\u27e8D\u27e9_i \u2212 \u27e8D\u27e9_ref after transient cut; tracking proxy, not theoretical \u0394\u03b4_eq",
+    "delta_eq_theory": "Senichev equilibrium momentum shift from \u03be, \u03b71, emittances",
+    "C_n": "Phase coherence |\u27e8exp(i\u0394\u03c6)\u27e9| at saved turns only",
+    "dnu_s_rel": "Relative spin-tune estimate from unwrapped phase; None if aliased",
+    "aliased_phase_slope": "Raw phase slope / 2\u03c0 when sampling is aliased \u2014 not a physical tune",
+    "mean_polarization": "|\u27e8S\u27e9| ensemble polarization (distinct from phase coherence)",
+    "spin_plane": "Phase = unwrap(atan2(Sx,Sz)); requires horizontal/longitudinal initial spin (psi_deg\u22480). Vertical spin (psi=90\u00b0) makes this phase undefined."
+  },
   "per_ray": [
-    {
-      "ray": 0,
-      "group": "ref",
-      "Dbar": 0.0,
-      "delta_eq": 0.0,
-      "X0": 0.0,
-      "Y0": 0.0,
-      "D0": 0.0
-    },
     {
       "ray": 1,
       "group": "ref",
       "Dbar": 0.0,
-      "delta_eq": 0.0,
+      "mean_D_offset": 0.0,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": 0.0
@@ -59,7 +70,7 @@
       "ray": 2,
       "group": "X",
       "Dbar": 1.8682192352941173e-09,
-      "delta_eq": 1.8682192352941173e-09,
+      "mean_D_offset": 1.8682192352941173e-09,
       "X0": -0.001,
       "Y0": 0.0,
       "D0": 0.0
@@ -68,7 +79,7 @@
       "ray": 3,
       "group": "X",
       "Dbar": 1.0333792676470588e-09,
-      "delta_eq": 1.0333792676470588e-09,
+      "mean_D_offset": 1.0333792676470588e-09,
       "X0": -0.00075,
       "Y0": 0.0,
       "D0": 0.0
@@ -77,7 +88,7 @@
       "ray": 4,
       "group": "X",
       "Dbar": 4.437292552941177e-10,
-      "delta_eq": 4.437292552941177e-10,
+      "mean_D_offset": 4.437292552941177e-10,
       "X0": -0.0005,
       "Y0": 0.0,
       "D0": 0.0
@@ -86,16 +97,16 @@
       "ray": 5,
       "group": "X",
       "Dbar": 9.926943800000001e-11,
-      "delta_eq": 9.926943800000001e-11,
+      "mean_D_offset": 9.926943800000001e-11,
       "X0": -0.00025,
       "Y0": 0.0,
       "D0": 0.0
     },
     {
       "ray": 6,
-      "group": "ref",
+      "group": "X",
       "Dbar": 0.0,
-      "delta_eq": 0.0,
+      "mean_D_offset": 0.0,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": 0.0
@@ -104,7 +115,7 @@
       "ray": 7,
       "group": "X",
       "Dbar": 1.4592108470588233e-10,
-      "delta_eq": 1.4592108470588233e-10,
+      "mean_D_offset": 1.4592108470588233e-10,
       "X0": 0.00025,
       "Y0": 0.0,
       "D0": 0.0
@@ -113,7 +124,7 @@
       "ray": 8,
       "group": "X",
       "Dbar": 5.370328152941177e-10,
-      "delta_eq": 5.370328152941177e-10,
+      "mean_D_offset": 5.370328152941177e-10,
       "X0": 0.0005,
       "Y0": 0.0,
       "D0": 0.0
@@ -122,7 +133,7 @@
       "ray": 9,
       "group": "X",
       "Dbar": 1.1733353470588236e-09,
-      "delta_eq": 1.1733353470588236e-09,
+      "mean_D_offset": 1.1733353470588236e-09,
       "X0": 0.00075,
       "Y0": 0.0,
       "D0": 0.0
@@ -131,7 +142,7 @@
       "ray": 10,
       "group": "X",
       "Dbar": 2.054828664705882e-09,
-      "delta_eq": 2.054828664705882e-09,
+      "mean_D_offset": 2.054828664705882e-09,
       "X0": 0.001,
       "Y0": 0.0,
       "D0": 0.0
@@ -140,7 +151,7 @@
       "ray": 11,
       "group": "Y",
       "Dbar": 1.0801982764705883e-08,
-      "delta_eq": 1.0801982764705883e-08,
+      "mean_D_offset": 1.0801982764705883e-08,
       "X0": 0.0,
       "Y0": -0.001,
       "D0": 0.0
@@ -149,7 +160,7 @@
       "ray": 12,
       "group": "Y",
       "Dbar": 6.363295811764705e-09,
-      "delta_eq": 6.363295811764705e-09,
+      "mean_D_offset": 6.363295811764705e-09,
       "X0": 0.0,
       "Y0": -0.00075,
       "D0": 0.0
@@ -158,7 +169,7 @@
       "ray": 13,
       "group": "Y",
       "Dbar": 3.083403117647059e-09,
-      "delta_eq": 3.083403117647059e-09,
+      "mean_D_offset": 3.083403117647059e-09,
       "X0": 0.0,
       "Y0": -0.0005,
       "D0": 0.0
@@ -167,16 +178,16 @@
       "ray": 14,
       "group": "Y",
       "Dbar": 9.623044235294119e-10,
-      "delta_eq": 9.623044235294119e-10,
+      "mean_D_offset": 9.623044235294119e-10,
       "X0": 0.0,
       "Y0": -0.00025,
       "D0": 0.0
     },
     {
       "ray": 15,
-      "group": "ref",
+      "group": "Y",
       "Dbar": 0.0,
-      "delta_eq": 0.0,
+      "mean_D_offset": 0.0,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": 0.0
@@ -185,7 +196,7 @@
       "ray": 16,
       "group": "Y",
       "Dbar": 1.9649033058823528e-10,
-      "delta_eq": 1.9649033058823528e-10,
+      "mean_D_offset": 1.9649033058823528e-10,
       "X0": 0.0,
       "Y0": 0.00025,
       "D0": 0.0
@@ -194,7 +205,7 @@
       "ray": 17,
       "group": "Y",
       "Dbar": 1.5517755582352942e-09,
-      "delta_eq": 1.5517755582352942e-09,
+      "mean_D_offset": 1.5517755582352942e-09,
       "X0": 0.0,
       "Y0": 0.0005,
       "D0": 0.0
@@ -203,7 +214,7 @@
       "ray": 18,
       "group": "Y",
       "Dbar": 4.065855134117647e-09,
-      "delta_eq": 4.065855134117647e-09,
+      "mean_D_offset": 4.065855134117647e-09,
       "X0": 0.0,
       "Y0": 0.00075,
       "D0": 0.0
@@ -212,7 +223,7 @@
       "ray": 19,
       "group": "Y",
       "Dbar": 7.738731300000001e-09,
-      "delta_eq": 7.738731300000001e-09,
+      "mean_D_offset": 7.738731300000001e-09,
       "X0": 0.0,
       "Y0": 0.001,
       "D0": 0.0
@@ -221,7 +232,7 @@
       "ray": 20,
       "group": "D",
       "Dbar": -7.828199176470589e-05,
-      "delta_eq": -7.828199176470589e-05,
+      "mean_D_offset": -7.828199176470589e-05,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": -0.0001
@@ -230,7 +241,7 @@
       "ray": 21,
       "group": "D",
       "Dbar": -5.871167764705883e-05,
-      "delta_eq": -5.871167764705883e-05,
+      "mean_D_offset": -5.871167764705883e-05,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": -7.5e-05
@@ -239,7 +250,7 @@
       "ray": 22,
       "group": "D",
       "Dbar": -3.9141291176470586e-05,
-      "delta_eq": -3.9141291176470586e-05,
+      "mean_D_offset": -3.9141291176470586e-05,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": -5e-05
@@ -248,16 +259,16 @@
       "ray": 23,
       "group": "D",
       "Dbar": -1.957075529411765e-05,
-      "delta_eq": -1.957075529411765e-05,
+      "mean_D_offset": -1.957075529411765e-05,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": -2.5e-05
     },
     {
       "ray": 24,
-      "group": "ref",
+      "group": "D",
       "Dbar": 0.0,
-      "delta_eq": 0.0,
+      "mean_D_offset": 0.0,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": 0.0
@@ -266,7 +277,7 @@
       "ray": 25,
       "group": "D",
       "Dbar": 1.957105235294118e-05,
-      "delta_eq": 1.957105235294118e-05,
+      "mean_D_offset": 1.957105235294118e-05,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": 2.5e-05
@@ -275,7 +286,7 @@
       "ray": 26,
       "group": "D",
       "Dbar": 3.914247470588235e-05,
-      "delta_eq": 3.914247470588235e-05,
+      "mean_D_offset": 3.914247470588235e-05,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": 5e-05
@@ -284,7 +295,7 @@
       "ray": 27,
       "group": "D",
       "Dbar": 5.8714342941176474e-05,
-      "delta_eq": 5.8714342941176474e-05,
+      "mean_D_offset": 5.8714342941176474e-05,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": 7.5e-05
@@ -293,172 +304,308 @@
       "ray": 28,
       "group": "D",
       "Dbar": 7.828672823529412e-05,
-      "delta_eq": 7.828672823529412e-05,
+      "mean_D_offset": 7.828672823529412e-05,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": 0.0001
     }
   ],
-  "dnu_s": [
-    {
-      "ray": 0,
-      "group": "ref",
-      "dnu_s": 0.0
-    },
+  "spin_per_ray": [
     {
       "ray": 1,
       "group": "ref",
-      "dnu_s": -0.036435171555533725
+      "mean_polarization": 1.0,
+      "phase_fit_rms_rad": 4.6142449322355724e-08,
+      "n_fit": 17,
+      "aliased_phase_slope": -0.036435171555533725,
+      "dnu_s_rel": null
     },
     {
       "ray": 2,
       "group": "X",
-      "dnu_s": 0.0010121513990574496
+      "mean_polarization": 1.0000000010196128,
+      "phase_fit_rms_rad": 2.700086813710362,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0010121513990574496,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.037447322954591175
     },
     {
       "ray": 3,
       "group": "X",
-      "dnu_s": 0.0010117942599448453
+      "mean_polarization": 1.0000000005735206,
+      "phase_fit_rms_rad": 2.6999200621408073,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0010117942599448453,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.037446965815478565
     },
     {
       "ray": 4,
       "group": "X",
-      "dnu_s": 0.0010114366915805145
+      "mean_polarization": 1.0000000002548928,
+      "phase_fit_rms_rad": 2.699752833841821,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0010114366915805145,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.03744660824711424
     },
     {
       "ray": 5,
       "group": "X",
-      "dnu_s": 0.0010110787723942806
+      "mean_polarization": 1.000000000063722,
+      "phase_fit_rms_rad": 2.699585129452597,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0010110787723942806,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.037446250327928005
     },
     {
       "ray": 6,
-      "group": "ref",
-      "dnu_s": -0.036435171555533725
+      "group": "X",
+      "mean_polarization": 1.0,
+      "phase_fit_rms_rad": 4.6142449322355724e-08,
+      "n_fit": 17,
+      "aliased_phase_slope": -0.036435171555533725,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.0
     },
     {
       "ray": 7,
       "group": "X",
-      "dnu_s": 0.001010361787022149
+      "mean_polarization": 1.0000000000637193,
+      "phase_fit_rms_rad": 2.6992483259153994,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.001010361787022149,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.03744553334255587
     },
     {
       "ray": 8,
       "group": "X",
-      "dnu_s": 0.0010100027338069664
+      "mean_polarization": 1.0000000002548708,
+      "phase_fit_rms_rad": 2.699079215615364,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0010100027338069664,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.0374451742893407
     },
     {
       "ray": 9,
       "group": "X",
-      "dnu_s": 0.001009643278498007
+      "mean_polarization": 1.0000000005734475,
+      "phase_fit_rms_rad": 2.6989096667257133,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.001009643278498007,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.03744481483403173
     },
     {
       "ray": 10,
       "group": "X",
-      "dnu_s": 0.0010092834235184646
+      "mean_polarization": 1.0000000010194396,
+      "phase_fit_rms_rad": 2.698739663052321,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0010092834235184646,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.03744445497905219
     },
     {
       "ray": 11,
       "group": "Y",
-      "dnu_s": 0.0016932981293074649
+      "mean_polarization": 1.0000000054283364,
+      "phase_fit_rms_rad": 2.367853528944406,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0016932981293074649,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.038128469684841196
     },
     {
       "ray": 12,
       "group": "Y",
-      "dnu_s": 0.0016936583262466558
+      "mean_polarization": 1.000000003053546,
+      "phase_fit_rms_rad": 2.3678407165967847,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0016936583262466558,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.03812882988178038
     },
     {
       "ray": 13,
       "group": "Y",
-      "dnu_s": 0.0016940232876814785
+      "mean_polarization": 1.0000000013571781,
+      "phase_fit_rms_rad": 2.3678274046515035,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0016940232876814785,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.038129194843215204
     },
     {
       "ray": 14,
       "group": "Y",
-      "dnu_s": 0.0016943932124839898
+      "mean_polarization": 1.000000000339306,
+      "phase_fit_rms_rad": 2.3678135485238645,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0016943932124839898,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.03812956476801772
     },
     {
       "ray": 15,
-      "group": "ref",
-      "dnu_s": -0.036435171555533725
+      "group": "Y",
+      "mean_polarization": 1.0,
+      "phase_fit_rms_rad": 4.6142449322355724e-08,
+      "n_fit": 17,
+      "aliased_phase_slope": -0.036435171555533725,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.0
     },
     {
       "ray": 16,
       "group": "Y",
-      "dnu_s": 0.0016951481987619724
+      "mean_polarization": 1.0000000003393283,
+      "phase_fit_rms_rad": 2.3677842076433278,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0016951481987619724,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.03813031975429569
     },
     {
       "ray": 17,
       "group": "Y",
-      "dnu_s": 0.00169553350437413
+      "mean_polarization": 1.0000000013573551,
+      "phase_fit_rms_rad": 2.3677686571127627,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.00169553350437413,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.03813070505990784
     },
     {
       "ray": 18,
       "group": "Y",
-      "dnu_s": 0.0016959238962803056
+      "mean_polarization": 1.0000000030541427,
+      "phase_fit_rms_rad": 2.3677525846282306,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0016959238962803056,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.03813109545181403
     },
     {
       "ray": 19,
       "group": "Y",
-      "dnu_s": 0.0016963197593218148
+      "mean_polarization": 1.0000000054297506,
+      "phase_fit_rms_rad": 2.367735891011832,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0016963197593218148,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.03813149131485555
     },
     {
       "ray": 20,
       "group": "D",
-      "dnu_s": -0.00863242467431541
+      "mean_polarization": 1.0000000000718885,
+      "phase_fit_rms_rad": 1.595690432034574,
+      "n_fit": 17,
+      "aliased_phase_slope": -0.00863242467431541,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.027802746881218324
     },
     {
       "ray": 21,
       "group": "D",
-      "dnu_s": -0.008631271127191333
+      "mean_polarization": 1.0000000000404365,
+      "phase_fit_rms_rad": 1.5957739587976525,
+      "n_fit": 17,
+      "aliased_phase_slope": -0.008631271127191333,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.027803900428342392
     },
     {
       "ray": 22,
       "group": "D",
-      "dnu_s": -0.00863013937436725
+      "mean_polarization": 1.0000000000179714,
+      "phase_fit_rms_rad": 1.5958576976252261,
+      "n_fit": 17,
+      "aliased_phase_slope": -0.00863013937436725,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.027805032181166475
     },
     {
       "ray": 23,
       "group": "D",
-      "dnu_s": -0.008629029559329234
+      "mean_polarization": 1.0000000000044926,
+      "phase_fit_rms_rad": 1.5959414915206471,
+      "n_fit": 17,
+      "aliased_phase_slope": -0.008629029559329234,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.02780614199620449
     },
     {
       "ray": 24,
-      "group": "ref",
-      "dnu_s": -0.036435171555533725
+      "group": "D",
+      "mean_polarization": 1.0,
+      "phase_fit_rms_rad": 4.6142449322355724e-08,
+      "n_fit": 17,
+      "aliased_phase_slope": -0.036435171555533725,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.0
     },
     {
       "ray": 25,
       "group": "D",
-      "dnu_s": -0.008626876845601218
+      "mean_polarization": 1.0000000000044926,
+      "phase_fit_rms_rad": 1.5961089630781597,
+      "n_fit": 17,
+      "aliased_phase_slope": -0.008626876845601218,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.027808294709932506
     },
     {
       "ray": 26,
       "group": "D",
-      "dnu_s": -0.008625834460996596
+      "mean_polarization": 1.0000000000179692,
+      "phase_fit_rms_rad": 1.5961924220089556,
+      "n_fit": 17,
+      "aliased_phase_slope": -0.008625834460996596,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.027809337094537128
     },
     {
       "ray": 27,
       "group": "D",
-      "dnu_s": -0.008624814789792516
+      "mean_polarization": 1.0000000000404294,
+      "phase_fit_rms_rad": 1.5962755724759405,
+      "n_fit": 17,
+      "aliased_phase_slope": -0.008624814789792516,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.02781035676574121
     },
     {
       "ray": 28,
       "group": "D",
-      "dnu_s": -0.008623818257338543
+      "mean_polarization": 1.000000000071872,
+      "phase_fit_rms_rad": 1.5963583035519289,
+      "n_fit": 17,
+      "aliased_phase_slope": -0.008623818257338543,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.027811353298195177
     }
   ],
-  "delta_eq_rms": 3.094452834157123e-05,
-  "dnu_rms": 0.01430791983056006,
-  "delta_eq_rms_by_group": {
-    "X": 1.15507574323448e-09,
-    "Y": 5.550602734893603e-09,
-    "D": 5.359749500399738e-05
+  "mean_D_offset_rms": 2.917478110792577e-05,
+  "mean_D_offset_rms_by_group": {
+    "X": 1.0890158544335896e-09,
+    "Y": 5.233158444687818e-09,
+    "D": 5.05322028959182e-05
   },
+  "dnu_rms": null,
+  "aliased_slope_rms": 0.013065729558478555,
   "dnu_rms_by_group": {
-    "X": 0.0010107195200641994,
-    "Y": 0.001694787604928754,
-    "D": 0.00862802663951261
+    "X": 0.032792618100400434,
+    "Y": 0.032792618100400434,
+    "D": 0.032792618100400434
   },
-  "C_final": 0.0016769099572798252,
+  "C_final": 0.10969770954354029,
+  "polarization_final": 1.0000000000000002,
   "turns": [
     0,
     10,
@@ -484,49 +631,72 @@
   ],
   "C": [
     1.0,
-    2.208513450290958e-05,
-    2.1713169188369834e-05,
-    0.0002700732919696446,
-    0.0002753428735589116,
-    0.0013059071691846839,
-    7.961092689983386e-05,
-    0.0010552440101530293,
-    0.0004262464827477485,
-    0.00022385898532385212,
-    9.69550317105198e-05,
-    0.0027664470678402985,
-    0.0005613241827778902,
-    0.00025607817584863586,
-    0.0004978238164113511,
-    0.00021478128260220424,
-    0.0007685037679208855,
-    0.00022832923544538944,
-    0.00024470238237201173,
-    0.0009378953395063321,
-    0.0016769099572798252
+    0.11111139187292207,
+    0.11109692357341996,
+    0.11104694095072537,
+    0.1113276255334168,
+    0.11007107891125421,
+    0.11115635515088852,
+    0.11112187903477923,
+    0.11123366140007726,
+    0.11099064129701336,
+    0.11113084314853594,
+    0.11350173561919305,
+    0.11064197284277619,
+    0.1110558985727452,
+    0.11080383090789268,
+    0.11092093590093802,
+    0.11059139694500443,
+    0.11127189087555402,
+    0.11091654342058149,
+    0.11041985828861264,
+    0.10969770954354029
   ],
   "rms_circular_phase": [
     -0.0,
-    4.630465597042305,
-    4.634132412103038,
-    4.053841926879446,
-    4.049072344125748,
-    3.6444086847967445,
-    4.344734560804373,
-    3.7024271092224796,
-    3.9396682045620994,
-    4.099876640619948,
-    4.299130906954437,
-    3.4322562343355645,
-    3.869163204990854,
-    4.066946713615327,
-    3.900067775267981,
-    4.1099611525779185,
-    3.7871004982816827,
-    4.09505114876132,
-    4.078104425262833,
-    3.734132347288948,
-    3.5751370576020456
+    2.096292942545537,
+    2.0963550621630036,
+    2.0965697105582795,
+    2.0953652873194684,
+    2.1007755472436425,
+    2.096099932665502,
+    2.0962479198409736,
+    2.09576822790158,
+    2.0968115765913886,
+    2.096209438375058,
+    2.086114642285289,
+    2.098311588203897,
+    2.0965312369166433,
+    2.0976148027155386,
+    2.0971111656986645,
+    2.098529474764036,
+    2.095604259099389,
+    2.0971300491552443,
+    2.099269056368051,
+    2.1023923473956314
+  ],
+  "mean_polarization_vs_turn": [
+    1.0,
+    1.0000000000000002,
+    1.0,
+    1.0,
+    1.0000000000000002,
+    1.0,
+    1.0,
+    1.0000000000000002,
+    1.0,
+    1.0000000000000002,
+    1.0,
+    1.0000000000000002,
+    1.0,
+    1.0,
+    1.0000000000000002,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0000000000000004,
+    1.0000000000000002
   ],
   "plot": "C:\\GIT_REPOS\\SCT\\COSY\\sct_study\\plots\\magnetic_2_track_natural_smoke.png"
 }

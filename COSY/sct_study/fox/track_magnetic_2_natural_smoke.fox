@@ -30,7 +30,7 @@ PROCEDURE MAIN;
   SGx1 := 0.0; SGx2 := 0.0; SGy1 := 0.0; SGy2 := 0.0;
   NTURN := 200;
   PNUM := 9;
-  PSI0 := 90.0;
+  PSI0 := 0.0;
 
   OV 3 3 0;
   SET_FOR_DEUTERONS GAMMA;
@@ -42,7 +42,8 @@ PROCEDURE MAIN;
   OPENF 772 '../sct_study/dat/magnetic_2/track_natural_smoke_TRPRAY.dat' 'REPLACE';
   OPENF 893 '../sct_study/dat/magnetic_2/track_natural_smoke_TRPSPI.dat' 'REPLACE';
   TRPRAY 772; TRPSPI 893;
-  TR NTURN NINT(NTURN*0.05) -1 -3 1.2 1.2 0 0 -12;
+  { SAVE_EVERY: explicit turns between samples; dense needs ≤1/(2|ν_s|)≈3 }
+  TR NTURN 10 -1 -3 1.2 1.2 0 0 -12;
   CLOSEF 772; CLOSEF 893;
   CR;
 ENDPROCEDURE;

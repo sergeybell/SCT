@@ -2,20 +2,19 @@
 
 | Файл | Назначение |
 |------|------------|
-| [`study_config.json`](study_config.json) | Единый конфиг: stems, γ, G, длины решёток, сценарии эмиттанса, параметры трекинга |
+| [`study_config.json`](study_config.json) | stems, γ, G, длины, трекинг, резонансы |
 
-## Ключевые поля `study_config.json`
+## Ключевые поля
 
-- **`stems`** — `magnetic_2`…`magnetic_5`.
-- **`gamma`, `G`** — энергия дейтрона и аномальный магнитный момент; \(\gamma G\) задаёт спиновый tune на рабочей точке.
-- **`lattice_lengths_m`** — геометрическая длина кольца \(L\) (используется в \(\Delta\delta_{eq}\)).
-- **`fACCLEN_header`** — значение `141` из заголовка FOX; **не равно** геометрическому \(L\) (известное предупреждение).
-- **`emittance_scenarios`** — диагностические \(\varepsilon_x,\varepsilon_y,\delta_m\) для теоретических панелей \(\Delta\delta_{eq}\).
+- **`gamma`, `G`** — дейтрон; \(\gamma G\) задаёт спиновый tune.
+- **`lattice_lengths_m`** — геометрическая \(L\) для \(\Delta\delta_{eq}\).
+- **`fACCLEN_header=141`** — legacy RF length; ≠ геометрической \(L\).
 - **`tracking`**:
-  - `pilot_stem`: сейчас только `magnetic_2`;
-  - `num_per_group=9` → ~29 лучей (ref + X + Y + D);
-  - `psi_deg=90` → начальный спин \(S=(0,1,0)\);
-  - `smoke_nturn=200`, `nturn=2000`;
-  - `save_every_frac=0.05` — доля оборотов между снимками.
+  - `pilot_stem=magnetic_2`
+  - `psi_deg=0` — горизонтальный/продольный начальный спин (нужен для `atan2(Sx,Sz)`)
+  - `smoke_nturn=200`, `nturn=2000`, `dense_nturn=2000`
+  - `save_every_turns_smoke=10`, `save_every_turns_sparse=100`, `save_every_turns_dense=2`
+  - Найквист: \(\Delta n\le 1/(2|\nu_s|)\approx 3\)
+- **`Qs_estimate.default`** — временная оценка для synchrotron sidebands.
 
-Конфиг читается всеми скриптами через `py/common.py` → `load_config()`.
+Читается через `py/common.py` → `load_config()`.

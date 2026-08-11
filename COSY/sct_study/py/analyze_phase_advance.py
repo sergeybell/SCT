@@ -81,7 +81,10 @@ def walk_lattice(text: str, lengths: Dict[str, float]) -> List[dict]:
 
 
 def estimate_phase_advances(elements: List[dict], Qx: float, Qy: float) -> List[dict]:
-    """Uniform phase advance proxy μ = 2π Q * (s/C). Replace later with Twiss BETS if available."""
+    """Geometric phase proxy μ = 2π Q · (s/C). Not a resonance driving term.
+
+    Prefer ``analyze_twiss_phase.py`` (ψ=∫ds/β) for physics conclusions.
+    """
     C = elements[-1]["s_end"] if elements else 1.0
     out = []
     for el in elements:
@@ -234,17 +237,16 @@ def main() -> int:
         px = plot_polar(stem, sexts, "x", res_x)
         py = plot_polar(stem, sexts, "y", res_y)
         lines.append(
-            f"- {stem}: {len(sexts)} magnets; |Σ|_x={res_x['magnitude']:.4g}, "
+            f"- {stem}: {len(sexts)} sextupole instances; |Σ|_x={res_x['magnitude']:.4g}, "
             f"|Σ|_y={res_y['magnitude']:.4g}; {px.name}, {py.name}"
         )
-        print(f"OK phase {stem}: {len(sexts)} sextupoles")
+        print(f"OK phase {stem}: {len(sexts)} sextupole instances")
 
     append_worklog(
-        "## Phase diagrams\n\n"
-        "- **Статус:** prepared (s/C·Q proxy for μ; update after working_point COSY run)\n"
+        "## Phase diagrams (geometric proxy)\n\n"
+        "- **Статус:** geometric preview only; prefer `analyze_twiss_phase.py`\n"
         "- **Команда:** `python COSY/sct_study/py/analyze_phase_advance.py`\n"
-        "- Диаграмма: длина = |K₂|, угол = μ; знак K₂ → +π; чёрный пунктир = результирующий Σ.\n"
-        "- Масштаб радиуса — свой для каждой структуры.\n"
+        "- Диаграмма: длина = |K₂|, угол = μ=2πQ·s/C; знак K₂ → +π.\n"
         + "\n".join(lines) + "\n"
     )
     return 0

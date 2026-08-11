@@ -5,75 +5,58 @@
 ## Физическая цель
 
 1. По mapping FR0 найти токи секступолей \(I^\*=(SGx1,SGx2,SGy1)\), при которых \(\xi_x=\xi_y=\eta_1=0\).
-2. Через теорию \(\Delta\delta_{eq}\) оценить, как обнуление хроматичности подавляет удлинение орбиты.
-3. Multi-turn трекингом (пилот `magnetic_2`) проверить proxy \(\overline{D}_i-\overline{D}_{ref}\) и спиновую метрику \(C(n)\).
+2. Через теорию \(\Delta\delta_{eq}\) (Senichev) оценить подавление удлинения орбиты.
+3. Multi-turn трекингом (пилот `magnetic_2`) проверить proxy `mean_D_offset` и спиновые метрики на **плотной** выборке.
 
-**Важно:** \(C(n)\) — это **фазовая** когерентность (одинаковость мгновенной фазы спина относительно reference). Одинаковость физических spin tune — отдельная задача. Существующее поле `dnu_s` получено из редко сохранённой фазы и подвержено временному алиасингу, поэтому его нельзя считать надёжной индивидуальной частотой. Орбитальные \(Q_{x,i},Q_{y,i}\) из трекинга текущий код также не извлекает.
-
-Подробный разбор модели и математики: [`analysis.ipynb`](analysis.ipynb).
-
-## Структура и документация
-
-```
-sct_study/
-  README.md              — этот файл
-  WORKLOG.md             — журнал шагов и численные результаты
-  analysis.ipynb         — единое полотно: физика + код + графики
-  manifest.json          — реестр stem ↔ fox/dat/plots и журнал jobs
-  config/README.md       — параметры (γ, G, smoke/full, ансамбль)
-  fox/README.md          — шаблоны и сгенерированные .fox
-  py/README.md           — скрипты пайплайна
-  dat/README.md          — JSON и .dat результаты (+ почему файлы «похожи»)
-  plots/README.md        — графики
-```
-
-Исходные mapping-данные **не копируются**: читаются из `COSY/src/dat/<stem>/`.  
-COSY всегда запускается с `cwd=COSY/src`.
-
-## Словарь
+## Словарь (важно)
 
 | Термин | Смысл |
 |--------|--------|
-| **smoke** | Короткий трекинг: `NTURN=200`. Проверка пайплайна («дымовой тест»). |
-| **full** | Полный трекинг: `NTURN=2000`. |
-| **natural** | Секступоли выключены: \(I=0\). |
-| **Istar** | Токи \(I^\*\), обнуляющие \(\xi_x,\xi_y,\eta_1\) в линейной модели. |
-| **ctrl_xi_x / ctrl_xi_y / ctrl_eta1** | Точки сетки с большим \(|\xi_x|\), \(|\xi_y|\) или \(|\eta_1|\) для сравнения. |
-| **PRAY** | Начальные условия лучей (одинаковы для smoke и full). |
-| **TRPRAY** | Орбита \(X,A,Y,B,T,D\) по сохранённым оборотам. |
-| **TRPSPI** | Спин \(S_x,S_y,S_z\) по тем же оборотам. |
-| **C(n)** | \(\bigl\|N^{-1}\sum_i e^{i(\phi_i-\phi_{ref})}\bigr\|\in[0,1]\). |
+| **\(D\)** | 6-я координата COSY в `TRPRAY` (относительное \(\delta p/p\)), не \(\Delta\delta_{eq}\). |
+| **\(\Delta\delta_{eq}\)** | Теоретический сдвиг равновесного импульса из \(\xi,\eta_1,\varepsilon\). |
+| **`mean_D_offset`** | \(\overline D_i-\overline D_{\rm ref}\) — трекинговый proxy. |
+| **\(C(n)\)** | Фазовая когерентность в сохранённые моменты. |
+| **\(\Delta\nu_s\)** | Относительный spin tune; только при \(\Delta n_{\rm save}\le 1/(2|\nu_s|)\approx 3\). |
+| **smoke / full / dense** | 200 / 2000 оборотов; full — редкое сохранение (орбита); dense — \(\Delta n=2\) (спин). |
+| **psi_deg=0** | Начальный спин в горизонтальной плоскости; `atan2(Sx,Sz)` измерим. При 90° (вертикаль) фаза бессмысленна. |
 
-Почему smoke/full `.dat` выглядят «одинаковыми»: шаг сохранения `NINT(NTURN·0.05)` → ~одинаковое число строк, но разные номера оборотов (до 200 vs 2000). `PRAY` действительно идентичен.
+Подробный разбор: [`analysis.ipynb`](analysis.ipynb).
+
+## Структура
+
+```
+sct_study/
+  README.md, WORKLOG.md, analysis.ipynb, manifest.json
+  config/   — study_config.json
+  fox/      — шаблоны и сгенерированные .fox
+  py/       — пайплайн
+  dat/      — JSON и .dat
+  plots/    — графики
+```
+
+Mapping читается из `COSY/src/dat/<stem>/`. COSY запускается с `cwd=COSY/src`.
 
 ## Быстрый старт
 
 ```bash
-# 1) Offline (без cosy.exe): audit, I*, Δδ_eq, фазы, WP-постпроцесс
+# Offline
 python COSY/sct_study/py/run_offline_analysis.py
 
-# 2) FOX (токи I* и контрольные точки)
+# FOX + COSY
 python COSY/sct_study/py/generate_fox.py
-
-# 3) COSY (нужен cosy.exe)
 python COSY/src/run/run_cosy.py --pre
 python COSY/sct_study/py/run_cosy_jobs.py --job validate
 python COSY/sct_study/py/run_cosy_jobs.py --job working_point
-python COSY/sct_study/py/run_cosy_jobs.py --job track --smoke
-# полный пилот:
-python COSY/sct_study/py/run_cosy_jobs.py --job track --full --stem magnetic_2
-
-# 4) Postprocess трекинга
+python COSY/sct_study/py/run_cosy_jobs.py --job track --dense --stem magnetic_2
 python COSY/sct_study/py/analyze_tracking.py
+python COSY/sct_study/py/analyze_resonances.py
 ```
-
-Для чтения уже посчитанных артефактов достаточно открыть `analysis.ipynb` — **новый трекинг не нужен**.
 
 ## Зафиксированные решения
 
-- Только FR0 (без fringe), без FIT.
-- Structures: `magnetic_2`…`magnetic_5`.
-- Пилот трекинга: `magnetic_2` (лучший `cond(R_int)`).
-- Multi-turn: `INJECT+TR`; анализ индивидуальных \(\overline D_i-\overline D_{\mathrm{ref}}\) и \(C(n)\). Поле `dnu_s` сохраняется только как диагностический алиасированный наклон фазы.
+- Только FR0, без FIT; stems `magnetic_2`…`magnetic_5`; пилот `magnetic_2`.
+- Spin tune только из `dense` (\(\Delta n=2\)); sparse `full` — для орбиты.
+- MCM2: конвенция `mapping.fox` (без факториала 2).
+- `fACCLEN=141` ≠ геометрическая \(L\) — известное предупреждение для RF/\(Q_s\).
 
-См. [`WORKLOG.md`](WORKLOG.md) для статусов и чисел.
+См. [`WORKLOG.md`](WORKLOG.md).

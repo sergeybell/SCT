@@ -269,6 +269,66 @@
       "stem": "magnetic_2",
       "tag": "ctrl_eta1",
       "kind": "full"
+    },
+    {
+      "job": "track",
+      "stem": "magnetic_2",
+      "tag": "natural",
+      "kind": "dense"
+    },
+    {
+      "job": "track",
+      "stem": "magnetic_2",
+      "tag": "Istar",
+      "kind": "dense"
+    },
+    {
+      "job": "track",
+      "stem": "magnetic_2",
+      "tag": "ctrl_xi_x",
+      "kind": "dense"
+    },
+    {
+      "job": "track",
+      "stem": "magnetic_2",
+      "tag": "ctrl_xi_y",
+      "kind": "dense"
+    },
+    {
+      "job": "track",
+      "stem": "magnetic_2",
+      "tag": "ctrl_eta1",
+      "kind": "dense"
+    },
+    {
+      "job": "track",
+      "stem": "magnetic_2",
+      "tag": "natural",
+      "kind": "dense"
+    },
+    {
+      "job": "track",
+      "stem": "magnetic_2",
+      "tag": "Istar",
+      "kind": "dense"
+    },
+    {
+      "job": "track",
+      "stem": "magnetic_2",
+      "tag": "ctrl_xi_x",
+      "kind": "dense"
+    },
+    {
+      "job": "track",
+      "stem": "magnetic_2",
+      "tag": "ctrl_xi_y",
+      "kind": "dense"
+    },
+    {
+      "job": "track",
+      "stem": "magnetic_2",
+      "tag": "ctrl_eta1",
+      "kind": "dense"
     }
   ]
 }

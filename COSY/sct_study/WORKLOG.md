@@ -5,116 +5,90 @@
 - Mode: FR0 only (no fringe), no FIT
 - Folder: `COSY/sct_study/`
 - Pilot tracking: `magnetic_2`
+- Spin sampling: dense \(\Delta n=2\), horizontal spin (`psi_deg=0`)
 
 ---
 
-## 1. Setup — verified
-- Created `README.md`, `WORKLOG.md`, `manifest.json`, `config/`, `fox/`, `py/`, `dat/`, `plots/`
+## 1. Mapping FR0 — verified
+| stem | cond(R_int) | inside FR0 | d_min | d_min/‖ΔI‖ |
+|------|-------------|------------|-------|------------|
+| magnetic_2 | 34.5 | no (SGx2<0) | 0.0041 | **0.45** |
+| magnetic_3 | 35.9 | no | 0.029 | 1.54 |
+| magnetic_4 | 180.6 | no, far | 0.34 | 10.7 |
+| magnetic_5 | 69.7 | no, far | 0.24 | 5.16 |
 
-## 2. Audit mapping FR0 — verified
-Command: `python COSY/sct_study/py/audit_mapping.py`
+Linearity R²≈1. Сравнивать stems по **нормированному** расстоянию.
 
-| stem | cond(R_int) | I* inside box? | min\|I*-grid\| |
-|------|-------------|----------------|----------------|
-| magnetic_2 | 34.5 | no (SGx2<0) | 0.0041 |
-| magnetic_3 | 35.9 | no | 0.029 |
-| magnetic_4 | 180.6 | no, far | 0.34 |
-| magnetic_5 | 69.7 | no, far | 0.24 |
-
-- Linearity R²≈1 for chrom and spin-link.
-- Outputs: `dat/<stem>/audit.json`, `plots/<stem>_grid_vs_istar.png`
-
-## 3. Coefficient conventions — verified
-Command: `python COSY/sct_study/py/validate_coefficients.py`
+## 2. Coefficients — verified
 - γ=1.143914, G=−0.142987, γG≈−0.163565
-- η₁ rebuild from α₀,α₁ matches integrals.dat
-- WARNING: MCM2 factorial differs (`mapping.fox` vs `coherence_opt.fox`)
+- η₁ rebuild matches integrals.dat
+- MCM2: study uses `mapping.fox` convention
 - WARNING: `fACCLEN=141` ≠ geometric L (117–134 m)
-- Output: `dat/coefficient_conventions.json`
 
-## 4. Zero point I* — verified (COSY)
-Commands:
-- `python COSY/sct_study/py/analyze_zero_point.py`
-- `python COSY/sct_study/py/run_cosy_jobs.py --job validate`
+## 3. I* validate (COSY) — verified
+magnetic_2 @I*: chrom_x, chrom_y, η₁ ~ 1e−12 → обнуление подтверждено.
 
-magnetic_2 direct COSY @I*:
-- SGx1=0.0041106, SGx2=−0.0031840, SGy1=−0.0040305
-- chrom_x≈−9.3e−13, chrom_y≈−8.1e−13, eta1≈−1.3e−13
-- Model chrom error ~1e−12 → **ξ and η₁ действительно обнуляются**
+## 4. Working points — verified
+magnetic_2 @I*: Qx≈0.44628, Qy≈0.47668, ν_s≈0.163565
 
-Same validation run for magnetic_3/4/5.
+## 5. Twiss phase at sextupole instances — verified
+- ψ=∫ds/β from existing BETAX/BETAY (linear β independent of sextupoles on closed orbit)
+- rms |ψ − 2πQs/C| ~ O(1) rad → геометрический proxy **недостаточен**
+- Outputs: `dat/<stem>/sext_phase_twiss.json`, `plots/<stem>_sext_phase_twiss_{x,y}.png`
 
-## 5. Working points — verified
-Commands:
-- `python COSY/sct_study/py/run_cosy_jobs.py --job working_point`
-- `python COSY/sct_study/py/analyze_working_point.py`
+## 6. Resonance scan — verified (geometric + tracking proxies)
+Kinds: imperfection / intrinsic / synchrotron / combined.
+- Deuteron |Gγ|≪ proton at same γ — but coherence still needs explicit check.
+- Qs currently from config estimate (0.01) until RF one-turn extraction.
+- Plot: `plots/resonance_scan_summary.png`
 
-magnetic_2 @I*: Qx≈0.44628, Qy≈0.47668, ν_s≈0.163565, γG≈−0.163565  
-Nearest resonances far (min distance ~0.28).  
-Plot: `plots/working_points_summary.png`
+## 7. Multi-turn tracking — verified
 
-## 6. Phase diagrams — verified (μ proxy)
-Command: `python COSY/sct_study/py/analyze_phase_advance.py`
-- 2D polar: length=|K₂|, angle=μ=2πQ·s/C (proxy; real Q from WP)
-- Plots: `plots/<stem>_sext_phase_{x,y}.png`
+### Nomenclature
+- `mean_D_offset` = ⟨D⟩−⟨D⟩ref (not theoretical Δδ_eq)
+- Spin phase requires horizontal initial spin (`psi_deg=0`)
+- Sparse `full` (Δn=100) / `smoke` (Δn=10): **aliased** for spin; orbit proxy OK
 
-## 7. Δδ_eq panels — verified
-Command: `python COSY/sct_study/py/analyze_delta_eq.py`
-- Theory Δδ_eq crosses 0 at ξ=0 by construction
-- Plots: `plots/<stem>_delta_eq_panels.png`, `plots/<stem>_map_dnu_panels.png`
-- Summary: `plots/summary_delta_eq_suppression.png`
+### Dense (Δn=2, NTURN=2000, psi=0), magnetic_2
 
-## 8. Multi-turn INJECT+TR — verified (pilot magnetic_2)
-Commands:
-- `python COSY/sct_study/py/generate_fox.py`
-- `python COSY/sct_study/py/run_cosy_jobs.py --job track --smoke|--full --stem magnetic_2`
-- `python COSY/sct_study/py/analyze_tracking.py`
+| tag | RMS_X | RMS_Y | RMS_D | C_final | dnu_rms | ref ν_s |
+|-----|-------|-------|-------|---------|---------|---------|
+| natural | 6.1e−9 | 2.9e−8 | 1.3e−5 | 1.0 | ~4e−8 | 0.16356483 |
+| **Istar** | **4.4e−13** | **6.7e−12** | 1.3e−5 | 1.0 | ~4e−8 | 0.16356483 |
+| ctrl_xi_x | 6.4e−8 | 3.0e−7 | 1.3e−5 | 1.0 | ~4e−8 | 0.16356483 |
 
-~29 rays (ref + X/Y/D groups), smoke=200 / full=2000 turns.
-
-Per-group RMS Δδ_eq (full):
-
-| tag | RMS_X | RMS_Y | RMS_D | C_final |
-|-----|-------|-------|-------|---------|
-| natural | 6.5e−9 | 3.1e−8 | 1.5e−5 | 9.2e−4 |
-| **Istar** | **5.7e−13** | **7.6e−12** | 1.5e−5 | 4.6e−4 |
-| ctrl_xi_x | 6.9e−8 | 3.2e−7 | 1.5e−5 | 1.2e−2 |
-
-**Physics conclusion:**
-1. Mapping + I* correctly zeros ξ_x, ξ_y, η₁ (COSY confirmed).
-2. Multi-turn path-lengthening proxy for X/Y groups drops by ~4 orders at I*.
-3. D-group unchanged (synchrotron motion).
-4. Spin coherence C(n) on this diagnostic ensemble does **not** improve at I* — next checks: fix fACCLEN to geometric L, spin-plane definition, matched beam ensemble.
-
-Plots: `plots/magnetic_2_track_*.png`, `plots/magnetic_2_track_compare_full.png`
-
----
+**Physics:**
+1. I* zeros ξ, η₁ and suppresses X/Y `mean_D_offset` by ~4 orders.
+2. Dense ref spin tune matches |γG| to machine precision.
+3. On this diagnostic ensemble (2000 turns, amp 1 mm / δ~1e−4) relative Δν and C(n) remain ~ideal for all tags — decoherence not resolved yet; next: longer run / matched larger emittance / fix fACCLEN.
 
 ## Reproduce
 ```bash
 python COSY/sct_study/py/run_offline_analysis.py
-python COSY/src/run/run_cosy.py --pre
-python COSY/sct_study/py/run_cosy_jobs.py --job validate
-python COSY/sct_study/py/run_cosy_jobs.py --job working_point
-python COSY/sct_study/py/run_cosy_jobs.py --job track --full --stem magnetic_2
-python COSY/sct_study/py/analyze_working_point.py
+python COSY/sct_study/py/generate_fox.py
+python COSY/sct_study/py/run_cosy_jobs.py --job track --dense --stem magnetic_2
 python COSY/sct_study/py/analyze_tracking.py
+python COSY/sct_study/py/analyze_resonances.py
 ```
 
----
+## Resonance scan
 
-## 9. Documentation canvas — verified
-- README в `config/`, `py/`, `fox/`, `dat/` (+ stems), `plots/`; расширен корневой `README.md` (словарь smoke/full, C(n)).
-- Единый notebook: `analysis.ipynb` (физика + воспроизведение без нового COSY track).
-- Полярные диаграммы: свой масштаб на stem + результирующий вектор Σ; поле `resultant` в `sext_phase.json`.
+- **Статус:** verified (geometric distances + tracking proxies when present)
+- **Команда:** `python COSY/sct_study/py/analyze_resonances.py`
+- Plot: `resonance_scan_summary.png`
+- Qs from config estimate until RF one-turn extraction is added.
+- magnetic_2@Istar: imp=0.1636 (ν_s=5), intr=0.2827 (ν_s=4+Q_x), sync=0.1436, comb=0.2627
+- magnetic_3@Istar: imp=0.1636 (ν_s=0), intr=0.1269 (ν_s=3-Q_x), sync=0.1436, comb=0.1069
+- magnetic_4@Istar: imp=0.1636 (ν_s=5), intr=0.07527 (ν_s=6-Q_y), sync=0.1436, comb=0.05527
+- magnetic_5@Istar: imp=0.1636 (ν_s=3), intr=0.06388 (ν_s=1+Q_y), sync=0.1436, comb=0.04388
 
-## Phase diagrams
+## Δδ_eq + map-Δν_s panels
 
-- **Статус:** prepared (s/C·Q proxy for μ; update after working_point COSY run)
-- **Команда:** `python COSY/sct_study/py/analyze_phase_advance.py`
-- Диаграмма: длина = |K₂|, угол = μ; знак K₂ → +π; чёрный пунктир = результирующий Σ.
-- Масштаб радиуса — свой для каждой структуры.
-- magnetic_2: 10 magnets; |Σ|_x=0.01527, |Σ|_y=0.01457; magnetic_2_sext_phase_x.png, magnetic_2_sext_phase_y.png
-- magnetic_3: 15 magnets; |Σ|_x=0.08451, |Σ|_y=0.09117; magnetic_3_sext_phase_x.png, magnetic_3_sext_phase_y.png
-- magnetic_4: 20 magnets; |Σ|_x=0.2824, |Σ|_y=0.3531; magnetic_4_sext_phase_x.png, magnetic_4_sext_phase_y.png
-- magnetic_5: 25 magnets; |Σ|_x=1.302, |Σ|_y=1.316; magnetic_5_sext_phase_x.png, magnetic_5_sext_phase_y.png
+- **Статус:** verified (offline)
+- **Команда:** `python COSY/sct_study/py/analyze_delta_eq.py`
+- Сценарии ε/δ заданы в `config/study_config.json`.
+- При линейной модели Δδ_eq(ξ) проходит через 0 при ξ=0 **по построению**.
+- magnetic_2: magnetic_2_delta_eq_panels.png, magnetic_2_map_dnu_panels.png; Δδ_eq@I*={'X_only': -1.1131338950049443e-23, 'X_only_at_natural': -9.228135434107606e-08, 'Y_only': -1.1131338950049443e-23, 'Y_only_at_natural': -9.262616120172013e-08, 'D_only': -2.079659993557127e-24, 'D_only_at_natural': -9.532609864673429e-09}
+- magnetic_3: magnetic_3_delta_eq_panels.png, magnetic_3_map_dnu_panels.png; Δδ_eq@I*={'X_only': -1.7204862495743977e-23, 'X_only_at_natural': -1.447261149502933e-07, 'Y_only': -1.7204862495743977e-23, 'Y_only_at_natural': -1.4510670504559358e-07, 'D_only': -0.0, 'D_only_at_natural': -7.739409948872235e-09}
+- magnetic_4: magnetic_4_delta_eq_panels.png, magnetic_4_map_dnu_panels.png; Δδ_eq@I*={'X_only': 6.170243037032215e-23, 'X_only_at_natural': -1.9065534057985742e-07, 'Y_only': -1.234048607406443e-22, 'Y_only_at_natural': -1.9051406274606084e-07, 'D_only': 3.147101757126394e-24, 'D_only_at_natural': -6.882172082509207e-09}
+- magnetic_5: magnetic_5_delta_eq_panels.png, magnetic_5_map_dnu_panels.png; Δδ_eq@I*={'X_only': -2.8745982597068286e-23, 'X_only_at_natural': -2.3470501642833182e-07, 'Y_only': -5.749196519413657e-23, 'Y_only_at_natural': -2.3763211625023798e-07, 'D_only': -7.639689592633897e-25, 'D_only_at_natural': -6.44177135024405e-09}

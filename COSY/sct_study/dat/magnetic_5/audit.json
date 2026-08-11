@@ -160,7 +160,15 @@
         0.0888,
         0.0
       ],
-      "min_distance_to_grid_point": 0.23615609838230545
+      "min_distance_to_grid_point": 0.23615609838230545,
+      "note": "FR0 box = measured mapping domain, not a physical limit. Compare stems via min_distance_normalized, not raw d_min.",
+      "grid_step": [
+        0.0222,
+        0.0222,
+        0.0333
+      ],
+      "grid_step_norm": 0.04576647244435604,
+      "min_distance_normalized": 5.16002404750398
     },
     "chrom_verify": {
       "r2_chrom_x": 1.0,

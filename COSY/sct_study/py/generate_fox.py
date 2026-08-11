@@ -17,12 +17,6 @@ def render(template: str, mapping: dict) -> str:
     return out
 
 
-def fox_rel(path: Path) -> str:
-    """Path relative to COSY/src for OPENF."""
-    # COSY cwd = COSY/src → ../sct_study/...
-    return "../sct_study/" + path.relative_to(path.parents[2]).as_posix()
-
-
 def main() -> int:
     cfg = load_config()
     gamma = cfg["gamma"]
@@ -33,14 +27,18 @@ def main() -> int:
     tpl_wp = (FOX / "_template_working_point.fox").read_text(encoding="utf-8")
     tpl_tr = (FOX / "_template_track.fox").read_text(encoding="utf-8")
 
+    track_kinds = [
+        (tr["smoke_nturn"], "smoke", int(tr.get("save_every_turns_smoke", 10))),
+        (tr["nturn"], "full", int(tr.get("save_every_turns_sparse", 100))),
+        (tr.get("dense_nturn", tr["nturn"]), "dense", int(tr.get("save_every_turns_dense", 2))),
+    ]
+
     for stem in stems():
         zp = json.loads((DAT_OUT / stem / "zero_point.json").read_text(encoding="utf-8"))
         for pt in zp["control_points"]["points"]:
             tag = pt["tag"]
             I = pt["I"]
-            # validate only for Istar + natural (all stems)
             if tag in ("Istar", "natural"):
-                outdat = DAT_OUT / stem / f"validate_{tag}.dat"
                 text = render(
                     tpl_val,
                     {
@@ -57,7 +55,6 @@ def main() -> int:
                 path.write_text(text, encoding="utf-8")
                 generated.append(str(path))
 
-            # working point for all control tags
             text = render(
                 tpl_wp,
                 {
@@ -74,13 +71,12 @@ def main() -> int:
             path.write_text(text, encoding="utf-8")
             generated.append(str(path))
 
-        # tracking only for pilot stem
         if stem != tr["pilot_stem"]:
             continue
         for pt in zp["control_points"]["points"]:
             tag = pt["tag"]
             I = pt["I"]
-            for nturn, kind in [(tr["smoke_nturn"], "smoke"), (tr["nturn"], "full")]:
+            for nturn, kind, save_every in track_kinds:
                 text = render(
                     tpl_tr,
                     {
@@ -94,7 +90,7 @@ def main() -> int:
                         "PSI": tr["psi_deg"],
                         "XAMP": tr["x_amp"],
                         "DSCALE": tr["d_scale"],
-                        "SAVEFRAC": tr["save_every_frac"],
+                        "SAVE_EVERY": save_every,
                         "OUTPRAY": f"../sct_study/dat/{stem}/track_{tag}_{kind}_PRAY.dat",
                         "OUTTRPRAY": f"../sct_study/dat/{stem}/track_{tag}_{kind}_TRPRAY.dat",
                         "OUTTRPSPI": f"../sct_study/dat/{stem}/track_{tag}_{kind}_TRPSPI.dat",
@@ -111,6 +107,9 @@ def main() -> int:
         f"- **Команда:** `python COSY/sct_study/py/generate_fox.py`\n"
         f"- **Создано файлов:** {len(generated)}\n"
         f"- Пилот трекинга: `{tr['pilot_stem']}`\n"
+        f"- Track kinds: smoke(Δn={tr.get('save_every_turns_smoke')}), "
+        f"full/sparse(Δn={tr.get('save_every_turns_sparse')}), "
+        f"dense(Δn={tr.get('save_every_turns_dense')})\n"
     )
     print(f"OK: generated {len(generated)} fox files")
     return 0

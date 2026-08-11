@@ -1,0 +1,934 @@
+{
+  "stem": "magnetic_4",
+  "Qs_note": "Approximate synchrotron tune placeholder until extracted from RF one-turn map; used only for geometric distance scan.",
+  "proton_comparison": {
+    "deuteron_G": -0.142987,
+    "proton_G": 1.7928474,
+    "gamma": 1.143914,
+    "deuteron_gammaG": -0.16356483111800002,
+    "proton_gammaG_same_gamma": 2.0508632407236003,
+    "note": "Deuteron |G\u03b3|\u226a1 keeps low-order imperfection lines farther in absolute spin tune than for protons at the same \u03b3; this does not prove resonances are irrelevant for coherence \u2014 check distances and observed excitation."
+  },
+  "points": {
+    "natural": {
+      "Qx": 0.9285474294637072,
+      "Qy": 0.9117077494074781,
+      "NU_s": 0.1635648284944904,
+      "gammaG": -0.163564831118,
+      "Qs_used": 0.01,
+      "nearest_by_kind": {
+        "imperfection": {
+          "kind": "imperfection",
+          "form": "\u03bd_s=5",
+          "target": 5.0,
+          "distance": 0.16356482849448994,
+          "k": 5,
+          "m": 0,
+          "plane": null
+        },
+        "intrinsic": {
+          "kind": "intrinsic",
+          "form": "\u03bd_s=6-Q_y",
+          "target": 5.088292250592522,
+          "distance": 0.07527257790196806,
+          "k": 6,
+          "m": 0,
+          "plane": "y"
+        },
+        "synchrotron": {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=1+2Q_s",
+          "target": 1.02,
+          "distance": 0.14356482849449037,
+          "k": 1,
+          "m": 2,
+          "plane": "s"
+        },
+        "combined": {
+          "kind": "combined",
+          "form": "\u03bd_s=0-Q_y+2Q_s",
+          "target": -0.8917077494074781,
+          "distance": 0.05527257790196849,
+          "k": 0,
+          "m": 2,
+          "plane": "y"
+        }
+      },
+      "nearest_all": [
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=0-Q_y+2Q_s",
+          "target": -0.8917077494074781,
+          "distance": 0.05527257790196849,
+          "k": 0,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=2-Q_y+2Q_s",
+          "target": 1.108292250592522,
+          "distance": 0.05527257790196849,
+          "k": 2,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=3-Q_y+2Q_s",
+          "target": 2.108292250592522,
+          "distance": 0.05527257790196849,
+          "k": 3,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=4-Q_y+2Q_s",
+          "target": 3.108292250592522,
+          "distance": 0.05527257790196849,
+          "k": 4,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=6-Q_y+2Q_s",
+          "target": 5.1082922505925215,
+          "distance": 0.05527257790196849,
+          "k": 6,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=7-Q_y+2Q_s",
+          "target": 6.1082922505925215,
+          "distance": 0.05527257790196849,
+          "k": 7,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=8-Q_y+2Q_s",
+          "target": 7.1082922505925215,
+          "distance": 0.05527257790196849,
+          "k": 8,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=1-Q_y+2Q_s",
+          "target": 0.10829225059252189,
+          "distance": 0.0552725779019685,
+          "k": 1,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=5-Q_y+2Q_s",
+          "target": 4.1082922505925215,
+          "distance": 0.05527257790196893,
+          "k": 5,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=6-Q_y+1Q_s",
+          "target": 5.098292250592522,
+          "distance": 0.06527257790196828,
+          "k": 6,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=7-Q_y+1Q_s",
+          "target": 6.098292250592522,
+          "distance": 0.06527257790196828,
+          "k": 7,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=8-Q_y+1Q_s",
+          "target": 7.098292250592522,
+          "distance": 0.06527257790196828,
+          "k": 8,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=0-Q_y+1Q_s",
+          "target": -0.9017077494074781,
+          "distance": 0.0652725779019685,
+          "k": 0,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=2-Q_y+1Q_s",
+          "target": 1.098292250592522,
+          "distance": 0.0652725779019685,
+          "k": 2,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=1-Q_y+1Q_s",
+          "target": 0.09829225059252188,
+          "distance": 0.06527257790196851,
+          "k": 1,
+          "m": 1,
+          "plane": "y"
+        }
+      ],
+      "n_lines_scanned": 225,
+      "tracking_proxy": null
+    },
+    "Istar": {
+      "Qx": 0.9285474294637072,
+      "Qy": 0.9117077494074781,
+      "NU_s": 0.1635648284944904,
+      "gammaG": -0.163564831118,
+      "Qs_used": 0.01,
+      "nearest_by_kind": {
+        "imperfection": {
+          "kind": "imperfection",
+          "form": "\u03bd_s=5",
+          "target": 5.0,
+          "distance": 0.16356482849448994,
+          "k": 5,
+          "m": 0,
+          "plane": null
+        },
+        "intrinsic": {
+          "kind": "intrinsic",
+          "form": "\u03bd_s=6-Q_y",
+          "target": 5.088292250592522,
+          "distance": 0.07527257790196806,
+          "k": 6,
+          "m": 0,
+          "plane": "y"
+        },
+        "synchrotron": {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=1+2Q_s",
+          "target": 1.02,
+          "distance": 0.14356482849449037,
+          "k": 1,
+          "m": 2,
+          "plane": "s"
+        },
+        "combined": {
+          "kind": "combined",
+          "form": "\u03bd_s=0-Q_y+2Q_s",
+          "target": -0.8917077494074781,
+          "distance": 0.05527257790196849,
+          "k": 0,
+          "m": 2,
+          "plane": "y"
+        }
+      },
+      "nearest_all": [
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=0-Q_y+2Q_s",
+          "target": -0.8917077494074781,
+          "distance": 0.05527257790196849,
+          "k": 0,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=2-Q_y+2Q_s",
+          "target": 1.108292250592522,
+          "distance": 0.05527257790196849,
+          "k": 2,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=3-Q_y+2Q_s",
+          "target": 2.108292250592522,
+          "distance": 0.05527257790196849,
+          "k": 3,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=4-Q_y+2Q_s",
+          "target": 3.108292250592522,
+          "distance": 0.05527257790196849,
+          "k": 4,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=6-Q_y+2Q_s",
+          "target": 5.1082922505925215,
+          "distance": 0.05527257790196849,
+          "k": 6,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=7-Q_y+2Q_s",
+          "target": 6.1082922505925215,
+          "distance": 0.05527257790196849,
+          "k": 7,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=8-Q_y+2Q_s",
+          "target": 7.1082922505925215,
+          "distance": 0.05527257790196849,
+          "k": 8,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=1-Q_y+2Q_s",
+          "target": 0.10829225059252189,
+          "distance": 0.0552725779019685,
+          "k": 1,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=5-Q_y+2Q_s",
+          "target": 4.1082922505925215,
+          "distance": 0.05527257790196893,
+          "k": 5,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=6-Q_y+1Q_s",
+          "target": 5.098292250592522,
+          "distance": 0.06527257790196828,
+          "k": 6,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=7-Q_y+1Q_s",
+          "target": 6.098292250592522,
+          "distance": 0.06527257790196828,
+          "k": 7,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=8-Q_y+1Q_s",
+          "target": 7.098292250592522,
+          "distance": 0.06527257790196828,
+          "k": 8,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=0-Q_y+1Q_s",
+          "target": -0.9017077494074781,
+          "distance": 0.0652725779019685,
+          "k": 0,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=2-Q_y+1Q_s",
+          "target": 1.098292250592522,
+          "distance": 0.0652725779019685,
+          "k": 2,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=1-Q_y+1Q_s",
+          "target": 0.09829225059252188,
+          "distance": 0.06527257790196851,
+          "k": 1,
+          "m": 1,
+          "plane": "y"
+        }
+      ],
+      "n_lines_scanned": 225,
+      "tracking_proxy": null
+    },
+    "ctrl_xi_x": {
+      "Qx": 0.9285474294637072,
+      "Qy": 0.9117077494074781,
+      "NU_s": 0.1635648284944904,
+      "gammaG": -0.163564831118,
+      "Qs_used": 0.01,
+      "nearest_by_kind": {
+        "imperfection": {
+          "kind": "imperfection",
+          "form": "\u03bd_s=5",
+          "target": 5.0,
+          "distance": 0.16356482849448994,
+          "k": 5,
+          "m": 0,
+          "plane": null
+        },
+        "intrinsic": {
+          "kind": "intrinsic",
+          "form": "\u03bd_s=6-Q_y",
+          "target": 5.088292250592522,
+          "distance": 0.07527257790196806,
+          "k": 6,
+          "m": 0,
+          "plane": "y"
+        },
+        "synchrotron": {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=1+2Q_s",
+          "target": 1.02,
+          "distance": 0.14356482849449037,
+          "k": 1,
+          "m": 2,
+          "plane": "s"
+        },
+        "combined": {
+          "kind": "combined",
+          "form": "\u03bd_s=0-Q_y+2Q_s",
+          "target": -0.8917077494074781,
+          "distance": 0.05527257790196849,
+          "k": 0,
+          "m": 2,
+          "plane": "y"
+        }
+      },
+      "nearest_all": [
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=0-Q_y+2Q_s",
+          "target": -0.8917077494074781,
+          "distance": 0.05527257790196849,
+          "k": 0,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=2-Q_y+2Q_s",
+          "target": 1.108292250592522,
+          "distance": 0.05527257790196849,
+          "k": 2,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=3-Q_y+2Q_s",
+          "target": 2.108292250592522,
+          "distance": 0.05527257790196849,
+          "k": 3,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=4-Q_y+2Q_s",
+          "target": 3.108292250592522,
+          "distance": 0.05527257790196849,
+          "k": 4,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=6-Q_y+2Q_s",
+          "target": 5.1082922505925215,
+          "distance": 0.05527257790196849,
+          "k": 6,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=7-Q_y+2Q_s",
+          "target": 6.1082922505925215,
+          "distance": 0.05527257790196849,
+          "k": 7,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=8-Q_y+2Q_s",
+          "target": 7.1082922505925215,
+          "distance": 0.05527257790196849,
+          "k": 8,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=1-Q_y+2Q_s",
+          "target": 0.10829225059252189,
+          "distance": 0.0552725779019685,
+          "k": 1,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=5-Q_y+2Q_s",
+          "target": 4.1082922505925215,
+          "distance": 0.05527257790196893,
+          "k": 5,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=6-Q_y+1Q_s",
+          "target": 5.098292250592522,
+          "distance": 0.06527257790196828,
+          "k": 6,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=7-Q_y+1Q_s",
+          "target": 6.098292250592522,
+          "distance": 0.06527257790196828,
+          "k": 7,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=8-Q_y+1Q_s",
+          "target": 7.098292250592522,
+          "distance": 0.06527257790196828,
+          "k": 8,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=0-Q_y+1Q_s",
+          "target": -0.9017077494074781,
+          "distance": 0.0652725779019685,
+          "k": 0,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=2-Q_y+1Q_s",
+          "target": 1.098292250592522,
+          "distance": 0.0652725779019685,
+          "k": 2,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=1-Q_y+1Q_s",
+          "target": 0.09829225059252188,
+          "distance": 0.06527257790196851,
+          "k": 1,
+          "m": 1,
+          "plane": "y"
+        }
+      ],
+      "n_lines_scanned": 225,
+      "tracking_proxy": null
+    },
+    "ctrl_xi_y": {
+      "Qx": 0.9285474294637072,
+      "Qy": 0.9117077494074781,
+      "NU_s": 0.1635648284944904,
+      "gammaG": -0.163564831118,
+      "Qs_used": 0.01,
+      "nearest_by_kind": {
+        "imperfection": {
+          "kind": "imperfection",
+          "form": "\u03bd_s=5",
+          "target": 5.0,
+          "distance": 0.16356482849448994,
+          "k": 5,
+          "m": 0,
+          "plane": null
+        },
+        "intrinsic": {
+          "kind": "intrinsic",
+          "form": "\u03bd_s=6-Q_y",
+          "target": 5.088292250592522,
+          "distance": 0.07527257790196806,
+          "k": 6,
+          "m": 0,
+          "plane": "y"
+        },
+        "synchrotron": {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=1+2Q_s",
+          "target": 1.02,
+          "distance": 0.14356482849449037,
+          "k": 1,
+          "m": 2,
+          "plane": "s"
+        },
+        "combined": {
+          "kind": "combined",
+          "form": "\u03bd_s=0-Q_y+2Q_s",
+          "target": -0.8917077494074781,
+          "distance": 0.05527257790196849,
+          "k": 0,
+          "m": 2,
+          "plane": "y"
+        }
+      },
+      "nearest_all": [
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=0-Q_y+2Q_s",
+          "target": -0.8917077494074781,
+          "distance": 0.05527257790196849,
+          "k": 0,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=2-Q_y+2Q_s",
+          "target": 1.108292250592522,
+          "distance": 0.05527257790196849,
+          "k": 2,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=3-Q_y+2Q_s",
+          "target": 2.108292250592522,
+          "distance": 0.05527257790196849,
+          "k": 3,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=4-Q_y+2Q_s",
+          "target": 3.108292250592522,
+          "distance": 0.05527257790196849,
+          "k": 4,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=6-Q_y+2Q_s",
+          "target": 5.1082922505925215,
+          "distance": 0.05527257790196849,
+          "k": 6,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=7-Q_y+2Q_s",
+          "target": 6.1082922505925215,
+          "distance": 0.05527257790196849,
+          "k": 7,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=8-Q_y+2Q_s",
+          "target": 7.1082922505925215,
+          "distance": 0.05527257790196849,
+          "k": 8,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=1-Q_y+2Q_s",
+          "target": 0.10829225059252189,
+          "distance": 0.0552725779019685,
+          "k": 1,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=5-Q_y+2Q_s",
+          "target": 4.1082922505925215,
+          "distance": 0.05527257790196893,
+          "k": 5,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=6-Q_y+1Q_s",
+          "target": 5.098292250592522,
+          "distance": 0.06527257790196828,
+          "k": 6,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=7-Q_y+1Q_s",
+          "target": 6.098292250592522,
+          "distance": 0.06527257790196828,
+          "k": 7,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=8-Q_y+1Q_s",
+          "target": 7.098292250592522,
+          "distance": 0.06527257790196828,
+          "k": 8,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=0-Q_y+1Q_s",
+          "target": -0.9017077494074781,
+          "distance": 0.0652725779019685,
+          "k": 0,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=2-Q_y+1Q_s",
+          "target": 1.098292250592522,
+          "distance": 0.0652725779019685,
+          "k": 2,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=1-Q_y+1Q_s",
+          "target": 0.09829225059252188,
+          "distance": 0.06527257790196851,
+          "k": 1,
+          "m": 1,
+          "plane": "y"
+        }
+      ],
+      "n_lines_scanned": 225,
+      "tracking_proxy": null
+    },
+    "ctrl_eta1": {
+      "Qx": 0.9285474294637072,
+      "Qy": 0.9117077494074781,
+      "NU_s": 0.1635648284944904,
+      "gammaG": -0.163564831118,
+      "Qs_used": 0.01,
+      "nearest_by_kind": {
+        "imperfection": {
+          "kind": "imperfection",
+          "form": "\u03bd_s=5",
+          "target": 5.0,
+          "distance": 0.16356482849448994,
+          "k": 5,
+          "m": 0,
+          "plane": null
+        },
+        "intrinsic": {
+          "kind": "intrinsic",
+          "form": "\u03bd_s=6-Q_y",
+          "target": 5.088292250592522,
+          "distance": 0.07527257790196806,
+          "k": 6,
+          "m": 0,
+          "plane": "y"
+        },
+        "synchrotron": {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=1+2Q_s",
+          "target": 1.02,
+          "distance": 0.14356482849449037,
+          "k": 1,
+          "m": 2,
+          "plane": "s"
+        },
+        "combined": {
+          "kind": "combined",
+          "form": "\u03bd_s=0-Q_y+2Q_s",
+          "target": -0.8917077494074781,
+          "distance": 0.05527257790196849,
+          "k": 0,
+          "m": 2,
+          "plane": "y"
+        }
+      },
+      "nearest_all": [
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=0-Q_y+2Q_s",
+          "target": -0.8917077494074781,
+          "distance": 0.05527257790196849,
+          "k": 0,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=2-Q_y+2Q_s",
+          "target": 1.108292250592522,
+          "distance": 0.05527257790196849,
+          "k": 2,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=3-Q_y+2Q_s",
+          "target": 2.108292250592522,
+          "distance": 0.05527257790196849,
+          "k": 3,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=4-Q_y+2Q_s",
+          "target": 3.108292250592522,
+          "distance": 0.05527257790196849,
+          "k": 4,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=6-Q_y+2Q_s",
+          "target": 5.1082922505925215,
+          "distance": 0.05527257790196849,
+          "k": 6,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=7-Q_y+2Q_s",
+          "target": 6.1082922505925215,
+          "distance": 0.05527257790196849,
+          "k": 7,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=8-Q_y+2Q_s",
+          "target": 7.1082922505925215,
+          "distance": 0.05527257790196849,
+          "k": 8,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=1-Q_y+2Q_s",
+          "target": 0.10829225059252189,
+          "distance": 0.0552725779019685,
+          "k": 1,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=5-Q_y+2Q_s",
+          "target": 4.1082922505925215,
+          "distance": 0.05527257790196893,
+          "k": 5,
+          "m": 2,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=6-Q_y+1Q_s",
+          "target": 5.098292250592522,
+          "distance": 0.06527257790196828,
+          "k": 6,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=7-Q_y+1Q_s",
+          "target": 6.098292250592522,
+          "distance": 0.06527257790196828,
+          "k": 7,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=8-Q_y+1Q_s",
+          "target": 7.098292250592522,
+          "distance": 0.06527257790196828,
+          "k": 8,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=0-Q_y+1Q_s",
+          "target": -0.9017077494074781,
+          "distance": 0.0652725779019685,
+          "k": 0,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=2-Q_y+1Q_s",
+          "target": 1.098292250592522,
+          "distance": 0.0652725779019685,
+          "k": 2,
+          "m": 1,
+          "plane": "y"
+        },
+        {
+          "kind": "combined",
+          "form": "\u03bd_s=1-Q_y+1Q_s",
+          "target": 0.09829225059252188,
+          "distance": 0.06527257790196851,
+          "k": 1,
+          "m": 1,
+          "plane": "y"
+        }
+      ],
+      "n_lines_scanned": 225,
+      "tracking_proxy": null
+    }
+  }
+}

@@ -95,7 +95,11 @@ def delta_eq_theory(
     L: float,
     gamma: float,
 ) -> float:
-    """Melnikov-style equilibrium momentum shift (diagnostic units)."""
+    """Theoretical equilibrium relative-momentum shift Δδ_eq (Senichev et al.).
+
+    This is *not* the COSY TRPRAY coordinate D and *not* the tracking proxy
+    mean_D_offset = ⟨D⟩_i − ⟨D⟩_ref.
+    """
     denom = gamma**2 * alpha0 - 1.0
     if abs(denom) < 1e-14:
         return float("nan")
@@ -104,21 +108,47 @@ def delta_eq_theory(
     return float(pre * bracket)
 
 
-def currents_in_box(I: np.ndarray, df) -> Dict[str, Any]:
+def mapping_grid_step(stem: str, mode: str = "FR0") -> np.ndarray:
+    """Return FR0/FR3 current step vector (SGx1, SGx2, SGy1) for a stem."""
+    from run_mapping import get_mapping_steps  # local import; ANALYSIS on path
+
+    step_x, step_y = get_mapping_steps(stem, mode)
+    # Scan uses SGx1,SGx2 along step_x and SGy1 along step_y (signed).
+    return np.array([abs(step_x), abs(step_x), abs(step_y)], dtype=float)
+
+
+def currents_in_box(
+    I: np.ndarray,
+    df,
+    *,
+    stem: Optional[str] = None,
+    mode: str = "FR0",
+) -> Dict[str, Any]:
     pts = df[["SGx1", "SGx2", "SGy1"]].values
     mins = pts.min(axis=0)
     maxs = pts.max(axis=0)
     inside = bool(np.all((I >= mins - 1e-15) & (I <= maxs + 1e-15)))
     dmin = float(np.linalg.norm(pts - I, axis=1).min())
-    return {
+    out: Dict[str, Any] = {
         "inside_axis_aligned_box": inside,
         "box_min": mins.tolist(),
         "box_max": maxs.tolist(),
         "min_distance_to_grid_point": dmin,
+        "note": (
+            "FR0 box = measured mapping domain, not a physical limit. "
+            "Compare stems via min_distance_normalized, not raw d_min."
+        ),
     }
+    if stem is not None:
+        step = mapping_grid_step(stem, mode)
+        step_norm = float(np.linalg.norm(step))
+        out["grid_step"] = step.tolist()
+        out["grid_step_norm"] = step_norm
+        out["min_distance_normalized"] = float(dmin / step_norm) if step_norm > 0 else float("nan")
+    return out
 
 
-def model_summary(df) -> Dict[str, Any]:
+def model_summary(df, stem: Optional[str] = None, mode: str = "FR0") -> Dict[str, Any]:
     m = get_dual_model(df, suffix="")
     m1 = get_dual_model(df, suffix="_1")
     Istar = solve_currents(m["R_int"], m["int_nat"], np.zeros(3))
@@ -126,7 +156,7 @@ def model_summary(df) -> Dict[str, Any]:
     cond = float(svals.max() / max(svals.min(), 1e-30))
     pred_spin = m["R_spin"] @ Istar + m["spin_nat"]
     pred_chrom = m["R_int"] @ Istar + m["int_nat"]
-    box = currents_in_box(Istar, df)
+    box = currents_in_box(Istar, df, stem=stem, mode=mode)
     R = m["R_int"]
     # column correlations of response
     cols = R / np.linalg.norm(R, axis=0, keepdims=True)

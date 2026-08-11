@@ -1,0 +1,994 @@
+{
+  "stem": "magnetic_2",
+  "Qs_note": "Approximate synchrotron tune placeholder until extracted from RF one-turn map; used only for geometric distance scan.",
+  "proton_comparison": {
+    "deuteron_G": -0.142987,
+    "proton_G": 1.7928474,
+    "gamma": 1.143914,
+    "deuteron_gammaG": -0.16356483111800002,
+    "proton_gammaG_same_gamma": 2.0508632407236003,
+    "note": "Deuteron |G\u03b3|\u226a1 keeps low-order imperfection lines farther in absolute spin tune than for protons at the same \u03b3; this does not prove resonances are irrelevant for coherence \u2014 check distances and observed excitation."
+  },
+  "points": {
+    "natural": {
+      "Qx": 0.4462838512100592,
+      "Qy": 0.476682443002865,
+      "NU_s": 0.1635648284944904,
+      "gammaG": -0.163564831118,
+      "Qs_used": 0.01,
+      "nearest_by_kind": {
+        "imperfection": {
+          "kind": "imperfection",
+          "form": "\u03bd_s=5",
+          "target": 5.0,
+          "distance": 0.16356482849448994,
+          "k": 5,
+          "m": 0,
+          "plane": null
+        },
+        "intrinsic": {
+          "kind": "intrinsic",
+          "form": "\u03bd_s=4+Q_x",
+          "target": 4.446283851210059,
+          "distance": 0.28271902271556826,
+          "k": 4,
+          "m": 0,
+          "plane": "x"
+        },
+        "synchrotron": {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=1+2Q_s",
+          "target": 1.02,
+          "distance": 0.14356482849449037,
+          "k": 1,
+          "m": 2,
+          "plane": "s"
+        },
+        "combined": {
+          "kind": "combined",
+          "form": "\u03bd_s=1+Q_x-2Q_s",
+          "target": 1.426283851210059,
+          "distance": 0.2627190227155687,
+          "k": 1,
+          "m": 2,
+          "plane": "x"
+        }
+      },
+      "nearest_all": [
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=1+2Q_s",
+          "target": 1.02,
+          "distance": 0.14356482849449037,
+          "k": 1,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=2+2Q_s",
+          "target": 2.02,
+          "distance": 0.14356482849449037,
+          "k": 2,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=3+2Q_s",
+          "target": 3.02,
+          "distance": 0.14356482849449037,
+          "k": 3,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=5+2Q_s",
+          "target": 5.02,
+          "distance": 0.14356482849449037,
+          "k": 5,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=6+2Q_s",
+          "target": 6.02,
+          "distance": 0.14356482849449037,
+          "k": 6,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=7+2Q_s",
+          "target": 7.02,
+          "distance": 0.14356482849449037,
+          "k": 7,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=8+2Q_s",
+          "target": 8.02,
+          "distance": 0.14356482849449037,
+          "k": 8,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=0+2Q_s",
+          "target": 0.02,
+          "distance": 0.1435648284944904,
+          "k": 0,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=4+2Q_s",
+          "target": 4.02,
+          "distance": 0.14356482849449081,
+          "k": 4,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=5+1Q_s",
+          "target": 5.01,
+          "distance": 0.15356482849449016,
+          "k": 5,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=6+1Q_s",
+          "target": 6.01,
+          "distance": 0.15356482849449016,
+          "k": 6,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=7+1Q_s",
+          "target": 7.01,
+          "distance": 0.15356482849449016,
+          "k": 7,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=8+1Q_s",
+          "target": 8.01,
+          "distance": 0.15356482849449016,
+          "k": 8,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=0+1Q_s",
+          "target": 0.01,
+          "distance": 0.15356482849449038,
+          "k": 0,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=1+1Q_s",
+          "target": 1.01,
+          "distance": 0.15356482849449038,
+          "k": 1,
+          "m": 1,
+          "plane": "s"
+        }
+      ],
+      "n_lines_scanned": 225,
+      "tracking_proxy": {
+        "track_kind": "dense",
+        "C_final": 0.999999660140722,
+        "polarization_final": 0.9999996731195738,
+        "mean_D_offset_rms_by_group": {
+          "X": 6.050554338541645e-09,
+          "Y": 2.856260927046794e-08,
+          "D": 1.3424940888496276e-05
+        },
+        "sampling_aliased": false,
+        "dnu_rms": 3.649836211933816e-08,
+        "note": "Tracking metrics are observable proxies for decoherence/excitation; not Froissart\u2013Stora resonance strength."
+      }
+    },
+    "Istar": {
+      "Qx": 0.4462838512100592,
+      "Qy": 0.476682443002865,
+      "NU_s": 0.1635648284944904,
+      "gammaG": -0.163564831118,
+      "Qs_used": 0.01,
+      "nearest_by_kind": {
+        "imperfection": {
+          "kind": "imperfection",
+          "form": "\u03bd_s=5",
+          "target": 5.0,
+          "distance": 0.16356482849448994,
+          "k": 5,
+          "m": 0,
+          "plane": null
+        },
+        "intrinsic": {
+          "kind": "intrinsic",
+          "form": "\u03bd_s=4+Q_x",
+          "target": 4.446283851210059,
+          "distance": 0.28271902271556826,
+          "k": 4,
+          "m": 0,
+          "plane": "x"
+        },
+        "synchrotron": {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=1+2Q_s",
+          "target": 1.02,
+          "distance": 0.14356482849449037,
+          "k": 1,
+          "m": 2,
+          "plane": "s"
+        },
+        "combined": {
+          "kind": "combined",
+          "form": "\u03bd_s=1+Q_x-2Q_s",
+          "target": 1.426283851210059,
+          "distance": 0.2627190227155687,
+          "k": 1,
+          "m": 2,
+          "plane": "x"
+        }
+      },
+      "nearest_all": [
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=1+2Q_s",
+          "target": 1.02,
+          "distance": 0.14356482849449037,
+          "k": 1,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=2+2Q_s",
+          "target": 2.02,
+          "distance": 0.14356482849449037,
+          "k": 2,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=3+2Q_s",
+          "target": 3.02,
+          "distance": 0.14356482849449037,
+          "k": 3,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=5+2Q_s",
+          "target": 5.02,
+          "distance": 0.14356482849449037,
+          "k": 5,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=6+2Q_s",
+          "target": 6.02,
+          "distance": 0.14356482849449037,
+          "k": 6,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=7+2Q_s",
+          "target": 7.02,
+          "distance": 0.14356482849449037,
+          "k": 7,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=8+2Q_s",
+          "target": 8.02,
+          "distance": 0.14356482849449037,
+          "k": 8,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=0+2Q_s",
+          "target": 0.02,
+          "distance": 0.1435648284944904,
+          "k": 0,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=4+2Q_s",
+          "target": 4.02,
+          "distance": 0.14356482849449081,
+          "k": 4,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=5+1Q_s",
+          "target": 5.01,
+          "distance": 0.15356482849449016,
+          "k": 5,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=6+1Q_s",
+          "target": 6.01,
+          "distance": 0.15356482849449016,
+          "k": 6,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=7+1Q_s",
+          "target": 7.01,
+          "distance": 0.15356482849449016,
+          "k": 7,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=8+1Q_s",
+          "target": 8.01,
+          "distance": 0.15356482849449016,
+          "k": 8,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=0+1Q_s",
+          "target": 0.01,
+          "distance": 0.15356482849449038,
+          "k": 0,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=1+1Q_s",
+          "target": 1.01,
+          "distance": 0.15356482849449038,
+          "k": 1,
+          "m": 1,
+          "plane": "s"
+        }
+      ],
+      "n_lines_scanned": 225,
+      "tracking_proxy": {
+        "track_kind": "dense",
+        "C_final": 0.9999996601291806,
+        "polarization_final": 0.9999996765939488,
+        "mean_D_offset_rms_by_group": {
+          "X": 4.356581014662101e-13,
+          "Y": 6.663241471427266e-12,
+          "D": 1.3424940288363123e-05
+        },
+        "sampling_aliased": false,
+        "dnu_rms": 3.650065320049762e-08,
+        "note": "Tracking metrics are observable proxies for decoherence/excitation; not Froissart\u2013Stora resonance strength."
+      }
+    },
+    "ctrl_xi_x": {
+      "Qx": 0.4462838512100592,
+      "Qy": 0.476682443002865,
+      "NU_s": 0.1635648284944904,
+      "gammaG": -0.163564831118,
+      "Qs_used": 0.01,
+      "nearest_by_kind": {
+        "imperfection": {
+          "kind": "imperfection",
+          "form": "\u03bd_s=5",
+          "target": 5.0,
+          "distance": 0.16356482849448994,
+          "k": 5,
+          "m": 0,
+          "plane": null
+        },
+        "intrinsic": {
+          "kind": "intrinsic",
+          "form": "\u03bd_s=4+Q_x",
+          "target": 4.446283851210059,
+          "distance": 0.28271902271556826,
+          "k": 4,
+          "m": 0,
+          "plane": "x"
+        },
+        "synchrotron": {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=1+2Q_s",
+          "target": 1.02,
+          "distance": 0.14356482849449037,
+          "k": 1,
+          "m": 2,
+          "plane": "s"
+        },
+        "combined": {
+          "kind": "combined",
+          "form": "\u03bd_s=1+Q_x-2Q_s",
+          "target": 1.426283851210059,
+          "distance": 0.2627190227155687,
+          "k": 1,
+          "m": 2,
+          "plane": "x"
+        }
+      },
+      "nearest_all": [
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=1+2Q_s",
+          "target": 1.02,
+          "distance": 0.14356482849449037,
+          "k": 1,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=2+2Q_s",
+          "target": 2.02,
+          "distance": 0.14356482849449037,
+          "k": 2,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=3+2Q_s",
+          "target": 3.02,
+          "distance": 0.14356482849449037,
+          "k": 3,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=5+2Q_s",
+          "target": 5.02,
+          "distance": 0.14356482849449037,
+          "k": 5,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=6+2Q_s",
+          "target": 6.02,
+          "distance": 0.14356482849449037,
+          "k": 6,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=7+2Q_s",
+          "target": 7.02,
+          "distance": 0.14356482849449037,
+          "k": 7,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=8+2Q_s",
+          "target": 8.02,
+          "distance": 0.14356482849449037,
+          "k": 8,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=0+2Q_s",
+          "target": 0.02,
+          "distance": 0.1435648284944904,
+          "k": 0,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=4+2Q_s",
+          "target": 4.02,
+          "distance": 0.14356482849449081,
+          "k": 4,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=5+1Q_s",
+          "target": 5.01,
+          "distance": 0.15356482849449016,
+          "k": 5,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=6+1Q_s",
+          "target": 6.01,
+          "distance": 0.15356482849449016,
+          "k": 6,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=7+1Q_s",
+          "target": 7.01,
+          "distance": 0.15356482849449016,
+          "k": 7,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=8+1Q_s",
+          "target": 8.01,
+          "distance": 0.15356482849449016,
+          "k": 8,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=0+1Q_s",
+          "target": 0.01,
+          "distance": 0.15356482849449038,
+          "k": 0,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=1+1Q_s",
+          "target": 1.01,
+          "distance": 0.15356482849449038,
+          "k": 1,
+          "m": 1,
+          "plane": "s"
+        }
+      ],
+      "n_lines_scanned": 225,
+      "tracking_proxy": {
+        "track_kind": "dense",
+        "C_final": 0.9999996590289439,
+        "polarization_final": 0.9999996669432976,
+        "mean_D_offset_rms_by_group": {
+          "X": 6.413587372513028e-08,
+          "Y": 3.0120878700286925e-07,
+          "D": 1.3424945070350905e-05
+        },
+        "sampling_aliased": false,
+        "dnu_rms": 3.671664873562163e-08,
+        "note": "Tracking metrics are observable proxies for decoherence/excitation; not Froissart\u2013Stora resonance strength."
+      }
+    },
+    "ctrl_xi_y": {
+      "Qx": 0.4462838512100592,
+      "Qy": 0.476682443002865,
+      "NU_s": 0.1635648284944904,
+      "gammaG": -0.163564831118,
+      "Qs_used": 0.01,
+      "nearest_by_kind": {
+        "imperfection": {
+          "kind": "imperfection",
+          "form": "\u03bd_s=5",
+          "target": 5.0,
+          "distance": 0.16356482849448994,
+          "k": 5,
+          "m": 0,
+          "plane": null
+        },
+        "intrinsic": {
+          "kind": "intrinsic",
+          "form": "\u03bd_s=4+Q_x",
+          "target": 4.446283851210059,
+          "distance": 0.28271902271556826,
+          "k": 4,
+          "m": 0,
+          "plane": "x"
+        },
+        "synchrotron": {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=1+2Q_s",
+          "target": 1.02,
+          "distance": 0.14356482849449037,
+          "k": 1,
+          "m": 2,
+          "plane": "s"
+        },
+        "combined": {
+          "kind": "combined",
+          "form": "\u03bd_s=1+Q_x-2Q_s",
+          "target": 1.426283851210059,
+          "distance": 0.2627190227155687,
+          "k": 1,
+          "m": 2,
+          "plane": "x"
+        }
+      },
+      "nearest_all": [
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=1+2Q_s",
+          "target": 1.02,
+          "distance": 0.14356482849449037,
+          "k": 1,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=2+2Q_s",
+          "target": 2.02,
+          "distance": 0.14356482849449037,
+          "k": 2,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=3+2Q_s",
+          "target": 3.02,
+          "distance": 0.14356482849449037,
+          "k": 3,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=5+2Q_s",
+          "target": 5.02,
+          "distance": 0.14356482849449037,
+          "k": 5,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=6+2Q_s",
+          "target": 6.02,
+          "distance": 0.14356482849449037,
+          "k": 6,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=7+2Q_s",
+          "target": 7.02,
+          "distance": 0.14356482849449037,
+          "k": 7,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=8+2Q_s",
+          "target": 8.02,
+          "distance": 0.14356482849449037,
+          "k": 8,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=0+2Q_s",
+          "target": 0.02,
+          "distance": 0.1435648284944904,
+          "k": 0,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=4+2Q_s",
+          "target": 4.02,
+          "distance": 0.14356482849449081,
+          "k": 4,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=5+1Q_s",
+          "target": 5.01,
+          "distance": 0.15356482849449016,
+          "k": 5,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=6+1Q_s",
+          "target": 6.01,
+          "distance": 0.15356482849449016,
+          "k": 6,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=7+1Q_s",
+          "target": 7.01,
+          "distance": 0.15356482849449016,
+          "k": 7,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=8+1Q_s",
+          "target": 8.01,
+          "distance": 0.15356482849449016,
+          "k": 8,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=0+1Q_s",
+          "target": 0.01,
+          "distance": 0.15356482849449038,
+          "k": 0,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=1+1Q_s",
+          "target": 1.01,
+          "distance": 0.15356482849449038,
+          "k": 1,
+          "m": 1,
+          "plane": "s"
+        }
+      ],
+      "n_lines_scanned": 225,
+      "tracking_proxy": {
+        "track_kind": "dense",
+        "C_final": 0.9999996590289439,
+        "polarization_final": 0.9999996669432976,
+        "mean_D_offset_rms_by_group": {
+          "X": 6.413587372513028e-08,
+          "Y": 3.0120878700286925e-07,
+          "D": 1.3424945070350905e-05
+        },
+        "sampling_aliased": false,
+        "dnu_rms": 3.671664873562163e-08,
+        "note": "Tracking metrics are observable proxies for decoherence/excitation; not Froissart\u2013Stora resonance strength."
+      }
+    },
+    "ctrl_eta1": {
+      "Qx": 0.4462838512100592,
+      "Qy": 0.476682443002865,
+      "NU_s": 0.1635648284944904,
+      "gammaG": -0.163564831118,
+      "Qs_used": 0.01,
+      "nearest_by_kind": {
+        "imperfection": {
+          "kind": "imperfection",
+          "form": "\u03bd_s=5",
+          "target": 5.0,
+          "distance": 0.16356482849448994,
+          "k": 5,
+          "m": 0,
+          "plane": null
+        },
+        "intrinsic": {
+          "kind": "intrinsic",
+          "form": "\u03bd_s=4+Q_x",
+          "target": 4.446283851210059,
+          "distance": 0.28271902271556826,
+          "k": 4,
+          "m": 0,
+          "plane": "x"
+        },
+        "synchrotron": {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=1+2Q_s",
+          "target": 1.02,
+          "distance": 0.14356482849449037,
+          "k": 1,
+          "m": 2,
+          "plane": "s"
+        },
+        "combined": {
+          "kind": "combined",
+          "form": "\u03bd_s=1+Q_x-2Q_s",
+          "target": 1.426283851210059,
+          "distance": 0.2627190227155687,
+          "k": 1,
+          "m": 2,
+          "plane": "x"
+        }
+      },
+      "nearest_all": [
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=1+2Q_s",
+          "target": 1.02,
+          "distance": 0.14356482849449037,
+          "k": 1,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=2+2Q_s",
+          "target": 2.02,
+          "distance": 0.14356482849449037,
+          "k": 2,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=3+2Q_s",
+          "target": 3.02,
+          "distance": 0.14356482849449037,
+          "k": 3,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=5+2Q_s",
+          "target": 5.02,
+          "distance": 0.14356482849449037,
+          "k": 5,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=6+2Q_s",
+          "target": 6.02,
+          "distance": 0.14356482849449037,
+          "k": 6,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=7+2Q_s",
+          "target": 7.02,
+          "distance": 0.14356482849449037,
+          "k": 7,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=8+2Q_s",
+          "target": 8.02,
+          "distance": 0.14356482849449037,
+          "k": 8,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=0+2Q_s",
+          "target": 0.02,
+          "distance": 0.1435648284944904,
+          "k": 0,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=4+2Q_s",
+          "target": 4.02,
+          "distance": 0.14356482849449081,
+          "k": 4,
+          "m": 2,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=5+1Q_s",
+          "target": 5.01,
+          "distance": 0.15356482849449016,
+          "k": 5,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=6+1Q_s",
+          "target": 6.01,
+          "distance": 0.15356482849449016,
+          "k": 6,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=7+1Q_s",
+          "target": 7.01,
+          "distance": 0.15356482849449016,
+          "k": 7,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=8+1Q_s",
+          "target": 8.01,
+          "distance": 0.15356482849449016,
+          "k": 8,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=0+1Q_s",
+          "target": 0.01,
+          "distance": 0.15356482849449038,
+          "k": 0,
+          "m": 1,
+          "plane": "s"
+        },
+        {
+          "kind": "synchrotron",
+          "form": "\u03bd_s=1+1Q_s",
+          "target": 1.01,
+          "distance": 0.15356482849449038,
+          "k": 1,
+          "m": 1,
+          "plane": "s"
+        }
+      ],
+      "n_lines_scanned": 225,
+      "tracking_proxy": {
+        "track_kind": "dense",
+        "C_final": 0.999999659751215,
+        "polarization_final": 0.999999665717559,
+        "mean_D_offset_rms_by_group": {
+          "X": 3.635450997867182e-08,
+          "Y": 1.6881159896206194e-07,
+          "D": 1.3424947445840636e-05
+        },
+        "sampling_aliased": false,
+        "dnu_rms": 3.6576338456317856e-08,
+        "note": "Tracking metrics are observable proxies for decoherence/excitation; not Froissart\u2013Stora resonance strength."
+      }
+    }
+  }
+}

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Postprocess INJECT+TR outputs: per-particle Dbar, Delta nu_s, coherence C(n)."""
+"""Postprocess INJECT+TR: mean_D_offset, spin coherence, relative spin tunes."""
 from __future__ import annotations
 
 import json
 import sys
 from pathlib import Path
-from typing import Dict, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -63,35 +63,72 @@ def read_trpspi(path: Path) -> pd.DataFrame:
     return pd.DataFrame(rows, columns=["turn", "ray", "Sx", "Sy", "Sz"])
 
 
-def classify_rays(pray: Path) -> Dict[int, str]:
-    """Map ray id -> group using initial PRAY if available."""
-    groups = {}
-    if not pray.is_file():
-        return groups
-    # PRAY dump format varies; fallback by injection order in analyze
-    return groups
+def assign_groups_from_inject(orb: pd.DataFrame, num_per_group: int) -> Tuple[Dict[int, str], int]:
+    """Classify by INJECT layout: ray0 dummy, ray1 ref, then X/Y/D blocks.
+
+    Cosy always inserts ray 0. Our template then injects one reference plus
+    three groups of size ``num_per_group``. Classification by |X|,|Y|,|D| is
+    wrong when linspace includes a zero amplitude ray.
+    """
+    rays = sorted(int(r) for r in orb["ray"].unique())
+    groups: Dict[int, str] = {}
+    if not rays:
+        return groups, 0
+
+    # Prefer explicit layout starting at ray 0.
+    ref_id = 1 if 1 in rays else rays[0]
+    groups[0] = "dummy" if 0 in rays else groups.get(0, "dummy")
+    if 0 in rays:
+        groups[0] = "dummy"
+    groups[ref_id] = "ref"
+
+    x0 = ref_id + 1
+    for i in range(num_per_group):
+        groups[x0 + i] = "X"
+    y0 = x0 + num_per_group
+    for i in range(num_per_group):
+        groups[y0 + i] = "Y"
+    d0 = y0 + num_per_group
+    for i in range(num_per_group):
+        groups[d0 + i] = "D"
+
+    # Any unexpected ray ids: mark unknown (still tracked).
+    for r in rays:
+        groups.setdefault(r, "other")
+    return groups, ref_id
 
 
-def assign_groups_from_initial(df: pd.DataFrame) -> Dict[int, str]:
-    """At turn==min, classify by dominant coordinate."""
-    t0 = df["turn"].min()
-    init = df[df["turn"] == t0].sort_values("ray")
-    groups = {}
-    for _, row in init.iterrows():
-        rid = int(row.ray)
-        x, y, d = abs(row.X), abs(row.Y), abs(row.D)
-        if x < 1e-12 and y < 1e-12 and d < 1e-12:
-            groups[rid] = "ref"
-        elif x >= y and x >= d:
-            groups[rid] = "X"
-        elif y >= x and y >= d:
-            groups[rid] = "Y"
-        else:
-            groups[rid] = "D"
-    return groups
+def nyquist_turns(nu_s: float) -> float:
+    """Max save interval (turns) for unambiguous spin-tune sampling."""
+    return 0.5 / max(abs(nu_s), 1e-12)
 
 
-def analyze_case(stem: str, tag: str, kind: str) -> Optional[dict]:
+def median_save_interval(turns: np.ndarray) -> float:
+    if len(turns) < 2:
+        return float("nan")
+    return float(np.median(np.diff(np.sort(turns.astype(float)))))
+
+
+def fit_phase_slope(
+    turns: np.ndarray, phi: np.ndarray, n1: float
+) -> Tuple[Optional[float], Optional[float], int]:
+    mask = turns >= n1
+    if mask.sum() < 2:
+        return None, None, 0
+    t = turns[mask]
+    p = phi[mask]
+    coeff = np.polyfit(t, p, 1)
+    resid = p - np.polyval(coeff, t)
+    rms = float(np.sqrt(np.mean(resid**2)))
+    return float(coeff[0] / (2 * np.pi)), rms, int(mask.sum())
+
+
+def analyze_case(stem: str, tag: str, kind: str, cfg: Optional[dict] = None) -> Optional[dict]:
+    cfg = cfg or load_config()
+    tr_cfg = cfg["tracking"]
+    num = int(tr_cfg["num_per_group"])
+    nu_s_ref = abs(float(cfg["gamma"]) * float(cfg["G"]))
+
     base = DAT_OUT / stem
     trpray = base / f"track_{tag}_{kind}_TRPRAY.dat"
     trpspi = base / f"track_{tag}_{kind}_TRPSPI.dat"
@@ -103,132 +140,207 @@ def analyze_case(stem: str, tag: str, kind: str) -> Optional[dict]:
     if orb.empty or spi.empty:
         return {"error": "empty tracking files", "tag": tag, "kind": kind}
 
-    groups = assign_groups_from_initial(orb)
+    groups, ref_id = assign_groups_from_inject(orb, num)
     turns = np.sort(orb["turn"].unique())
-    # drop first 20% as transient
     n1 = turns[int(0.2 * len(turns))] if len(turns) > 5 else turns[0]
-    n2 = turns[-1]
-
-    # Prefer reference with nonzero spin; skip COSY dummy ray 0 if |S|=0
-    spin_norm = spi.groupby("ray")[["Sx", "Sy", "Sz"]].apply(
-        lambda g: float(np.sqrt((g.iloc[0] ** 2).sum()))
-    )
-    ref_candidates = [r for r, g in groups.items() if g == "ref"]
-    ref_id = None
-    for r in ref_candidates:
-        if spin_norm.get(r, 0.0) > 0.5:
-            ref_id = r
-            break
-    if ref_id is None:
-        # fallback: smallest ray with |S|~1 and near-zero orbit at t0
-        t0 = orb["turn"].min()
-        init = orb[orb["turn"] == t0]
-        for _, row in init.sort_values("ray").iterrows():
-            rid = int(row.ray)
-            if spin_norm.get(rid, 0.0) > 0.5 and abs(row.X) + abs(row.Y) + abs(row.D) < 1e-12:
-                ref_id = rid
-                groups[rid] = "ref"
-                break
-    if ref_id is None:
-        ref_id = int(orb["ray"].min())
+    save_dt = median_save_interval(turns)
+    nyq = nyquist_turns(nu_s_ref)
+    spin_aliased = bool(save_dt > nyq)
+    spin_samples = int(len(turns))
+    spin_turns_physical = float(nu_s_ref * (turns[-1] - turns[0])) if len(turns) else 0.0
 
     orb_ref = orb[orb["ray"] == ref_id]
-    D_ref = float(orb_ref.loc[orb_ref["turn"] >= n1, "D"].mean())
+    D_ref = float(orb_ref.loc[orb_ref["turn"] >= n1, "D"].mean()) if not orb_ref.empty else float("nan")
 
     per_ray = []
     for rid, g in groups.items():
+        if g in ("dummy", "other"):
+            continue
         sub = orb[orb["ray"] == rid]
+        if sub.empty:
+            continue
         Dbar = float(sub.loc[sub["turn"] >= n1, "D"].mean())
         per_ray.append(
             {
                 "ray": rid,
                 "group": g,
                 "Dbar": Dbar,
-                "delta_eq": Dbar - D_ref,
+                "mean_D_offset": Dbar - D_ref,
                 "X0": float(sub.loc[sub["turn"] == turns[0], "X"].iloc[0]),
                 "Y0": float(sub.loc[sub["turn"] == turns[0], "Y"].iloc[0]),
                 "D0": float(sub.loc[sub["turn"] == turns[0], "D"].iloc[0]),
             }
         )
 
-    # spin phases in XZ plane (horizontal polarization diagnostic with Sy initial)
-    # For PSI=90°, initial S=(0,1,0) — use phase in XZ relative to stable axis approx atan2(Sx,Sz)
     spi = spi.sort_values(["ray", "turn"])
-    dnu = []
-    phase_series = {}
-    for rid in sorted(groups):
+    phase_series: Dict[int, Tuple[np.ndarray, np.ndarray]] = {}
+    spin_rows = []
+    for rid, g in groups.items():
+        if g in ("dummy", "other"):
+            continue
         s = spi[spi["ray"] == rid]
         if s.empty:
             continue
-        phi = np.unwrap(np.arctan2(s["Sx"].values, s["Sz"].values))
+        sx, sy, sz = s["Sx"].values, s["Sy"].values, s["Sz"].values
+        phi = np.unwrap(np.arctan2(sx, sz))
         turns_s = s["turn"].values.astype(float)
         phase_series[rid] = (turns_s, phi)
-        if len(turns_s) >= 2:
-            # linear fit after transient
-            mask = turns_s >= n1
-            if mask.sum() >= 2:
-                coeff = np.polyfit(turns_s[mask], phi[mask], 1)
-                dnu.append({"ray": rid, "group": groups[rid], "dnu_s": coeff[0] / (2 * np.pi)})
+        slope, rms, nfit = fit_phase_slope(turns_s, phi, float(n1))
+        pol = float(np.mean(np.sqrt(sx**2 + sy**2 + sz**2)))
+        row = {
+            "ray": rid,
+            "group": g,
+            "mean_polarization": pol,
+            "phase_fit_rms_rad": rms,
+            "n_fit": nfit,
+        }
+        if spin_aliased:
+            row["aliased_phase_slope"] = slope
+            row["dnu_s_rel"] = None
+        else:
+            row["aliased_phase_slope"] = None
+            row["dnu_s_rel"] = slope  # absolute slope; relative filled below
+        spin_rows.append(row)
 
-    # coherence relative to ref
+    # Relative spin tune / phase vs reference
     if ref_id in phase_series:
         t_ref, phi_ref = phase_series[ref_id]
-        # interpolate all to common turns
         common = turns
         dphi = []
         valid_rays = []
         for rid, (t, phi) in phase_series.items():
-            if rid == ref_id:
-                continue
-            if groups.get(rid) == "ref":
+            if rid == ref_id or groups.get(rid) == "ref":
                 continue
             ip = np.interp(common, t, phi)
             ir = np.interp(common, t_ref, phi_ref)
             dphi.append(ip - ir)
             valid_rays.append(rid)
-        dphi = np.array(dphi) if dphi else np.zeros((0, len(common)))
-        if len(dphi):
-            C = np.abs(np.mean(np.exp(1j * dphi), axis=0))
+            # relative slope after transient
+            rel_slope, rel_rms, nfit = fit_phase_slope(
+                common.astype(float), ip - ir, float(n1)
+            )
+            for row in spin_rows:
+                if row["ray"] == rid:
+                    if spin_aliased:
+                        row["aliased_phase_slope_rel"] = rel_slope
+                        row["dnu_s_rel"] = None
+                    else:
+                        row["dnu_s_rel"] = rel_slope
+                        row["phase_fit_rms_rad"] = rel_rms
+                    break
+        dphi_arr = np.array(dphi) if dphi else np.zeros((0, len(common)))
+        if len(dphi_arr):
+            C = np.abs(np.mean(np.exp(1j * dphi_arr), axis=0))
             rms_circ = np.sqrt(-2 * np.log(np.clip(C, 1e-15, 1.0)))
         else:
             C = np.ones(len(common))
             rms_circ = np.zeros(len(common))
+        # mean polarization of ensemble (excluding dummy)
+        ens = spi[spi["ray"].isin([r for r, g in groups.items() if g not in ("dummy", "other")])]
+        if not ens.empty:
+            mag = np.sqrt(ens["Sx"] ** 2 + ens["Sy"] ** 2 + ens["Sz"] ** 2)
+            # average vector polarization over particles at each saved turn
+            pol_t = []
+            for tt in common:
+                chunk = ens[ens["turn"] == tt]
+                if chunk.empty:
+                    pol_t.append(float("nan"))
+                    continue
+                mx = chunk["Sx"].mean()
+                my = chunk["Sy"].mean()
+                mz = chunk["Sz"].mean()
+                pol_t.append(float(np.sqrt(mx**2 + my**2 + mz**2)))
+        else:
+            pol_t = [float("nan")] * len(common)
     else:
         common, C, rms_circ = turns, np.ones(len(turns)), np.zeros(len(turns))
+        pol_t = [float("nan")] * len(turns)
+
+    def rms_of(key: str, group: Optional[str] = None) -> Optional[float]:
+        vals = [
+            p[key]
+            for p in per_ray
+            if p["group"] != "ref" and (group is None or p["group"] == group)
+        ]
+        return float(np.sqrt(np.mean(np.square(vals)))) if vals else None
+
+    def rms_spin(key: str, group: Optional[str] = None) -> Optional[float]:
+        vals = []
+        for d in spin_rows:
+            if d["group"] == "ref":
+                continue
+            if group is not None and d["group"] != group:
+                continue
+            v = d.get(key)
+            if v is not None:
+                vals.append(v)
+        return float(np.sqrt(np.mean(np.square(vals)))) if vals else None
 
     summary = {
         "stem": stem,
         "tag": tag,
         "kind": kind,
-        "n_rays": len(groups),
-        "groups": groups,
+        "n_rays": len([g for g in groups.values() if g not in ("dummy", "other")]),
+        "groups": {str(k): v for k, v in groups.items()},
+        "ref_ray": ref_id,
         "D_ref": D_ref,
         "transient_cut_turn": float(n1),
-        "per_ray": per_ray,
-        "dnu_s": dnu,
-        "delta_eq_rms": float(np.sqrt(np.mean([p["delta_eq"] ** 2 for p in per_ray if p["group"] != "ref"]))) if per_ray else None,
-        "dnu_rms": float(np.sqrt(np.mean([d["dnu_s"] ** 2 for d in dnu]))) if dnu else None,
-        "delta_eq_rms_by_group": {
-            gname: float(np.sqrt(np.mean([p["delta_eq"] ** 2 for p in per_ray if p["group"] == gname] or [0.0])))
-            for gname in ("X", "Y", "D")
+        "sampling": {
+            "save_interval_turns": save_dt,
+            "nyquist_max_interval": nyq,
+            "nu_s_ref": nu_s_ref,
+            "spin_aliased": spin_aliased,
+            "n_saved_turns": spin_samples,
+            "physical_spin_turns": spin_turns_physical,
+            "observable_spin_turns_note": (
+                "Physical spin revolutions ν_s·ΔN exist, but phase samples only "
+                "resolve them if save_interval ≤ 1/(2|ν_s|)."
+            ),
         },
+        "nomenclature": {
+            "D": "COSY TRPRAY 6th coordinate (relative momentum/energy deviation)",
+            "mean_D_offset": "⟨D⟩_i − ⟨D⟩_ref after transient cut; tracking proxy, not theoretical Δδ_eq",
+            "delta_eq_theory": "Senichev equilibrium momentum shift from ξ, η1, emittances",
+            "C_n": "Phase coherence |⟨exp(iΔφ)⟩| at saved turns only",
+            "dnu_s_rel": "Relative spin-tune estimate from unwrapped phase; None if aliased",
+            "aliased_phase_slope": "Raw phase slope / 2π when sampling is aliased — not a physical tune",
+            "mean_polarization": "|⟨S⟩| ensemble polarization (distinct from phase coherence)",
+            "spin_plane": (
+                "Phase = unwrap(atan2(Sx,Sz)); requires horizontal/longitudinal initial spin "
+                "(psi_deg≈0). Vertical spin (psi=90°) makes this phase undefined."
+            ),
+        },
+        "per_ray": per_ray,
+        "spin_per_ray": spin_rows,
+        "mean_D_offset_rms": rms_of("mean_D_offset"),
+        "mean_D_offset_rms_by_group": {
+            gname: rms_of("mean_D_offset", gname) for gname in ("X", "Y", "D")
+        },
+        "dnu_rms": rms_spin("dnu_s_rel") if not spin_aliased else None,
+        "aliased_slope_rms": rms_spin("aliased_phase_slope") if spin_aliased else None,
         "dnu_rms_by_group": {
-            gname: float(np.sqrt(np.mean([d["dnu_s"] ** 2 for d in dnu if d["group"] == gname] or [0.0])))
+            gname: (rms_spin("dnu_s_rel") if not spin_aliased else rms_spin("aliased_phase_slope_rel"))
             for gname in ("X", "Y", "D")
         },
         "C_final": float(C[-1]) if len(C) else None,
+        "polarization_final": float(pol_t[-1]) if pol_t else None,
         "turns": common.tolist(),
         "C": C.tolist(),
         "rms_circular_phase": rms_circ.tolist(),
+        "mean_polarization_vs_turn": pol_t,
     }
 
     # plots
     fig, axes = plt.subplots(2, 2, figsize=(11, 8))
-    fig.suptitle(f"{stem} / {tag} / {kind}")
+    title = f"{stem} / {tag} / {kind}"
+    if spin_aliased:
+        title += "  [spin sampling ALIASED]"
+    fig.suptitle(title)
+
     ax = axes[0, 0]
     for gname, color in [("X", "r"), ("Y", "b"), ("D", "g")]:
         xs = [p["X0"] ** 2 + p["Y0"] ** 2 + p["D0"] ** 2 for p in per_ray if p["group"] == gname]
-        ys = [p["delta_eq"] for p in per_ray if p["group"] == gname]
+        ys = [p["mean_D_offset"] for p in per_ray if p["group"] == gname]
         ax.scatter(xs, ys, c=color, label=gname)
     ax.axhline(0, color="k", lw=0.8)
     ax.set_xlabel(r"amp proxy $X_0^2+Y_0^2+D_0^2$")
@@ -237,17 +349,28 @@ def analyze_case(stem: str, tag: str, kind: str) -> Optional[dict]:
     ax.grid(True, alpha=0.3)
 
     ax = axes[0, 1]
-    for d in dnu:
-        ax.scatter([d["ray"]], [d["dnu_s"]], c={"X": "r", "Y": "b", "D": "g", "ref": "k"}.get(d["group"], "gray"))
+    key = "aliased_phase_slope" if spin_aliased else "dnu_s_rel"
+    for d in spin_rows:
+        v = d.get(key)
+        if v is None and spin_aliased:
+            v = d.get("aliased_phase_slope_rel")
+        if v is None:
+            continue
+        ax.scatter(
+            [d["ray"]],
+            [v],
+            c={"X": "r", "Y": "b", "D": "g", "ref": "k"}.get(d["group"], "gray"),
+        )
     ax.set_xlabel("ray")
-    ax.set_ylabel(r"$\Delta\nu_{s,i}$")
+    ax.set_ylabel("aliased slope" if spin_aliased else r"$\Delta\nu_{s,i}$ (rel)")
     ax.grid(True, alpha=0.3)
 
     ax = axes[1, 0]
-    ax.plot(common, C, lw=2)
+    ax.plot(common, C, lw=2, label="C(n)")
+    ax.plot(common, pol_t, lw=1.5, ls="--", label=r"$|\langle S\rangle|$")
     ax.set_xlabel("turn")
-    ax.set_ylabel("C(n)")
     ax.set_ylim(0, 1.05)
+    ax.legend(fontsize=8)
     ax.grid(True, alpha=0.3)
 
     ax = axes[1, 1]
@@ -269,7 +392,6 @@ def compare_plot(stem: str, kind: str, tags: list) -> Optional[Path]:
     fig, axes = plt.subplots(1, 3, figsize=(14, 4))
     fig.suptitle(f"{stem}: tracking compare ({kind})")
     any_data = False
-    xg, yg = [], []
     for tag in tags:
         path = DAT_OUT / stem / f"track_{tag}_{kind}_analysis.json"
         if not path.is_file():
@@ -277,11 +399,9 @@ def compare_plot(stem: str, kind: str, tags: list) -> Optional[Path]:
         data = json.loads(path.read_text(encoding="utf-8"))
         any_data = True
         axes[0].plot(data["turns"], data["C"], lw=2, label=tag)
-        by = data.get("delta_eq_rms_by_group", {})
-        xg.append(by.get("X", 0.0))
-        yg.append(by.get("Y", 0.0))
-        axes[1].bar(tag, by.get("X", 0.0))
-        axes[2].bar(tag, by.get("Y", 0.0))
+        by = data.get("mean_D_offset_rms_by_group") or data.get("delta_eq_rms_by_group", {})
+        axes[1].bar(tag, by.get("X", 0.0) or 0.0)
+        axes[2].bar(tag, by.get("Y", 0.0) or 0.0)
     if not any_data:
         plt.close(fig)
         return None
@@ -289,10 +409,10 @@ def compare_plot(stem: str, kind: str, tags: list) -> Optional[Path]:
     axes[0].set_ylabel("C(n)")
     axes[0].legend(fontsize=8)
     axes[0].grid(True, alpha=0.3)
-    axes[1].set_ylabel(r"RMS $\Delta\delta_{eq}$ (X group)")
+    axes[1].set_ylabel(r"RMS mean_D_offset (X)")
     axes[1].tick_params(axis="x", rotation=30)
     axes[1].grid(True, alpha=0.3)
-    axes[2].set_ylabel(r"RMS $\Delta\delta_{eq}$ (Y group)")
+    axes[2].set_ylabel(r"RMS mean_D_offset (Y)")
     axes[2].tick_params(axis="x", rotation=30)
     axes[2].grid(True, alpha=0.3)
     out = PLOTS / f"{stem}_track_compare_{kind}.png"
@@ -306,13 +426,19 @@ def main() -> int:
     cfg = load_config()
     stem = cfg["tracking"]["pilot_stem"]
     tags = ["natural", "Istar", "ctrl_xi_x", "ctrl_xi_y", "ctrl_eta1"]
+    kinds = ["smoke", "full", "dense"]
     done = []
-    for kind in ("smoke", "full"):
+    for kind in kinds:
         for tag in tags:
-            s = analyze_case(stem, tag, kind)
+            s = analyze_case(stem, tag, kind, cfg)
             if s and "error" not in s:
-                done.append(f"{tag}/{kind}: C_final={s.get('C_final')}, dde_rms={s.get('delta_eq_rms')}")
-                print(f"OK analyze {tag} {kind}")
+                samp = s["sampling"]
+                done.append(
+                    f"{tag}/{kind}: C_final={s.get('C_final')}, "
+                    f"mean_D_rms={s.get('mean_D_offset_rms')}, "
+                    f"aliased={samp['spin_aliased']}, Δn={samp['save_interval_turns']}"
+                )
+                print(f"OK analyze {tag} {kind} aliased={samp['spin_aliased']}")
             elif s is None:
                 print(f"SKIP missing {tag} {kind}")
         compare_plot(stem, kind, tags)
@@ -321,6 +447,8 @@ def main() -> int:
         "## Tracking analysis\n\n"
         f"- **Статус:** {'verified' if done else 'prepared (waiting COSY track outputs)'}\n"
         "- **Команда:** `python COSY/sct_study/py/analyze_tracking.py`\n"
+        "- Метрики: `mean_D_offset` (не Δδ_eq), `C(n)`, `|⟨S⟩|`, "
+        "`dnu_s_rel` только при save_interval ≤ 1/(2|ν_s|).\n"
         + ("\n".join(f"- {x}" for x in done) if done else "- No TRPRAY/TRPSPI yet.\n")
         + "\n"
     )

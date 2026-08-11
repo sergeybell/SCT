@@ -5,6 +5,8 @@
   "gamma": 1.143914,
   "G": -0.142987,
   "fACCLEN_header": 141.0,
+  "fACCLEN_policy": "Use geometric lattice_lengths_m for RF when generating new track/WP jobs; header 141 retained as legacy warning.",
+  "use_geometric_fACCLEN_for_track": true,
   "lattice_lengths_m": {
     "magnetic_2": 117.388296,
     "magnetic_3": 122.788296,
@@ -18,6 +20,11 @@
     "magnetic_5": 5
   },
   "resonance_orders_k": [0, 1, 2, 3, 4, 5, 6, 7, 8],
+  "synchrotron_sideband_m": [0, 1, 2],
+  "Qs_estimate": {
+    "note": "Approximate synchrotron tune placeholder until extracted from RF one-turn map; used only for geometric distance scan.",
+    "default": 0.01
+  },
   "emittance_scenarios": {
     "X_only": {"eps_x": 1.0e-6, "eps_y": 0.0, "delta_m": 0.0, "unit_note": "eps in m·rad (approx diagnostic)"},
     "Y_only": {"eps_x": 0.0, "eps_y": 1.0e-6, "delta_m": 0.0, "unit_note": "eps in m·rad (approx diagnostic)"},
@@ -26,16 +33,22 @@
   "tracking": {
     "pilot_stem": "magnetic_2",
     "num_per_group": 9,
-    "psi_deg": 90.0,
+    "psi_deg": 0.0,
     "x_amp": 1.0e-3,
     "d_scale": 0.1,
     "smoke_nturn": 200,
     "nturn": 2000,
-    "save_every_frac": 0.05
+    "dense_nturn": 2000,
+    "save_every_turns_sparse": 100,
+    "save_every_turns_smoke": 10,
+    "save_every_turns_dense": 2,
+    "ref_ray_id": 1,
+    "nyquist_note": "For |ν_s|≈0.1636 need Δn_save ≤ 3; dense uses 2."
   },
   "notes": {
     "eta1_formula": "ETA1 := ALPHA1 + (3/2)*beta^2/gamma^2 - ALPHA0/gamma^2 + 1/gamma^4",
-    "mcm_mapping": "mapping.fox: ALPHA0:=MCM1; ALPHA1:=MCM2 without factorial 2",
-    "mcm_coherence_opt": "coherence_opt.fox uses ALPHA1:=MCM2 with -2*TMPALPHA|(...&2) — factorial convention differs"
+    "mcm_mapping": "mapping.fox: ALPHA0:=MCM1; ALPHA1:=MCM2 without factorial 2 — study convention",
+    "mcm_coherence_opt": "coherence_opt.fox uses ALPHA1:=MCM2 with -2*TMPALPHA|(...&2) — do not mix",
+    "D_vs_delta_eq": "TRPRAY D is COSY relative momentum; mean_D_offset=⟨D⟩-⟨D⟩ref is a tracking proxy; theoretical Δδ_eq is Senichev formula"
   }
 }

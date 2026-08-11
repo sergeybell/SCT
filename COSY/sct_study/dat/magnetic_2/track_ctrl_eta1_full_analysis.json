@@ -2,15 +2,15 @@
   "stem": "magnetic_2",
   "tag": "ctrl_eta1",
   "kind": "full",
-  "n_rays": 29,
+  "n_rays": 28,
   "groups": {
-    "0": "ref",
+    "0": "dummy",
     "1": "ref",
     "2": "X",
     "3": "X",
     "4": "X",
     "5": "X",
-    "6": "ref",
+    "6": "X",
     "7": "X",
     "8": "X",
     "9": "X",
@@ -19,7 +19,7 @@
     "12": "Y",
     "13": "Y",
     "14": "Y",
-    "15": "ref",
+    "15": "Y",
     "16": "Y",
     "17": "Y",
     "18": "Y",
@@ -28,29 +28,40 @@
     "21": "D",
     "22": "D",
     "23": "D",
-    "24": "ref",
+    "24": "D",
     "25": "D",
     "26": "D",
     "27": "D",
     "28": "D"
   },
+  "ref_ray": 1,
   "D_ref": 0.0,
   "transient_cut_turn": 400.0,
+  "sampling": {
+    "save_interval_turns": 100.0,
+    "nyquist_max_interval": 3.05689185494458,
+    "nu_s_ref": 0.16356483111800002,
+    "spin_aliased": true,
+    "n_saved_turns": 21,
+    "physical_spin_turns": 327.12966223600006,
+    "observable_spin_turns_note": "Physical spin revolutions \u03bd_s\u00b7\u0394N exist, but phase samples only resolve them if save_interval \u2264 1/(2|\u03bd_s|)."
+  },
+  "nomenclature": {
+    "D": "COSY TRPRAY 6th coordinate (relative momentum/energy deviation)",
+    "mean_D_offset": "\u27e8D\u27e9_i \u2212 \u27e8D\u27e9_ref after transient cut; tracking proxy, not theoretical \u0394\u03b4_eq",
+    "delta_eq_theory": "Senichev equilibrium momentum shift from \u03be, \u03b71, emittances",
+    "C_n": "Phase coherence |\u27e8exp(i\u0394\u03c6)\u27e9| at saved turns only",
+    "dnu_s_rel": "Relative spin-tune estimate from unwrapped phase; None if aliased",
+    "aliased_phase_slope": "Raw phase slope / 2\u03c0 when sampling is aliased \u2014 not a physical tune",
+    "mean_polarization": "|\u27e8S\u27e9| ensemble polarization (distinct from phase coherence)",
+    "spin_plane": "Phase = unwrap(atan2(Sx,Sz)); requires horizontal/longitudinal initial spin (psi_deg\u22480). Vertical spin (psi=90\u00b0) makes this phase undefined."
+  },
   "per_ray": [
-    {
-      "ray": 0,
-      "group": "ref",
-      "Dbar": 0.0,
-      "delta_eq": 0.0,
-      "X0": 0.0,
-      "Y0": 0.0,
-      "D0": 0.0
-    },
     {
       "ray": 1,
       "group": "ref",
       "Dbar": 0.0,
-      "delta_eq": 0.0,
+      "mean_D_offset": 0.0,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": 0.0
@@ -59,7 +70,7 @@
       "ray": 2,
       "group": "X",
       "Dbar": -6.627122765882354e-08,
-      "delta_eq": -6.627122765882354e-08,
+      "mean_D_offset": -6.627122765882354e-08,
       "X0": -0.001,
       "Y0": 0.0,
       "D0": 0.0
@@ -68,7 +79,7 @@
       "ray": 3,
       "group": "X",
       "Dbar": -3.7274255387647056e-08,
-      "delta_eq": -3.7274255387647056e-08,
+      "mean_D_offset": -3.7274255387647056e-08,
       "X0": -0.00075,
       "Y0": 0.0,
       "D0": 0.0
@@ -77,7 +88,7 @@
       "ray": 4,
       "group": "X",
       "Dbar": -1.6564644781764706e-08,
-      "delta_eq": -1.6564644781764706e-08,
+      "mean_D_offset": -1.6564644781764706e-08,
       "X0": -0.0005,
       "Y0": 0.0,
       "D0": 0.0
@@ -86,16 +97,16 @@
       "ray": 5,
       "group": "X",
       "Dbar": -4.1406419829411755e-09,
-      "delta_eq": -4.1406419829411755e-09,
+      "mean_D_offset": -4.1406419829411755e-09,
       "X0": -0.00025,
       "Y0": 0.0,
       "D0": 0.0
     },
     {
       "ray": 6,
-      "group": "ref",
+      "group": "X",
       "Dbar": 0.0,
-      "delta_eq": 0.0,
+      "mean_D_offset": 0.0,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": 0.0
@@ -104,7 +115,7 @@
       "ray": 7,
       "group": "X",
       "Dbar": -4.139977543941177e-09,
-      "delta_eq": -4.139977543941177e-09,
+      "mean_D_offset": -4.139977543941177e-09,
       "X0": 0.00025,
       "Y0": 0.0,
       "D0": 0.0
@@ -113,7 +124,7 @@
       "ray": 8,
       "group": "X",
       "Dbar": -1.6557336971764708e-08,
-      "delta_eq": -1.6557336971764708e-08,
+      "mean_D_offset": -1.6557336971764708e-08,
       "X0": 0.0005,
       "Y0": 0.0,
       "D0": 0.0
@@ -122,7 +133,7 @@
       "ray": 9,
       "group": "X",
       "Dbar": -3.7248340521764705e-08,
-      "delta_eq": -3.7248340521764705e-08,
+      "mean_D_offset": -3.7248340521764705e-08,
       "X0": 0.00075,
       "Y0": 0.0,
       "D0": 0.0
@@ -131,7 +142,7 @@
       "ray": 10,
       "group": "X",
       "Dbar": -6.620875282941176e-08,
-      "delta_eq": -6.620875282941176e-08,
+      "mean_D_offset": -6.620875282941176e-08,
       "X0": 0.001,
       "Y0": 0.0,
       "D0": 0.0
@@ -140,7 +151,7 @@
       "ray": 11,
       "group": "Y",
       "Dbar": -3.0733280200000004e-07,
-      "delta_eq": -3.0733280200000004e-07,
+      "mean_D_offset": -3.0733280200000004e-07,
       "X0": 0.0,
       "Y0": -0.001,
       "D0": 0.0
@@ -149,7 +160,7 @@
       "ray": 12,
       "group": "Y",
       "Dbar": -1.7287488612941179e-07,
-      "delta_eq": -1.7287488612941179e-07,
+      "mean_D_offset": -1.7287488612941179e-07,
       "X0": 0.0,
       "Y0": -0.00075,
       "D0": 0.0
@@ -158,7 +169,7 @@
       "ray": 13,
       "group": "Y",
       "Dbar": -7.683471218235293e-08,
-      "delta_eq": -7.683471218235293e-08,
+      "mean_D_offset": -7.683471218235293e-08,
       "X0": 0.0,
       "Y0": -0.0005,
       "D0": 0.0
@@ -167,16 +178,16 @@
       "ray": 14,
       "group": "Y",
       "Dbar": -1.921005649294118e-08,
-      "delta_eq": -1.921005649294118e-08,
+      "mean_D_offset": -1.921005649294118e-08,
       "X0": 0.0,
       "Y0": -0.00025,
       "D0": 0.0
     },
     {
       "ray": 15,
-      "group": "ref",
+      "group": "Y",
       "Dbar": 0.0,
-      "delta_eq": 0.0,
+      "mean_D_offset": 0.0,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": 0.0
@@ -185,7 +196,7 @@
       "ray": 16,
       "group": "Y",
       "Dbar": -1.920496836e-08,
-      "delta_eq": -1.920496836e-08,
+      "mean_D_offset": -1.920496836e-08,
       "X0": 0.0,
       "Y0": 0.00025,
       "D0": 0.0
@@ -194,7 +205,7 @@
       "ray": 17,
       "group": "Y",
       "Dbar": -7.682676165294118e-08,
-      "delta_eq": -7.682676165294118e-08,
+      "mean_D_offset": -7.682676165294118e-08,
       "X0": 0.0,
       "Y0": 0.0005,
       "D0": 0.0
@@ -203,7 +214,7 @@
       "ray": 18,
       "group": "Y",
       "Dbar": -1.7286851821764706e-07,
-      "delta_eq": -1.7286851821764706e-07,
+      "mean_D_offset": -1.7286851821764706e-07,
       "X0": 0.0,
       "Y0": 0.00075,
       "D0": 0.0
@@ -212,7 +223,7 @@
       "ray": 19,
       "group": "Y",
       "Dbar": -3.073348047647059e-07,
-      "delta_eq": -3.073348047647059e-07,
+      "mean_D_offset": -3.073348047647059e-07,
       "X0": 0.0,
       "Y0": 0.001,
       "D0": 0.0
@@ -221,7 +232,7 @@
       "ray": 20,
       "group": "D",
       "Dbar": 2.1922948529411765e-05,
-      "delta_eq": 2.1922948529411765e-05,
+      "mean_D_offset": 2.1922948529411765e-05,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": -0.0001
@@ -230,7 +241,7 @@
       "ray": 21,
       "group": "D",
       "Dbar": 1.644974854705882e-05,
-      "delta_eq": 1.644974854705882e-05,
+      "mean_D_offset": 1.644974854705882e-05,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": -7.5e-05
@@ -239,7 +250,7 @@
       "ray": 22,
       "group": "D",
       "Dbar": 1.0971499341176469e-05,
-      "delta_eq": 1.0971499341176469e-05,
+      "mean_D_offset": 1.0971499341176469e-05,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": -5e-05
@@ -248,16 +259,16 @@
       "ray": 23,
       "group": "D",
       "Dbar": 5.488238029411766e-06,
-      "delta_eq": 5.488238029411766e-06,
+      "mean_D_offset": 5.488238029411766e-06,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": -2.5e-05
     },
     {
       "ray": 24,
-      "group": "ref",
+      "group": "D",
       "Dbar": 0.0,
-      "delta_eq": 0.0,
+      "mean_D_offset": 0.0,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": 0.0
@@ -266,7 +277,7 @@
       "ray": 25,
       "group": "D",
       "Dbar": -5.493180435294117e-06,
-      "delta_eq": -5.493180435294117e-06,
+      "mean_D_offset": -5.493180435294117e-06,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": 2.5e-05
@@ -275,7 +286,7 @@
       "ray": 26,
       "group": "D",
       "Dbar": -1.0991267088235294e-05,
-      "delta_eq": -1.0991267088235294e-05,
+      "mean_D_offset": -1.0991267088235294e-05,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": 5e-05
@@ -284,7 +295,7 @@
       "ray": 27,
       "group": "D",
       "Dbar": -1.6494223211764706e-05,
-      "delta_eq": -1.6494223211764706e-05,
+      "mean_D_offset": -1.6494223211764706e-05,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": 7.5e-05
@@ -293,172 +304,308 @@
       "ray": 28,
       "group": "D",
       "Dbar": -2.200201294117647e-05,
-      "delta_eq": -2.200201294117647e-05,
+      "mean_D_offset": -2.200201294117647e-05,
       "X0": 0.0,
       "Y0": 0.0,
       "D0": 0.0001
     }
   ],
-  "dnu_s": [
-    {
-      "ray": 0,
-      "group": "ref",
-      "dnu_s": 0.0
-    },
+  "spin_per_ray": [
     {
       "ray": 1,
       "group": "ref",
-      "dnu_s": 0.0035648284930497745
+      "mean_polarization": 1.0,
+      "phase_fit_rms_rad": 3.588846647166742e-08,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0035648284930497745,
+      "dnu_s_rel": null
     },
     {
       "ray": 2,
       "group": "X",
-      "dnu_s": 0.0027473003465917968
+      "mean_polarization": 1.0000000012765273,
+      "phase_fit_rms_rad": 2.747376148214456,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0027473003465917968,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.000817528146457978
     },
     {
       "ray": 3,
       "group": "X",
-      "dnu_s": 0.0027473186080885616
+      "mean_polarization": 1.000000000717915,
+      "phase_fit_rms_rad": 2.7473478515817433,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0027473186080885616,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.000817509884961213
     },
     {
       "ray": 4,
       "group": "X",
-      "dnu_s": 0.00274733382057768
+      "mean_polarization": 1.0000000003190115,
+      "phase_fit_rms_rad": 2.7473316174437463,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.00274733382057768,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.0008174946724720953
     },
     {
       "ray": 5,
       "group": "X",
-      "dnu_s": 0.002747345956102164
+      "mean_polarization": 1.0000000000797367,
+      "phase_fit_rms_rad": 2.747328725384369,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.002747345956102164,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.0008174825369476105
     },
     {
       "ray": 6,
-      "group": "ref",
-      "dnu_s": 0.0035648284930497745
+      "group": "X",
+      "mean_polarization": 1.0,
+      "phase_fit_rms_rad": 3.588846647166742e-08,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0035648284930497745,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.0
     },
     {
       "ray": 7,
       "group": "X",
-      "dnu_s": 0.002747360627319896
+      "mean_polarization": 1.0000000000797034,
+      "phase_fit_rms_rad": 2.747363703623119,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.002747360627319896,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.000817467865729878
     },
     {
       "ray": 8,
       "group": "X",
-      "dnu_s": 0.0027473628428274256
+      "mean_polarization": 1.0000000003187446,
+      "phase_fit_rms_rad": 2.7473995997971383,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0027473628428274256,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.0008174656502223486
     },
     {
       "ray": 9,
       "group": "X",
-      "dnu_s": 0.0027473613844083804
+      "mean_polarization": 1.0000000007170182,
+      "phase_fit_rms_rad": 2.7474451586935467,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0027473613844083804,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.0008174671086413944
     },
     {
       "ray": 10,
       "group": "X",
-      "dnu_s": 0.002747356067226199
+      "mean_polarization": 1.0000000012744144,
+      "phase_fit_rms_rad": 2.7474978445121843,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.002747356067226199,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.0008174724258235752
     },
     {
       "ray": 11,
       "group": "Y",
-      "dnu_s": -0.0005042440581067047
+      "mean_polarization": 1.0000000040347499,
+      "phase_fit_rms_rad": 5.576370889827085,
+      "n_fit": 17,
+      "aliased_phase_slope": -0.0005042440581067047,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.004069072551156479
     },
     {
       "ray": 12,
       "group": "Y",
-      "dnu_s": -0.0005078111667980408
+      "mean_polarization": 1.0000000022647133,
+      "phase_fit_rms_rad": 5.571312857316737,
+      "n_fit": 17,
+      "aliased_phase_slope": -0.0005078111667980408,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.004072639659847814
     },
     {
       "ray": 13,
       "group": "Y",
-      "dnu_s": -0.000509894208759256
+      "mean_polarization": 1.000000001005123,
+      "phase_fit_rms_rad": 5.566998866991283,
+      "n_fit": 17,
+      "aliased_phase_slope": -0.000509894208759256,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.00407472270180903
     },
     {
       "ray": 14,
       "group": "Y",
-      "dnu_s": -0.0005111005089874995
+      "mean_polarization": 1.0000000002510951,
+      "phase_fit_rms_rad": 5.564274485114719,
+      "n_fit": 17,
+      "aliased_phase_slope": -0.0005111005089874995,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.004075929002037273
     },
     {
       "ray": 15,
-      "group": "ref",
-      "dnu_s": 0.0035648284930497745
+      "group": "Y",
+      "mean_polarization": 1.0,
+      "phase_fit_rms_rad": 3.588846647166742e-08,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0035648284930497745,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.0
     },
     {
       "ray": 16,
       "group": "Y",
-      "dnu_s": -0.0005111857234942624
+      "mean_polarization": 1.000000000251195,
+      "phase_fit_rms_rad": 5.566266624514615,
+      "n_fit": 17,
+      "aliased_phase_slope": -0.0005111857234942624,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.004076014216544036
     },
     {
       "ray": 17,
       "group": "Y",
-      "dnu_s": -0.0005101266018071406
+      "mean_polarization": 1.0000000010059191,
+      "phase_fit_rms_rad": 5.570778103508782,
+      "n_fit": 17,
+      "aliased_phase_slope": -0.0005101266018071406,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.004074955094856916
     },
     {
       "ray": 18,
       "group": "Y",
-      "dnu_s": -0.0005083193917636907
+      "mean_polarization": 1.0000000022673756,
+      "phase_fit_rms_rad": 5.576585406599427,
+      "n_fit": 17,
+      "aliased_phase_slope": -0.0005083193917636907,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.004073147884813465
     },
     {
       "ray": 19,
       "group": "Y",
-      "dnu_s": -0.0005052990591557723
+      "mean_polarization": 1.0000000040409653,
+      "phase_fit_rms_rad": 5.582863764157849,
+      "n_fit": 17,
+      "aliased_phase_slope": -0.0005052990591557723,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.004070127552205547
     },
     {
       "ray": 20,
       "group": "D",
-      "dnu_s": 0.0021119492294183894
+      "mean_polarization": 1.0000000000662383,
+      "phase_fit_rms_rad": 1.6376978265738333,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0021119492294183894,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.0014528792636313863
     },
     {
       "ray": 21,
       "group": "D",
-      "dnu_s": 0.0021128977493800626
+      "mean_polarization": 1.0000000000372424,
+      "phase_fit_rms_rad": 1.6377108656212909,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0021128977493800626,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.0014519307436697117
     },
     {
       "ray": 22,
       "group": "D",
-      "dnu_s": 0.0021134573270250494
+      "mean_polarization": 1.000000000016535,
+      "phase_fit_rms_rad": 1.6376933843139858,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0021134573270250494,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.0014513711660247256
     },
     {
       "ray": 23,
       "group": "D",
-      "dnu_s": 0.002113677479391746
+      "mean_polarization": 1.0000000000041271,
+      "phase_fit_rms_rad": 1.6375604474352445,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.002113677479391746,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.001451151013658029
     },
     {
       "ray": 24,
-      "group": "ref",
-      "dnu_s": 0.0035648284930497745
+      "group": "D",
+      "mean_polarization": 1.0,
+      "phase_fit_rms_rad": 3.588846647166742e-08,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0035648284930497745,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": 0.0
     },
     {
       "ray": 25,
       "group": "D",
-      "dnu_s": 0.002113252077810344
+      "mean_polarization": 1.0000000000041083,
+      "phase_fit_rms_rad": 1.6367280276084144,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.002113252077810344,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.0014515764152394305
     },
     {
       "ray": 26,
       "group": "D",
-      "dnu_s": 0.0021126550582595293
+      "mean_polarization": 1.0000000000163867,
+      "phase_fit_rms_rad": 1.635990344990065,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0021126550582595293,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.0014521734347902452
     },
     {
       "ray": 27,
       "group": "D",
-      "dnu_s": 0.00211182079638162
+      "mean_polarization": 1.0000000000367595,
+      "phase_fit_rms_rad": 1.6350666089619597,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.00211182079638162,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.0014530076966681549
     },
     {
       "ray": 28,
       "group": "D",
-      "dnu_s": 0.0021107626634973213
+      "mean_polarization": 1.0000000000651537,
+      "phase_fit_rms_rad": 1.6340200378066658,
+      "n_fit": 17,
+      "aliased_phase_slope": 0.0021107626634973213,
+      "dnu_s_rel": null,
+      "aliased_phase_slope_rel": -0.0014540658295524535
     }
   ],
-  "delta_eq_rms": 8.682138673100739e-06,
-  "dnu_rms": 0.002266601525622183,
-  "delta_eq_rms_by_group": {
-    "X": 3.894724115293738e-08,
-    "Y": 1.8070043083524545e-07,
-    "D": 1.5036769143787402e-05
+  "mean_D_offset_rms": 8.185598841268676e-06,
+  "mean_D_offset_rms_by_group": {
+    "X": 3.6719811103666394e-08,
+    "Y": 1.703660000092437e-07,
+    "D": 1.4176801904944945e-05
   },
+  "dnu_rms": null,
+  "aliased_slope_rms": 0.0022466352587466004,
   "dnu_rms_by_group": {
-    "X": 0.002747342456727347,
-    "Y": 0.0005085034196881798,
-    "D": 0.002112559248998223
+    "X": 0.002395635668808408,
+    "Y": 0.002395635668808408,
+    "D": 0.002395635668808408
   },
-  "C_final": 0.008573841844028693,
+  "C_final": 0.1185522865848858,
+  "polarization_final": 1.0000000000000016,
   "turns": [
     0,
     100,
@@ -484,49 +631,72 @@
   ],
   "C": [
     1.0,
-    0.0004788868159995262,
-    0.005158243617250034,
-    0.013393063731008617,
-    0.0020269974113382976,
-    0.003077921573960737,
-    0.0011055567448467853,
-    0.0035749620046889074,
-    0.0022465126994105442,
-    0.0005279440583443219,
-    0.0028310390366060372,
-    0.0004453099671470056,
-    0.002057987949571615,
-    0.003373433221881445,
-    0.007676095722794907,
-    0.00038906645725008863,
-    0.0004202287509738562,
-    0.0046276049118939636,
-    0.0016006625644937565,
-    0.004004549292671251,
-    0.008573841844028693
+    0.1108617272207149,
+    0.11518991872707218,
+    0.12300978158393028,
+    0.11271388052972946,
+    0.10872433795521051,
+    0.1120476727984052,
+    0.10794161658207739,
+    0.1130189388510923,
+    0.11064504337612016,
+    0.11071339583763048,
+    0.1109147280669527,
+    0.11294029727000862,
+    0.10817667092169725,
+    0.10443301141809595,
+    0.11137210155962547,
+    0.11138451179802496,
+    0.10976211504063352,
+    0.11140984918928697,
+    0.10818718106360521,
+    0.1185522865848858
   ],
   "rms_circular_phase": [
     -0.0,
-    3.9099990487853935,
-    3.2456614554467644,
-    2.9370115212771144,
-    3.5217040445225445,
-    3.401029468685909,
-    3.6898255323003073,
-    3.356724811762707,
-    3.492384909053999,
-    3.884976249599622,
-    3.4255252105235336,
-    3.9285467956723163,
-    3.5173929257320116,
-    3.3739662988831567,
-    3.1207833088870016,
-    3.9627668080970055,
-    3.9432756306848153,
-    3.27893758475994,
-    3.588129772637748,
-    3.322747128794627,
-    3.085138362204414
+    2.0973657549002596,
+    2.079025274304948,
+    2.0471890004096185,
+    2.0894509814739908,
+    2.1066274514896848,
+    2.0922862367585076,
+    2.1100543998820727,
+    2.0881570218070475,
+    2.098298362485535,
+    2.098004021117214,
+    2.0971378536050818,
+    2.088490336408235,
+    2.1090232556907886,
+    2.1256572876133832,
+    2.0951746550995685,
+    2.0951214730838648,
+    2.102113148955188,
+    2.095012908106732,
+    2.108977190036332,
+    2.06513979125875
+  ],
+  "mean_polarization_vs_turn": [
+    1.0,
+    1.0,
+    1.0000000000000016,
+    1.0000000000000053,
+    1.0,
+    1.0000000000000002,
+    1.0000000000000013,
+    1.0,
+    1.0000000000000007,
+    1.0,
+    1.0000000000000002,
+    1.0,
+    1.0,
+    1.0000000000000002,
+    1.0000000000000004,
+    1.0000000000000002,
+    1.0000000000000002,
+    1.0000000000000007,
+    1.0,
+    1.0000000000000036,
+    1.0000000000000016
   ],
   "plot": "C:\\GIT_REPOS\\SCT\\COSY\\sct_study\\plots\\magnetic_2_track_ctrl_eta1_full.png"
 }
