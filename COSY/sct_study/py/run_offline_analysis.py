@@ -14,6 +14,7 @@ SCRIPTS = [
     "analyze_delta_eq.py",
     "analyze_phase_advance.py",
     "analyze_twiss_phase.py",
+    "analyze_optim_sext_phase.py",
     "generate_fox.py",
     "analyze_working_point.py",
     "analyze_resonances.py",

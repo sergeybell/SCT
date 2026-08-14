@@ -92,3 +92,10 @@ python COSY/sct_study/py/analyze_resonances.py
 - magnetic_3: magnetic_3_delta_eq_panels.png, magnetic_3_map_dnu_panels.png; Δδ_eq@I*={'X_only': -1.7204862495743977e-23, 'X_only_at_natural': -1.447261149502933e-07, 'Y_only': -1.7204862495743977e-23, 'Y_only_at_natural': -1.4510670504559358e-07, 'D_only': -0.0, 'D_only_at_natural': -7.739409948872235e-09}
 - magnetic_4: magnetic_4_delta_eq_panels.png, magnetic_4_map_dnu_panels.png; Δδ_eq@I*={'X_only': 6.170243037032215e-23, 'X_only_at_natural': -1.9065534057985742e-07, 'Y_only': -1.234048607406443e-22, 'Y_only_at_natural': -1.9051406274606084e-07, 'D_only': 3.147101757126394e-24, 'D_only_at_natural': -6.882172082509207e-09}
 - magnetic_5: magnetic_5_delta_eq_panels.png, magnetic_5_map_dnu_panels.png; Δδ_eq@I*={'X_only': -2.8745982597068286e-23, 'X_only_at_natural': -2.3470501642833182e-07, 'Y_only': -5.749196519413657e-23, 'Y_only_at_natural': -2.3763211625023798e-07, 'D_only': -7.639689592633897e-25, 'D_only_at_natural': -6.44177135024405e-09}
+
+## OptiM Nu vs Twiss vs Q_full·s/C
+
+- **Статус:** offline from `sext_phase_magnetic_2.txt` + I* + existing Twiss JSON
+- **Команда:** `python COSY/sct_study/py/analyze_optim_sext_phase.py`
+- A: |I*| with SF1>0, SF2>0, SD<0. φ=2π Nu (Nu in turns).
+- magnetic_2: 10 instances; rms|ΔNu|_geom=0.008911/0.009622; rms|ΔNu|_twiss=0.2904297853494206/0.22704263963720983

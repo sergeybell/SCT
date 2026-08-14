@@ -9,6 +9,7 @@
 | `analyze_delta_eq.py` | теоретические панели \(\Delta\delta_{eq}\) |
 | `analyze_phase_advance.py` | геометрический proxy \(2\pi Qs/C\) |
 | `analyze_twiss_phase.py` | \(\psi=\int ds/\beta\) на каждом экземпляре секступоля |
+| `analyze_optim_sext_phase.py` | OptiM \(\mathrm{Nu}\) vs Twiss vs \(2\pi Q_{\mathrm{full}} s/C\); \(A\): SF1,SF2\(>0\), SD\(<0\) |
 | `analyze_working_point.py` | Qx,Qy,νs из COSY WP |
 | `analyze_resonances.py` | imperfection / intrinsic / synchrotron / combined |
 | `generate_fox.py` | validate / WP / track (smoke, full, dense) |
