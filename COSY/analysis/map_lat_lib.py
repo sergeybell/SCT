@@ -1,6 +1,7 @@
 ﻿"""Mapping lattice analysis utilities (shared by Map_magnetic.ipynb and plot_magnetic_map.py)."""
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union
 
@@ -22,6 +23,16 @@ COLS_S0_FILE = ["SGx1", "SGx2", "SGy1", "SGy2", "spin_ref", "spin_x", "spin_y", 
 COLS_S1_FILE = ["SGx1", "SGx2", "SGy1", "SGy2", "spin_ref_1", "spin_x_1", "spin_y_1", "spin_z_1"]
 
 MAGNETIC_LATTICES = [f"magnetic_{n}" for n in range(2, 9)]
+MAGNETIC_SERIES_3_8 = [f"magnetic_{n}" for n in range(3, 9)]
+ELECTROSTATIC_LATTICES = ["electrostatic"]
+COMBINED_LATTICES = ["Nuclotron_8", "Nuclotron_16"]
+PRESENTATION_LATTICES = [
+    "magnetic_2",
+    "magnetic_3",
+    "electrostatic",
+    "Nuclotron_8",
+    "Nuclotron_16",
+]
 
 PANEL_CHROM_LABELS = [r"$\xi_x$", r"$\xi_y$", r"$\eta_1$"]
 PANEL_CONSTRAINTS = [
@@ -113,6 +124,21 @@ def solve_currents(R_int: np.ndarray, int_nat: np.ndarray, target_chrom: np.ndar
     except np.linalg.LinAlgError:
         I, _, _, _ = np.linalg.lstsq(R_int, rhs, rcond=None)
         return I
+
+
+def zero_chrom_working_point(model: Dict[str, np.ndarray]) -> Dict[str, Union[np.ndarray, float]]:
+    """Solve I* for xi=0 and predict Delta nu_s* (Map_lat zero-chromaticity point)."""
+    target = np.zeros(3)
+    I_star = solve_currents(model["R_int"], model["int_nat"], target)
+    dnu_star = model["R_dnu_s"] @ I_star + model["dnu_s_nat"]
+    cond = float(np.linalg.cond(model["R_int"]))
+    return {
+        "I_star": I_star,
+        "dnu_s_star": dnu_star,
+        "cond_R_int": cond,
+        "xi_nat": model["int_nat"].copy(),
+        "dnu_s_nat": model["dnu_s_nat"].copy(),
+    }
 
 
 def build_lattice_models(
@@ -316,23 +342,33 @@ def plot_verify_chrom_to_spin(
 
 
 def audit_mapping_lattice(lattice: str, root_path: Optional[Path] = None) -> Dict[str, Union[int, bool, str, float, Tuple[float, float]]]:
-    """Summarize 3-family sextupole wiring vs mapping scan for one magnetic structure."""
-    fox_path = STRUCTURES_ROOT / lattice / f"{lattice}.fox"
-    if not fox_path.is_file():
-        return {"error": f"missing {fox_path}"}
+    """Summarize 3-family sextupole wiring vs mapping scan for one structure."""
+    fox_candidates = [
+        STRUCTURES_ROOT / lattice / f"{lattice}.fox",
+        REPO / "COSY" / "src" / f"{lattice}.fox",
+    ]
+    fox_path = next((p for p in fox_candidates if p.is_file()), None)
+    if fox_path is None:
+        return {"error": f"missing fox for {lattice}"}
 
     text = fox_path.read_text(encoding="utf-8")
     sf1 = text.count("MH L_SF1")
     sf2 = text.count("MH L_SF2")
     sd = text.count("MH L_SD SD")
+    # Electrostatic / Nuclotron: count MH/EH with {SF1}/{SF2}/{SD} comments
+    if sf1 + sf2 + sd == 0:
+        sf1 = len(re.findall(r"\b(?:MH|EH)\b[^;]*;\s*\{SF1\}", text, flags=re.IGNORECASE))
+        sf2 = len(re.findall(r"\b(?:MH|EH)\b[^;]*;\s*\{SF2\}", text, flags=re.IGNORECASE))
+        sd = len(re.findall(r"\b(?:MH|EH)\b[^;]*;\s*\{SD\}", text, flags=re.IGNORECASE))
     wired = {
         "SF1_from_SEXTGx1": "SF1 := SEXTGx1" in text,
         "SF2_from_SEXTGx2": "SF2 := SEXTGx2" in text,
         "SD_from_SEXTGy1": "SD := SEXTGy1" in text,
-        "SD1_present": "SD1 := SEXTGy2" in text or "MH L_SD1" in text,
+        "SD1_present": ("SD1 := SEXTGy2" in text) or ("MH L_SD1" in text),
+        "fox_path": str(fox_path),
     }
     if wired["SD1_present"]:
-        print(f"WARNING {lattice}: unexpected 4th sextupole family SD1 — should be 3 families only")
+        print(f"WARNING {lattice}: 4th sextupole family SD1 present — scan still varies 3 families only")
 
     out: Dict[str, Union[int, bool, str, float, Tuple[float, float]]] = {
         "lattice": lattice,

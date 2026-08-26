@@ -99,3 +99,41 @@ python COSY/sct_study/py/analyze_resonances.py
 - **Команда:** `python COSY/sct_study/py/analyze_optim_sext_phase.py`
 - A: |I*| with SF1>0, SF2>0, SD<0. φ=2π Nu (Nu in turns).
 - magnetic_2: 10 instances; rms|ΔNu|_geom=0.008911/0.009622; rms|ΔNu|_twiss=0.2904297853494206/0.22704263963720983
+
+## Audit mapping
+
+- **Статус:** verified (offline)
+- **Команда:** `python COSY/sct_study/py/audit_mapping.py --mode both --presentation`
+- **Выход:** `dat/<stem>/audit[_FR0|_FR3].json`, `plots/<stem>_grid_vs_istar*.png`
+
+| stem | mode | cond | I* | inside box | d_min | d_min/‖ΔI‖ | plot |
+|------|------|------|----|------------|-------|------------|------|
+| magnetic_2 | FR0 | 34.5 | [0.004110603226596334, -0.003183980136620862, -0.004030542798297506] | False | 0.004102 | 0.452 | magnetic_2_grid_vs_istar_FR0.png |
+| magnetic_2 | FR3 | 6.5 | [0.0036739260676598704, -0.002248732880017494, -0.0028758672454691765] | False | 0.005179 | 0.322 | magnetic_2_grid_vs_istar_FR3.png |
+| magnetic_3 | FR0 | 35.9 | [0.027589992513895895, -0.02835137491508242, -0.02307796576882895] | False | 0.02863 | 1.54 | magnetic_3_grid_vs_istar_FR0.png |
+| magnetic_3 | FR3 | 17.1 | [0.022567587446025765, -0.015348925536200068, -0.012610618398778464] | False | 0.01991 | 0.63 | magnetic_3_grid_vs_istar_FR3.png |
+| electrostatic | FR0 | 47.5 | [-0.21696938660284196, 13.890952090718532, -9.517714055996425] | False | 9.907 | 2.99 | electrostatic_grid_vs_istar_FR0.png |
+| electrostatic | FR3 | 47.3 | [-0.18701060835270725, 13.82789008444148, -9.574775398850074] | False | 12.36 | 3.73 | electrostatic_grid_vs_istar_FR3.png |
+| Nuclotron_8 | FR0 | 250.4 | [-0.2655065733888983, 0.40924106765036267, -0.1405443623956044] | False | 0.4235 | 10.3 | Nuclotron_8_grid_vs_istar_FR0.png |
+| Nuclotron_8 | FR3 | 259.1 | [-0.2888320975832907, 0.40350851394702963, -0.13231398101268288] | False | 0.4699 | 5.7 | Nuclotron_8_grid_vs_istar_FR3.png |
+| Nuclotron_16 | FR0 | 406.6 | [-0.4056055937838175, 0.2640627057337158, -0.06742987492860233] | False | 0.486 | 281 | Nuclotron_16_grid_vs_istar_FR0.png |
+| Nuclotron_16 | FR3 | 407.0 | [-0.39712954925097527, 0.25665487025383316, -0.06589476655127777] | False | 0.4761 | 115 | Nuclotron_16_grid_vs_istar_FR3.png |
+
+## Audit mapping
+
+- **Статус:** verified (offline)
+- **Команда:** `python COSY/sct_study/py/audit_mapping.py --mode both --presentation`
+- **Выход:** `dat/<stem>/audit[_FR0|_FR3].json`, `plots/<stem>_grid_vs_istar*.png`
+
+| stem | mode | cond | I* | inside box | d_min | d_min/‖ΔI‖ | plot |
+|------|------|------|----|------------|-------|------------|------|
+| magnetic_2 | FR0 | 34.5 | [0.004110603226596334, -0.003183980136620862, -0.004030542798297506] | False | 0.004102 | 0.452 | magnetic_2_grid_vs_istar_FR0.png |
+| magnetic_2 | FR3 | 6.5 | [0.0036739260676598704, -0.002248732880017494, -0.0028758672454691765] | False | 0.005179 | 0.322 | magnetic_2_grid_vs_istar_FR3.png |
+| magnetic_3 | FR0 | 35.9 | [0.027589992513895895, -0.02835137491508242, -0.02307796576882895] | False | 0.02863 | 1.54 | magnetic_3_grid_vs_istar_FR0.png |
+| magnetic_3 | FR3 | 17.1 | [0.022567587446025765, -0.015348925536200068, -0.012610618398778464] | False | 0.01991 | 0.63 | magnetic_3_grid_vs_istar_FR3.png |
+| electrostatic | FR0 | 47.5 | [-0.21696938660284196, 13.890952090718532, -9.517714055996425] | False | 9.907 | 2.99 | electrostatic_grid_vs_istar_FR0.png |
+| electrostatic | FR3 | 47.3 | [-0.18701060835270725, 13.82789008444148, -9.574775398850074] | False | 12.36 | 3.73 | electrostatic_grid_vs_istar_FR3.png |
+| Nuclotron_8 | FR0 | 247.5 | [-0.2607032486637308, 0.4026997487003092, -0.13923315901443303] | False | 0.4153 | 10.1 | Nuclotron_8_grid_vs_istar_FR0.png |
+| Nuclotron_8 | FR3 | 256.1 | [-0.2836773320598912, 0.39701078427973296, -0.13110463209599274] | False | 0.4255 | 5.16 | Nuclotron_8_grid_vs_istar_FR3.png |
+| Nuclotron_16 | FR0 | 406.4 | [-0.4061375332269248, 0.2635254322482896, -0.06743512249165767] | False | 0.4861 | 281 | Nuclotron_16_grid_vs_istar_FR0.png |
+| Nuclotron_16 | FR3 | 406.9 | [-0.39759285030783464, 0.25613362860795624, -0.06588406304131017] | False | 0.4746 | 115 | Nuclotron_16_grid_vs_istar_FR3.png |

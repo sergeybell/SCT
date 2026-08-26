@@ -60,6 +60,48 @@ MAPPING_STEPS: MappingSteps = {
         "FR0": (0.0595, -0.0893),
         "FR3": (0.0909, -0.1363),
     },
+    # Legacy COSY/src lattices (electrostatic ED, Nuclotron Wien filter)
+    "electrostatic": {
+        "FR0": (1.0, -3.0),
+        "FR3": (1.0, -3.0),
+    },
+    "Nuclotron_8": {
+        "FR0": (0.02, -0.03),
+        "FR3": (0.04, -0.06),
+    },
+    "Nuclotron_16": {
+        "FR0": (0.001, -0.001),
+        "FR3": (0.002, -0.003),
+    },
+}
+
+# EB1 passed to LATTICE (ED field / Wien E). Magnetic stems keep 0.
+EB1_BY_STEM: dict[str, float] = {
+    "electrostatic": 112.464392,
+    "Nuclotron_8": 132.0,
+    "Nuclotron_16": 132.0,
+}
+
+PRESENTATION_STEMS = [
+    "magnetic_2",
+    "magnetic_3",
+    "electrostatic",
+    "Nuclotron_8",
+    "Nuclotron_16",
+]
+
+# COSY SAVE name may differ from stem (used for INCLUDE after compile).
+INCLUDE_NAME: dict[str, str] = {
+    "Nuclotron_16": "seq_Nuclotron_16",
+}
+
+# Particle / gamma overrides (default: deuteron, GAMMA from mapping.fox).
+PARTICLE_SETUP: dict[str, dict[str, str | float]] = {
+    "electrostatic": {
+        "gamma": 1.24810736,  # proton ~233 MeV (Plotter / Twiss.fox)
+        "chrom_set": "SET_FOR_PROTONS_CHROM",
+        "spin_set": "SET_FOR_PROTONS",
+    },
 }
 
 sys.path.insert(0, str(REPO / "COSY" / "src" / "run"))
@@ -67,10 +109,16 @@ from run_cosy import run_cosy, run_pre  # noqa: E402
 
 
 def _lattice_fox(stem: str) -> Path:
-    p = STRUCTURES / stem / f"{stem}.fox"
-    if not p.is_file():
-        raise FileNotFoundError(f"Lattice not found: {p}")
-    return p
+    """Resolve lattice fox: structures/<stem>/ first, then COSY/src/<stem>.fox."""
+    candidates = [
+        STRUCTURES / stem / f"{stem}.fox",
+        COSY_SRC / f"{stem}.fox",
+    ]
+    for p in candidates:
+        if p.is_file():
+            return p
+    checked = ", ".join(str(c) for c in candidates)
+    raise FileNotFoundError(f"Lattice not found for {stem}: {checked}")
 
 
 def get_mapping_steps(stem: str, mode: str) -> tuple[float, float]:
@@ -80,13 +128,18 @@ def get_mapping_steps(stem: str, mode: str) -> tuple[float, float]:
     return DEFAULT_STEP_X, DEFAULT_STEP_Y
 
 
+def get_eb1(stem: str) -> float:
+    return float(EB1_BY_STEM.get(stem, 0.0))
+
+
 def generate_mapping_fox(stem: str, mode: str) -> str:
     if mode not in ("FR0", "FR3"):
         raise ValueError(f"mode must be FR0 or FR3, got {mode!r}")
 
     lines = MAPPING_TEMPLATE.read_text(encoding="utf-8").splitlines()
     proc_start = next(i for i, ln in enumerate(lines) if ln.strip().upper().startswith("PROCEDURE "))
-    body = "\n".join([f"INCLUDE '{stem}';"] + lines[proc_start:]) + "\n"
+    include_name = INCLUDE_NAME.get(stem, stem)
+    body = "\n".join([f"INCLUDE '{include_name}';"] + lines[proc_start:]) + "\n"
 
     body = re.sub(
         r"^\s*structure\s*:=\s*'[^']*'\s*;",
@@ -133,9 +186,56 @@ def generate_mapping_fox(stem: str, mode: str) -> str:
         flags=re.MULTILINE,
     )
 
+    eb1 = get_eb1(stem)
+    body = re.sub(
+        r"^\s*EB1\s*:=\s*[^;]+;",
+        f"    EB1 := {eb1} ;",
+        body,
+        count=1,
+        flags=re.MULTILINE,
+    )
+
+    setup = PARTICLE_SETUP.get(stem)
+    if setup:
+        body = re.sub(
+            r"^\s*GAMMA\s*:=\s*[^;]+;",
+            f"    GAMMA := {setup['gamma']};",
+            body,
+            count=1,
+            flags=re.MULTILINE,
+        )
+        body = body.replace(
+            "SET_FOR_DEUTERONS_CHROM GAMMA",
+            f"{setup['chrom_set']} GAMMA",
+        )
+        body = body.replace(
+            "SET_FOR_DEUTERONS GAMMA",
+            f"{setup['spin_set']} GAMMA",
+        )
+
     if f"structure := '{stem}'" not in body:
         raise RuntimeError(f"Failed to set structure := '{stem}'")
+    if f"INCLUDE '{include_name}';" not in body.split("PROCEDURE", 1)[0] and not body.startswith(
+        f"INCLUDE '{include_name}';"
+    ):
+        # INCLUDE is always the first line
+        if not body.lstrip().startswith(f"INCLUDE '{include_name}';"):
+            raise RuntimeError(f"Failed to INCLUDE '{include_name}' for {stem}")
     return body
+
+
+def _validate_outputs(stem: str, mode: str, *, min_bytes: int = 500) -> None:
+    """Fail fast if COSY wrote only headers (empty scan)."""
+    d = _dat_dir(stem)
+    for raw, prefix in RAW_OUTPUTS.items():
+        # after rename the mode-suffixed file must exist and be non-trivial
+        p = d / f"{prefix}_{mode}.dat"
+        if not p.is_file() or p.stat().st_size < min_bytes:
+            raise RuntimeError(
+                f"Mapping output too small or missing for {stem} {mode}: {p} "
+                f"(size={p.stat().st_size if p.is_file() else 'n/a'}). "
+                "Check particle/EB1/INCLUDE settings and COSY log."
+            )
 
 
 def _dat_dir(stem: str) -> Path:
@@ -184,6 +284,7 @@ def run_mapping(stem: str, mode: str, *, skip_compile: bool = False) -> Path:
     print(f"Mapping {stem} mode={mode} (3-family, step_x={step_x}, step_y={step_y})")
     run_cosy(fox_path)
     _rename_outputs(stem, mode)
+    _validate_outputs(stem, mode)
     print(f"Done {stem} {mode} in {time.perf_counter() - t0:.1f}s")
     return _dat_dir(stem)
 
@@ -194,7 +295,7 @@ def run_mapping_modes(stem: str, modes: list[str], *, skip_compile: bool = False
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Run COSY mapping scan for a magnetic structure")
+    ap = argparse.ArgumentParser(description="Run COSY mapping scan for a lattice structure")
     ap.add_argument("--stem", action="append", dest="stems", metavar="STEM")
     ap.add_argument("--mode", choices=["FR0", "FR3", "both"], default="both")
     ap.add_argument(
@@ -202,13 +303,23 @@ def main() -> int:
         action="store_true",
         help="all magnetic_* stems that have an entry in MAPPING_STEPS",
     )
+    ap.add_argument(
+        "--presentation",
+        action="store_true",
+        help="Mapping_presentation set: magnetic_2/3, electrostatic, Nuclotron_8/16",
+    )
     ap.add_argument("--pre", action="store_true")
     ap.add_argument("--skip-compile", action="store_true")
     args = ap.parse_args()
 
     stems: list[str] = list(args.stems or [])
+    if args.presentation:
+        stems.extend(PRESENTATION_STEMS)
     if args.all_magnetic:
-        stems.extend(sorted(MAPPING_STEPS))
+        stems.extend(sorted(s for s in MAPPING_STEPS if s.startswith("magnetic_")))
+    # de-dupe preserving order
+    seen: set[str] = set()
+    stems = [s for s in stems if not (s in seen or seen.add(s))]
     if not stems:
         ap.print_help()
         return 1
@@ -219,6 +330,8 @@ def main() -> int:
 
     for stem in stems:
         print(f"\n========== {stem} ==========")
+        print(f"  lattice={_lattice_fox(stem)}")
+        print(f"  EB1={get_eb1(stem)}")
         run_mapping_modes(stem, modes, skip_compile=args.skip_compile)
     return 0
 

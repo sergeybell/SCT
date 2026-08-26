@@ -15,6 +15,7 @@ sys.path.insert(0, str(REPO / "COSY" / "analysis"))
 from map_lat_lib import (  # noqa: E402
     DEFAULT_ROOT,
     MAGNETIC_LATTICES,
+    PRESENTATION_LATTICES,
     PANEL_CHROM_LABELS,
     PANEL_COLORS,
     PANEL_CONSTRAINTS,
@@ -116,13 +117,20 @@ def plot_lattice(
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="Plot Delta nu_s vs chromaticity (Map_lat style)")
-    ap.add_argument("lattices", nargs="*", default=MAGNETIC_LATTICES)
+    ap.add_argument("lattices", nargs="*", default=None)
+    ap.add_argument("--presentation", action="store_true", help="use Mapping_presentation stems")
     ap.add_argument("--root", type=Path, default=DEFAULT_ROOT)
     ap.add_argument("--require-fr3", action="store_true")
     ap.add_argument("--show", action="store_true")
     args = ap.parse_args()
+    if args.lattices:
+        lattices = args.lattices
+    elif args.presentation:
+        lattices = PRESENTATION_LATTICES
+    else:
+        lattices = MAGNETIC_LATTICES
     ok = False
-    for lat in args.lattices:
+    for lat in lattices:
         if plot_lattice(lat, args.root, require_fr3=args.require_fr3, show=args.show):
             ok = True
     return 0 if ok else 1

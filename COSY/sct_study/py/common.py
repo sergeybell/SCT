@@ -44,6 +44,23 @@ def stems() -> List[str]:
     return list(load_config()["stems"])
 
 
+def mapping_presentation_stems() -> List[str]:
+    cfg = load_config()
+    return list(cfg.get("mapping_presentation_stems", cfg["stems"]))
+
+
+def lattice_fox_path(stem: str) -> Path:
+    """Resolve lattice .fox from structures/ or COSY/src/."""
+    candidates = [
+        STRUCTURES / stem / f"{stem}.fox",
+        COSY_SRC / f"{stem}.fox",
+    ]
+    for p in candidates:
+        if p.is_file():
+            return p
+    raise FileNotFoundError(f"Lattice fox not found for {stem}")
+
+
 def write_json(path: Path, obj: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(obj, indent=2, default=_json_default), encoding="utf-8")

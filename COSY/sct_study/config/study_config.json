@@ -1,5 +1,12 @@
 {
   "stems": ["magnetic_2", "magnetic_3", "magnetic_4", "magnetic_5"],
+  "mapping_presentation_stems": [
+    "magnetic_2",
+    "magnetic_3",
+    "electrostatic",
+    "Nuclotron_8",
+    "Nuclotron_16"
+  ],
   "mode": "FR0",
   "particle": "deuteron",
   "gamma": 1.143914,
@@ -11,13 +18,28 @@
     "magnetic_2": 117.388296,
     "magnetic_3": 122.788296,
     "magnetic_4": 128.188296,
-    "magnetic_5": 133.588296
+    "magnetic_5": 133.588296,
+    "electrostatic": 419.1,
+    "Nuclotron_8": 251.030637,
+    "Nuclotron_16": 261.750637
   },
   "superperiodicity": {
     "magnetic_2": 2,
     "magnetic_3": 3,
     "magnetic_4": 4,
-    "magnetic_5": 5
+    "magnetic_5": 5,
+    "electrostatic": 5,
+    "Nuclotron_8": 8,
+    "Nuclotron_16": 16
+  },
+  "eb1": {
+    "magnetic_2": 0.0,
+    "magnetic_3": 0.0,
+    "magnetic_4": 0.0,
+    "magnetic_5": 0.0,
+    "electrostatic": 112.464392,
+    "Nuclotron_8": 132.0,
+    "Nuclotron_16": 132.0
   },
   "resonance_orders_k": [0, 1, 2, 3, 4, 5, 6, 7, 8],
   "synchrotron_sideband_m": [0, 1, 2],
